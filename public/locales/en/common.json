@@ -1,0 +1,13 @@
+{
+    "home": "Home",
+    "about": "About",
+    "services": "Services",
+    "contact": "Contact",
+    "logo_text": "alasmai high school",
+    "sections": {
+        "primary hero": {
+            "title": "Empowering Teachers with Tailored Tools",
+            "subtitle": "We aim to simplify repetitive tasks for teachers by providing ready-made templates and flexible tools that help you create worksheets, quizzes, and classroom activities in minutes, with the ability to download them as PDF or PNG for instant printing and sharing."
+        }
+    }
+}
