@@ -1,1 +1,59 @@
 @import "tailwindcss";
+
+@layer base {
+    :root {
+        --color-primary: #C19A6B;
+        --color-primary-foreground: #FFFFFF;
+        /* new foreground color */
+
+        --color-bg-base: #F5F5DC;
+        --color-bg-container: #FFFFFF;
+        --color-bg-layout: #FAF7F0;
+
+        --color-text-base: #3E2C1C;
+        --color-text-heading: #2A1E12;
+        --color-text-secondary: #6B4F3B;
+        --color-text-tertiary: #A67B5B;
+
+        --color-border: #E2D3C1;
+        --color-border-secondary: #F1E6D6;
+
+        --color-link: #A67B5B;
+        --color-success: #7BA05B;
+        --color-warning: #D9A441;
+        --color-error: #B85C38;
+        --color-info: #8C9A6B;
+
+        --color-primary-hover: #B08968;
+        --color-primary-active: #8B5E3C;
+
+        --color-text-light-solid: #FFFFFF;
+    }
+}
+
+@theme inline {
+    --color-primary: var(--color-primary);
+    --color-primary-foreground: var(--color-primary-foreground);
+
+    --color-bg-base: var(--color-bg-base);
+    --color-bg-container: var(--color-bg-container);
+    --color-bg-layout: var(--color-bg-layout);
+
+    --color-text-base: var(--color-text-base);
+    --color-text-heading: var(--color-text-heading);
+    --color-text-secondary: var(--color-text-secondary);
+    --color-text-tertiary: var(--color-text-tertiary);
+    --color-text-light-solid: var(--color-text-light-solid);
+
+    --color-border: var(--color-border);
+    --color-border-secondary: var(--color-border-secondary);
+
+    --color-link: var(--color-link);
+    --color-success: var(--color-success);
+    --color-warning: var(--color-warning);
+    --color-error: var(--color-error);
+    --color-info: var(--color-info);
+
+    --color-primary-hover: var(--color-primary-hover);
+    --color-primary-active: var(--color-primary-active);
+}
