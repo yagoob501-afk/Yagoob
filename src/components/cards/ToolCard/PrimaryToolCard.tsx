@@ -1,0 +1,40 @@
+import { Link } from "react-router-dom";
+
+interface Props {
+    title: string;
+    description: string;
+    link: string | null;
+    img: any;
+}
+
+function PrimaryToolCard({ title, description, link, img }: Props) {
+    return (
+        <Link
+            to={link || "#"}
+            className="bg-primary text-primary-foreground rounded-2xl p-6 flex flex-col gap-4 aspect-square max-h-80 shadow-md hover:shadow-lg transition-shadow w-full"
+        >
+            {/* Title */}
+            <h5 className="text-lg font-semibold leading-snug text-center">
+                {title}
+            </h5>
+
+            {/* Image (takes full width, fixed height) */}
+            {img && (
+                <div className="flex-1 flex items-center justify-center">
+                    <img
+                        src={img}
+                        alt=""
+                        className="w-full h-32 object-cover"
+                    />
+                </div>
+            )}
+
+            {/* Description */}
+            <p className="text-sm opacity-90 line-clamp-3 text-center">
+                {description}
+            </p>
+        </Link>
+    );
+}
+
+export default PrimaryToolCard;
