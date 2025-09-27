@@ -34,16 +34,16 @@ function PrimaryHeader() {
                         {t("about")}
                     </Link>
                     <Link
-                        to="/#services"
+                        to="/#tools"
                         className="text-[--color-text-light-solid] hover:text-[--color-primary-foreground] hover:underline transition-colors"
                     >
-                        {t("services")}
+                        {t("tools")}
                     </Link>
                     <Link
-                        to="/#contact"
+                        to="/#join-us"
                         className="text-[--color-text-light-solid] hover:text-[--color-primary-foreground] hover:underline transition-colors"
                     >
-                        {t("contact")}
+                        {t("join us")}
                     </Link>
                 </nav>
 
