@@ -1,3 +1,4 @@
+import PrimaryFooter from "@/components/sections/Footer/PrimaryFooter"
 import PrimaryHeader from "@/components/sections/Header/PrimaryHeader"
 import PrimaryHeroSection from "@/components/sections/Hero/PrimaryHeroSection"
 import PrimaryToolsSection from "@/components/sections/Tools/PrimaryToolsSection"
@@ -8,6 +9,7 @@ function HomePage() {
             <PrimaryHeader />
             <PrimaryHeroSection />
             <PrimaryToolsSection />
+            <PrimaryFooter />
         </div>
     )
 }

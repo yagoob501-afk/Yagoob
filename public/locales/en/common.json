@@ -8,6 +8,11 @@
         "primary hero": {
             "title": "Empowering Teachers with Tailored Tools",
             "subtitle": "We aim to simplify repetitive tasks for teachers by providing ready-made templates and flexible tools that help you create worksheets, quizzes, and classroom activities in minutes, with the ability to download them as PDF or PNG for instant printing and sharing."
+        },
+        "primary footer": {
+            "description": "نهدف إلى تسهيل المهام المتكررة على المعلمين من خلال توفير نماذج جاهزة وأدوات مرنة تساعدك على إنشاء أوراق العمل، الاختبارات، والأنشطة الصفية في دقائق معدودة، مع إمكانية تحميلها كملف PDF أو صورة PNG للطباعة والمشاركة فورًا."
         }
-    }
+    },
+    "follow_us": "follow us",
+    "all_rights_reserved": "All rights reserved"
 }
