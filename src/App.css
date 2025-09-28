@@ -21,6 +21,20 @@
         --color-cta-hover: #000000b3;
         --color-cta-active: #000000e0;
 
+        /* form colors */
+        --color-form-bg: #FFFFFF;
+        --color-form-text: var(--color-text-base);
+        --color-form-placeholder: #B8A89A;
+        --color-form-border: var(--color-border);
+        --color-form-border-hover: #D2BFA7;
+        --color-form-border-focus: var(--color-primary);
+        --color-form-border-error: var(--color-error);
+        --color-form-border-success: var(--color-success);
+        --color-form-disabled-bg: #F5F1E9;
+        --color-form-disabled-text: #A89E94;
+        --color-form-label: var(--color-text-secondary);
+        --color-form-helper: var(--color-text-muted);
+        --color-form-focus-ring: #C19A6B33;
 
         --color-border: #E2D3C1;
         --color-border-secondary: #F1E6D6;
@@ -70,4 +84,19 @@
     --color-cta-foreground: var(--color-cta-foreground);
     --color-cta-hover: var(--color-cta-hover);
     --color-cta-active: var(--color-cta-active);
+
+    /* form theme mapping */
+    --color-form-bg: var(--color-form-bg);
+    --color-form-text: var(--color-form-text);
+    --color-form-placeholder: var(--color-form-placeholder);
+    --color-form-border: var(--color-form-border);
+    --color-form-border-hover: var(--color-form-border-hover);
+    --color-form-border-focus: var(--color-form-border-focus);
+    --color-form-border-error: var(--color-form-border-error);
+    --color-form-border-success: var(--color-form-border-success);
+    --color-form-disabled-bg: var(--color-form-disabled-bg);
+    --color-form-disabled-text: var(--color-form-disabled-text);
+    --color-form-label: var(--color-form-label);
+    --color-form-helper: var(--color-form-helper);
+    --color-form-focus-ring: var(--color-form-focus-ring);
 }

@@ -18,6 +18,29 @@
             "cta": "قم بدعمنا"
         }
     },
+    "documentation": {
+        "title": "عنوان التوثيق",
+        "educationalArea": "المنطقة التعليمية",
+        "schoolName": "اسم المدرسة",
+        "teacherGender": "الصفة (معلم / معلمة)",
+        "maleTeacher": "معلم",
+        "femaleTeacher": "معلمة",
+        "teacherName": "اسم المعلم / المعلمة",
+        "department": "اسم القسم",
+        "place": "المكان",
+        "date": "تاريخ التنفيذ",
+        "managerGender": "الصفة (مدير / مديرة)",
+        "maleManager": "مدير",
+        "femaleManager": "مديرة",
+        "managerName": "اسم المدير / مديرة",
+        "targetGroup": "الفئة المستهدفة",
+        "description": "الشرح",
+        "images": "الصور"
+    },
+    "general": {
+        "submit": "إرسال",
+        "loading": "جاري الإرسال..."
+    },
     "follow_us": "تابعنا",
     "all_rights_reserved": "جميع الحقوق محفوظة"
 }
