@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import Img4 from "@/assets/4.png";
 import { useTranslation } from "react-i18next";
 import { Facebook, Twitter, Linkedin, Github } from "lucide-react";
+import { HashLink } from "react-router-hash-link";
 
 function PrimaryFooter() {
     const { t } = useTranslation();
@@ -15,37 +16,37 @@ function PrimaryFooter() {
                         <img src={Img4} alt="Logo" className="max-w-14" />
                         <p className="text-lg font-semibold">{t("logo_text")}</p>
                     </Link>
-                    <p className="mt-3 text-sm text-center lg:text-left max-w-xs">
+                    <p className="mt-3 text-sm text-center lg:text-start max-w-xs">
                         {t("sections.primary footer.description") || "We provide tools and resources to make your journey easier."}
                     </p>
                 </div>
 
                 {/* Navigation */}
                 <nav className="flex flex-col items-center gap-3 lg:items-start">
-                    <Link
+                    <HashLink
                         to="/"
                         className="hover:underline hover:text-primary-foreground"
                     >
                         {t("home")}
-                    </Link>
-                    <Link
+                    </HashLink>
+                    <HashLink
                         to="/#about"
                         className="hover:underline hover:text-primary-foreground"
                     >
                         {t("about")}
-                    </Link>
-                    <Link
+                    </HashLink>
+                    <HashLink
                         to="/#tools"
                         className="hover:underline hover:text-primary-foreground"
                     >
                         {t("tools")}
-                    </Link>
-                    <Link
+                    </HashLink>
+                    <HashLink
                         to="/#join-us"
                         className="hover:underline hover:text-primary-foreground"
                     >
                         {t("join us")}
-                    </Link>
+                    </HashLink>
                 </nav>
 
                 {/* Socials */}

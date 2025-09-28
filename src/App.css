@@ -15,6 +15,13 @@
         --color-text-tertiary: #A67B5B;
         --color-text-muted: #8B7E74;
 
+        /* CTA colors */
+        --color-cta-bg: #0000008c;
+        --color-cta-foreground: #FFFFFF;
+        --color-cta-hover: #000000b3;
+        --color-cta-active: #000000e0;
+
+
         --color-border: #E2D3C1;
         --color-border-secondary: #F1E6D6;
 
@@ -57,4 +64,10 @@
 
     --color-primary-hover: var(--color-primary-hover);
     --color-primary-active: var(--color-primary-active);
+
+    /* CTA theme mapping */
+    --color-cta-bg: var(--color-cta-bg);
+    --color-cta-foreground: var(--color-cta-foreground);
+    --color-cta-hover: var(--color-cta-hover);
+    --color-cta-active: var(--color-cta-active);
 }
