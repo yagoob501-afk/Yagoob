@@ -13,6 +13,7 @@ function HomePage() {
             <PrimaryToolsSection />
             <PrimaryAdditionalToolsSection />
             <PrimaryJoinUsSection />
+            <div className="mt-10"></div>
             <PrimaryFooter />
         </div>
     )

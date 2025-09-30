@@ -8,7 +8,7 @@ function PrimaryFooter() {
     const { t } = useTranslation();
 
     return (
-        <footer className="bg-primary text-primary-foreground px-6 pt-10 pb-6 mt-10 shadow-inner">
+        <footer className="bg-primary text-primary-foreground px-6 pt-10 pb-6 shadow-inner">
             <div className="container mx-auto flex flex-col gap-8 lg:flex-row lg:justify-between lg:items-start">
                 {/* Logo + text */}
                 <div className="flex flex-col items-center lg:items-start">
