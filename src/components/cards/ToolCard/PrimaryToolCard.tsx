@@ -11,7 +11,7 @@ function PrimaryToolCard({ title, description, link, img }: Props) {
     return (
         <Link
             to={link || "#"}
-            className="bg-primary text-primary-foreground rounded-2xl p-6 flex flex-col gap-4 aspect-square max-h-80 shadow-md hover:shadow-lg transition-shadow w-full"
+            className="bg-primary hover:bg-primary-hover text-primary-foreground rounded-2xl p-6 flex flex-col gap-4 aspect-square max-h-80 shadow-md hover:shadow-lg transition-all w-full"
         >
             {/* Title */}
             <h5 className="text-lg font-semibold leading-snug text-center">

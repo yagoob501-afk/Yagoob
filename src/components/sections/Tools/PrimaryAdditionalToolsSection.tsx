@@ -1,9 +1,10 @@
+"use client"
 import { motion } from "framer-motion";
 import PrimaryToolCard from "@/components/cards/ToolCard/PrimaryToolCard";
-import Img5 from "@/assets/5.png";
 import PrimarySectionTitle from "@/components/ui/SectionTitle/PrimarySectionTitle";
+import QrThumbnail from "@/assets/Using-a-QR-Code-Generator-with-text-below.png";
 
-function PrimaryToolsSection() {
+function PrimaryAdditionalToolsSection() {
     return (
         <motion.section
             className="py-14 px-3 container mx-auto"
@@ -14,7 +15,7 @@ function PrimaryToolsSection() {
         >
             <div className="flex flex-col gap-20">
                 <PrimarySectionTitle
-                    title="نماذج جاهزة للطباعة"
+                    title="أدوات اضافية"
                     h4Props={{ className: "text-center text-3xl" }}
                 />
 
@@ -40,17 +41,17 @@ function PrimaryToolsSection() {
                         transition={{ duration: 0.6, ease: "easeOut" }}
                     >
                         <PrimaryToolCard
-                            title="نموذج توثيق"
+                            title="تحويل النصوص الى qrcode"
                             description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat, autem adipisci! Earum doloremque libero exercitationem debitis sed aut vero pariatur ratione eius, magni ullam, maxime aliquid aperiam voluptas beatae eaque."
-                            link="/forms/project-documentation/1"
-                            img={Img5}
+                            link="/additional-tools/text-to-qrcode"
+                            img={QrThumbnail}
                         />
                     </motion.div>
                     {/* ))} */}
                 </motion.div>
             </div>
         </motion.section>
-    );
+    )
 }
 
-export default PrimaryToolsSection;
+export default PrimaryAdditionalToolsSection
