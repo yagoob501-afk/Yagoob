@@ -25,6 +25,8 @@
         "teacherGender": "الصفة (معلم / معلمة)",
         "maleTeacher": "معلم",
         "femaleTeacher": "معلمة",
+        "maleStudent": "طالب",
+        "femaleStudent": "طالبة",
         "teacherName": "اسم المعلم / المعلمة",
         "department": "اسم القسم",
         "place": "المكان",
@@ -35,7 +37,8 @@
         "managerName": "اسم المدير / مديرة",
         "targetGroup": "الفئة المستهدفة",
         "description": "الشرح",
-        "images": "الصور"
+        "images": "الصور",
+        "event type": "نوع الفعالية"
     },
     "general": {
         "submit": "إرسال",

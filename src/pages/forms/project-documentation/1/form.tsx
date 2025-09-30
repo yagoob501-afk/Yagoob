@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import DatePicker from "react-datepicker";
 import type { DocumentationData } from "./documentation";
+import "react-datepicker/dist/react-datepicker.css";
 
 function ProjectDocumentation1Form({ onSubmit }: { onSubmit?: (data: DocumentationData) => void }) {
     const { t } = useTranslation();
@@ -17,8 +18,10 @@ function ProjectDocumentation1Form({ onSubmit }: { onSubmit?: (data: Documentati
         formData.set("date", date?.toISOString() || ""); // replace date input with picker value
         images.forEach((img) => formData.append("images[]", img));
 
-        const data = Object.fromEntries(formData.entries());
-        onSubmit?.(data as any);
+        const data: any = Object.fromEntries(formData.entries());
+        data.images = images;
+        data.date = date;
+        onSubmit?.(data);
 
         setLoading(false);
     };
@@ -47,6 +50,7 @@ function ProjectDocumentation1Form({ onSubmit }: { onSubmit?: (data: Documentati
                     <input
                         type="text"
                         name="title"
+                        autoComplete="title"
                         placeholder={t("documentation.title")}
                         className="rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text placeholder:text-form-placeholder focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition"
                     />
@@ -89,6 +93,8 @@ function ProjectDocumentation1Form({ onSubmit }: { onSubmit?: (data: Documentati
                     >
                         <option value="male">{t("documentation.maleTeacher")}</option>
                         <option value="female">{t("documentation.femaleTeacher")}</option>
+                        <option value="maleStudent">{t("documentation.maleStudent")}</option>
+                        <option value="femaleStudent">{t("documentation.femaleStudent")}</option>
                     </select>
                 </div>
 
@@ -173,7 +179,7 @@ function ProjectDocumentation1Form({ onSubmit }: { onSubmit?: (data: Documentati
                 </div>
 
                 {/* Target Group */}
-                <div className="flex flex-col sm:col-span-2">
+                <div className="flex flex-col">
                     <label className="mb-1 text-sm font-medium text-form-label">
                         {t("documentation.targetGroup")}
                     </label>
@@ -181,6 +187,18 @@ function ProjectDocumentation1Form({ onSubmit }: { onSubmit?: (data: Documentati
                         type="text"
                         name="targetGroup"
                         placeholder={t("documentation.targetGroup")}
+                        className="rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text placeholder:text-form-placeholder focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition"
+                    />
+                </div>
+
+                <div className="flex flex-col">
+                    <label className="mb-1 text-sm font-medium text-form-label">
+                        {t("documentation.event type")}
+                    </label>
+                    <input
+                        type="text"
+                        name="eventType"
+                        placeholder={t("documentation.event type")}
                         className="rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text placeholder:text-form-placeholder focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition"
                     />
                 </div>
