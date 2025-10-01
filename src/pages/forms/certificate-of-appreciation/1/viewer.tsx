@@ -1,4 +1,4 @@
-import background from "@/assets/_شهادة تقدير أنيقة باللونين الأسود والذهبي .png";
+import background from "@/assets/certificates_backgrounds/_شهادة تقدير أنيقة باللونين الأسود والذهبي .png";
 import icon from "@/assets/icon-of-certificate-1.png";
 import html2canvas from "html2canvas";
 import { useEffect, useRef, useState } from "react";
