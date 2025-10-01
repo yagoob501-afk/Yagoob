@@ -6,7 +6,6 @@ import { BrowserRouter } from 'react-router'
 import ProjectDocumentation1 from '@/pages/forms/project-documentation/1/page'
 import HomePage from '@/pages/page'
 import TextToQRcodePage from './pages/additional-tools/TextToQRcode';
-// import CertificateOfAppreciationTemplate_1_Page from './pages/forms/certificate-of-appreciation/1/page';
 import CertificateOfAppreciationTemplate_2_Page from './pages/forms/certificate-of-appreciation/2/page';
 
 function App() {
@@ -17,7 +16,6 @@ function App() {
                     <Routes>
                         <Route path='/' element={<HomePage />} />
                         <Route path='/forms/project-documentation/1' element={<ProjectDocumentation1 />} />
-                        {/* <Route path='/forms/certificate-of-appreciation/1' element={<CertificateOfAppreciationTemplate_1_Page />} /> */}
                         <Route path='/forms/certificate-of-appreciation/2' element={<CertificateOfAppreciationTemplate_2_Page />} />
                         <Route path='/additional-tools/text-to-qrcode' element={<TextToQRcodePage />} />
                     </Routes>
