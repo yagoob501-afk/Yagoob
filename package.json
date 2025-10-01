@@ -25,7 +25,8 @@
     "react-router": "^7.9.3",
     "react-router-dom": "^7.9.3",
     "react-router-hash-link": "^2.4.3",
-    "respinner": "^4.0.3"
+    "respinner": "^4.0.3",
+    "yet-another-react-lightbox": "^3.25.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",

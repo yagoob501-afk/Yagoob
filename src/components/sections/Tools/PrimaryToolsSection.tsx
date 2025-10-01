@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import PrimaryToolCard from "@/components/cards/ToolCard/PrimaryToolCard";
 import Img5 from "@/assets/5.png";
+import Certificate1Thumbnail from "@/assets/cards_thumbnails/certificate-1.png";
 import PrimarySectionTitle from "@/components/ui/SectionTitle/PrimarySectionTitle";
 
 function PrimaryToolsSection() {
@@ -30,7 +31,6 @@ function PrimaryToolsSection() {
                         },
                     }}
                 >
-                    {/* {[...Array(7)].map((_, i) => ( */}
                     <motion.div
                         // key={i}
                         variants={{
@@ -46,7 +46,23 @@ function PrimaryToolsSection() {
                             img={Img5}
                         />
                     </motion.div>
-                    {/* ))} */}
+
+
+                    <motion.div
+                        // key={i}
+                        variants={{
+                            hidden: { opacity: 0, y: 30 },
+                            show: { opacity: 1, y: 0 },
+                        }}
+                        transition={{ duration: 0.6, ease: "easeOut" }}
+                    >
+                        <PrimaryToolCard
+                            title="نموذج شهادة تقدير"
+                            description="نموذج انشاء شهادة تقدير للمعلمين و الطلاب بالالوان الذهبي و الاسود"
+                            link="/forms/certificate-of-appreciation/1"
+                            img={Certificate1Thumbnail}
+                        />
+                    </motion.div>
                 </motion.div>
             </div>
         </motion.section>

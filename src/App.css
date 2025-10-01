@@ -1,5 +1,15 @@
 @import "tailwindcss";
 
+@font-face {
+    font-family: "al-gamah-alhoda";
+    src: url("assets/fonts/AL-Gemah-Alhoda.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "sharjah";
+    src: url("assets/fonts/SC_SHARJAH.ttf") format("truetype");
+}
+
 @layer base {
     :root {
         --color-primary: #C19A6B;
@@ -53,6 +63,9 @@
 }
 
 @theme inline {
+    --font-alhoda: al-gamah-alhoda, sans-serif;
+    --font-sharjah: sharjah, sans-serif;
+
     --color-primary: var(--color-primary);
     --color-primary-foreground: var(--color-primary-foreground);
 

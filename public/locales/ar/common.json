@@ -40,6 +40,13 @@
         "images": "الصور",
         "event type": "نوع الفعالية"
     },
+    "certificate": {
+        "title": "العنوان",
+        "subtitle": "العنوان الفرعي",
+        "personTitle": "الصفة",
+        "names": "الأسماء",
+        "line2": "النص الإضافي"
+    },
     "general": {
         "submit": "إرسال",
         "loading": "جاري الإرسال..."
