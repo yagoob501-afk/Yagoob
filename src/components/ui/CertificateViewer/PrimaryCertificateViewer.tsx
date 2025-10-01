@@ -146,10 +146,16 @@ function PrimaryCertificateViewer({
                     {/* Line 2 */}
                     {line2 && (
                         <p
-                            className={template.classNames.line2}
+                            className={template.classNames.line2 + "space-y-1"}
                             style={template.positions.line2}
                         >
-                            {line2}
+                            {line2.split("\n").map((value, index) => (
+                                <span
+                                    key={value + index}
+                                >
+                                    {value}
+                                </span>
+                            ))}
                         </p>
                     )}
 

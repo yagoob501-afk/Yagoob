@@ -6,7 +6,7 @@ export const Template2 = {
         title: "absolute font-sharjah text-[134px] text-[#d4b365]",
         subtitle: "absolute font-alhoda text-4xl text-[#d4b365]",
         name: "absolute font-bold text-4xl text-[#d4b365]",
-        line2: "absolute text-3xl text-[#d4b365]",
+        line2: "absolute text-5xl text-center text-[#d4b365]",
         date: "absolute text-3xl",
         sign: "absolute text-3xl",
     },
