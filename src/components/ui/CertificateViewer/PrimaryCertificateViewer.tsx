@@ -14,6 +14,10 @@ export type CertificateData = {
     personTitle?: string;
     line2?: string;
     date: Date;
+    managerTitle?: string;
+    managerName?: string;
+    teacherTitle?: string;
+    teacherName?: string;
     sign?: string; // base64
 };
 
@@ -27,6 +31,10 @@ export type CertificateTemplate = {
         line2?: string;
         date?: string;
         sign?: string;
+        managerTitle?: string;
+        managerName?: string;
+        teacherTitle?: string;
+        teacherName?: string;
     };
     positions: {
         title?: React.CSSProperties;
@@ -35,6 +43,10 @@ export type CertificateTemplate = {
         line2?: React.CSSProperties;
         date?: React.CSSProperties;
         sign?: React.CSSProperties;
+        managerTitle?: React.CSSProperties;
+        managerName?: React.CSSProperties;
+        teacherTitle?: React.CSSProperties;
+        teacherName?: React.CSSProperties;
     };
 };
 
@@ -133,6 +145,46 @@ function PrimaryCertificateViewer({
                     >
                         {subtitle}
                     </h2>
+
+                    {/* Manager Title */}
+                    {data.managerTitle && (
+                        <h3
+                            className={template.classNames.managerTitle}
+                            style={template.positions.managerTitle}
+                        >
+                            {data.managerTitle}
+                        </h3>
+                    )}
+
+                    {/* Manager Name */}
+                    {data.managerName && (
+                        <h3
+                            className={template.classNames.managerName}
+                            style={template.positions.managerName}
+                        >
+                            {data.managerName}
+                        </h3>
+                    )}
+
+                    {/* Teacher Title */}
+                    {data.teacherTitle && (
+                        <h3
+                            className={template.classNames.teacherTitle}
+                            style={template.positions.teacherTitle}
+                        >
+                            {data.teacherTitle}
+                        </h3>
+                    )}
+
+                    {/* Teacher Name */}
+                    {data.teacherName && (
+                        <h3
+                            className={template.classNames.teacherName}
+                            style={template.positions.teacherName}
+                        >
+                            {data.teacherName}
+                        </h3>
+                    )}
 
                     {/* Name + Person Title */}
                     <h2

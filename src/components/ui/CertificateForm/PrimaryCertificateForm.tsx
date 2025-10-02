@@ -45,6 +45,11 @@ function PrimaryCertificateForm({ onSubmit }: PrimaryCertificateFormProps) {
             .map((n) => n.trim())
             .filter(Boolean);
 
+        const managerTitle = (formData.get("managerTitle") as string) || "";
+        const managerName = (formData.get("managerName") as string) || "";
+        const teacherTitle = (formData.get("teacherTitle") as string) || "";
+        const teacherName = (formData.get("teacherName") as string) || "";
+
         const certificates: CertificateResult[] = names.map((name) => ({
             data: {
                 title,
@@ -54,8 +59,13 @@ function PrimaryCertificateForm({ onSubmit }: PrimaryCertificateFormProps) {
                 line2,
                 sign,
                 date: selectedDate || new Date(),
+                managerTitle,
+                managerName,
+                teacherTitle,
+                teacherName,
             },
         }));
+
 
         onSubmit?.(certificates);
         setLoading(false);
@@ -243,6 +253,61 @@ function PrimaryCertificateForm({ onSubmit }: PrimaryCertificateFormProps) {
                     </div>
                 </div>
             )}
+
+            {/* Manager Title */}
+            <div className="flex flex-col">
+                <label className="mb-1 text-sm font-medium text-form-label">
+                    لقب المدير / المديرة
+                </label>
+                <input
+                    type="text"
+                    name="managerTitle"
+                    placeholder="مثال: المدير / المديرة"
+                    defaultValue="المدير"
+                    className="rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text placeholder:text-form-placeholder focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition"
+                />
+            </div>
+
+            {/* Manager Name */}
+            <div className="flex flex-col">
+                <label className="mb-1 text-sm font-medium text-form-label">
+                    اسم المدير / المديرة
+                </label>
+                <input
+                    type="text"
+                    name="managerName"
+                    placeholder="مثال: أحمد علي"
+                    className="rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text placeholder:text-form-placeholder focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition"
+                />
+            </div>
+
+            {/* Teacher Title */}
+            <div className="flex flex-col">
+                <label className="mb-1 text-sm font-medium text-form-label">
+                    لقب المعلم / المعلمة
+                </label>
+                <input
+                    type="text"
+                    name="teacherTitle"
+                    placeholder="مثال: المعلم / المعلمة"
+                    defaultValue="المعلم"
+                    className="rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text placeholder:text-form-placeholder focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition"
+                />
+            </div>
+
+            {/* Teacher Name */}
+            <div className="flex flex-col">
+                <label className="mb-1 text-sm font-medium text-form-label">
+                    اسم المعلم / المعلمة
+                </label>
+                <input
+                    type="text"
+                    name="teacherName"
+                    placeholder="مثال: فاطمة حسن"
+                    className="rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text placeholder:text-form-placeholder focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition"
+                />
+            </div>
+
 
             {/* Submit */}
             <div className="flex justify-end">
