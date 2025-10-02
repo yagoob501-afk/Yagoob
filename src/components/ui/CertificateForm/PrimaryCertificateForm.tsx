@@ -18,9 +18,12 @@ function PrimaryCertificateForm({ onSubmit }: PrimaryCertificateFormProps) {
     const sigCanvasModal = useRef<SignatureCanvas | null>(null);
     const [sign, setSign] = useState<string | undefined>();
     const [isSignCanvasOpen, setIsSignCanvasOpen] = useState(false);
-    const [namesInput, setNamesInput] = useState("");
+    const [namesInput, setNamesInput] = useState("يوسف محمد");
     const [loading, setLoading] = useState(false);
     const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+
+    // store each extra line separately
+    const [extraLines, setExtraLines] = useState(["و ذلك نظير جهوده", "و بدورنا نقدم له هذا الشكل كتقدير لجهوده المبذولة", "متمنين له دوام التوفيق و السداد"]);
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -30,7 +33,12 @@ function PrimaryCertificateForm({ onSubmit }: PrimaryCertificateFormProps) {
         const title = (formData.get("title") as string) || "";
         const subtitle = (formData.get("subtitle") as string) || "";
         const personTitle = (formData.get("personTitle") as string) || "";
-        const line2 = (formData.get("line2") as string) || "";
+
+        // join extra lines with \n
+        const line2 = extraLines
+            .map((line) => line.trim())
+            .filter(Boolean)
+            .join("\n");
 
         const names = namesInput
             .split("\n")
@@ -88,7 +96,7 @@ function PrimaryCertificateForm({ onSubmit }: PrimaryCertificateFormProps) {
                 <input
                     type="text"
                     name="subtitle"
-                    defaultValue="تقدم هذه الشهادة بكل فخر الى"
+                    defaultValue="تتقدم ادارة مدرسة ___ بالشكر و التقدير"
                     placeholder={t("certificate.subtitle") || ""}
                     className="rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text placeholder:text-form-placeholder focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition"
                 />
@@ -99,15 +107,13 @@ function PrimaryCertificateForm({ onSubmit }: PrimaryCertificateFormProps) {
                 <label className="mb-1 text-sm font-medium text-form-label">
                     {t("certificate.personTitle")}
                 </label>
-                <select
+                <input
+                    type="text"
                     name="personTitle"
-                    className="rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition"
-                >
-                    <option value="المعلم">المعلم</option>
-                    <option value="المعلمة">المعلمة</option>
-                    <option value="الطالب">الطالب</option>
-                    <option value="الطالبة">الطالبة</option>
-                </select>
+                    placeholder="المعلم, الطالب,..."
+                    defaultValue={"الطالب"}
+                    className="rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text placeholder:text-form-placeholder focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition"
+                />
             </div>
 
             {/* Names */}
@@ -123,16 +129,25 @@ function PrimaryCertificateForm({ onSubmit }: PrimaryCertificateFormProps) {
                 />
             </div>
 
-            {/* Line 2 */}
-            <div className="flex flex-col">
+            {/* Line 2 (Extra Text split into 3 fields) */}
+            <div className="flex flex-col space-y-2">
                 <label className="mb-1 text-sm font-medium text-form-label">
                     {t("certificate.line2")}
                 </label>
-                <textarea
-                    name="line2"
-                    placeholder="نص إضافي (اختياري)"
-                    className="rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text placeholder:text-form-placeholder focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition h-24 resize-none"
-                />
+                {extraLines.map((line, idx) => (
+                    <input
+                        key={idx}
+                        type="text"
+                        value={line}
+                        onChange={(e) => {
+                            const newLines = [...extraLines];
+                            newLines[idx] = e.target.value;
+                            setExtraLines(newLines);
+                        }}
+                        placeholder={`سطر ${idx + 1} (اختياري)`}
+                        className="rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text placeholder:text-form-placeholder focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition"
+                    />
+                ))}
             </div>
 
             {/* Date */}
@@ -150,7 +165,6 @@ function PrimaryCertificateForm({ onSubmit }: PrimaryCertificateFormProps) {
                     calendarClassName="!rtl"
                 />
             </div>
-
 
             {/* Signature */}
             <div className="flex flex-col">
@@ -177,7 +191,7 @@ function PrimaryCertificateForm({ onSubmit }: PrimaryCertificateFormProps) {
                     <button
                         type="button"
                         onClick={() => setIsSignCanvasOpen(true)}
-                        className="bg-primary text-primary-foreground px-3 py-2 rounded-md text-sm hover:bg-primary-hover transition"
+                        className="bg-primary text-primary-foreground px-3 py-2 rounded-md text-sm hover:bg-primary-hover transition cursor-pointer"
                     >
                         افتح مساحة التوقيع
                     </button>
@@ -194,7 +208,7 @@ function PrimaryCertificateForm({ onSubmit }: PrimaryCertificateFormProps) {
                             <button
                                 type="button"
                                 onClick={() => setIsSignCanvasOpen(false)}
-                                className="text-red-500 text-sm"
+                                className="text-red-500 text-sm cursor-pointer"
                             >
                                 ✕
                             </button>
@@ -214,14 +228,14 @@ function PrimaryCertificateForm({ onSubmit }: PrimaryCertificateFormProps) {
                             <button
                                 type="button"
                                 onClick={() => sigCanvasModal.current?.clear()}
-                                className="bg-gray-200 text-gray-700 px-4 py-2 rounded-md text-sm"
+                                className="bg-gray-200 text-gray-700 px-4 py-2 rounded-md text-sm cursor-pointer"
                             >
                                 مسح
                             </button>
                             <button
                                 type="button"
                                 onClick={handleSaveSignature}
-                                className="bg-primary text-primary-foreground px-4 py-2 rounded-md text-sm"
+                                className="bg-primary text-primary-foreground px-4 py-2 rounded-md text-sm cursor-pointer"
                             >
                                 حفظ التوقيع
                             </button>
@@ -235,7 +249,7 @@ function PrimaryCertificateForm({ onSubmit }: PrimaryCertificateFormProps) {
                 <button
                     type="submit"
                     disabled={loading}
-                    className="bg-primary hover:bg-primary-hover active:bg-primary-active text-primary-foreground px-5 py-2 rounded-lg font-medium transition disabled:opacity-50"
+                    className="bg-primary hover:bg-primary-hover active:bg-primary-active text-primary-foreground px-5 py-2 rounded-lg font-medium transition disabled:opacity-50 cursor-pointer"
                 >
                     {loading ? t("general.loading") : t("general.submit")}
                 </button>
