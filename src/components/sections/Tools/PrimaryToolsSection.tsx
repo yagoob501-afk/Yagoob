@@ -4,6 +4,7 @@ import Img5 from "@/assets/5.png";
 import Template1background from "@/assets/cards_thumbnails/certificate-1.png";
 import Template2background from "@/assets/cards_thumbnails/certificate-2.png";
 import Template3background from "@/assets/cards_thumbnails/certificate-3.png";
+import Template4background from "@/assets/cards_thumbnails/certificate-4.png";
 import PrimarySectionTitle from "@/components/ui/SectionTitle/PrimarySectionTitle";
 
 function PrimaryToolsSection() {
@@ -97,6 +98,23 @@ function PrimaryToolsSection() {
                             description="نموذج انشاء شهادة تقدير للأولاد الصغار"
                             link="/forms/certificate-of-appreciation/3"
                             img={Template3background}
+                        />
+                    </motion.div>
+
+
+                    <motion.div
+                        // key={i}
+                        variants={{
+                            hidden: { opacity: 0, y: 30 },
+                            show: { opacity: 1, y: 0 },
+                        }}
+                        transition={{ duration: 0.6, ease: "easeOut" }}
+                    >
+                        <PrimaryToolCard
+                            title="نموذج شهادة تقدير"
+                            description="نموذج انشاء شهادة تقدير للبنات الصغار"
+                            link="/forms/certificate-of-appreciation/4"
+                            img={Template4background}
                         />
                     </motion.div>
 
