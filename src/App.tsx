@@ -8,6 +8,7 @@ import HomePage from '@/pages/page'
 import TextToQRcodePage from './pages/additional-tools/TextToQRcode';
 import CertificateOfAppreciationTemplate_2_Page from './pages/forms/certificate-of-appreciation/2/page';
 import CertificateOfAppreciationTemplate_1_Page from './pages/forms/certificate-of-appreciation/1/page';
+import CertificateOfAppreciationTemplate_3_Page from './pages/forms/certificate-of-appreciation/3/page';
 
 function App() {
     return (
@@ -22,6 +23,7 @@ function App() {
                         <Route path='/forms/project-documentation/1' element={<ProjectDocumentation1 />} />
                         <Route path='/forms/certificate-of-appreciation/1' element={<CertificateOfAppreciationTemplate_1_Page />} />
                         <Route path='/forms/certificate-of-appreciation/2' element={<CertificateOfAppreciationTemplate_2_Page />} />
+                        <Route path='/forms/certificate-of-appreciation/3' element={<CertificateOfAppreciationTemplate_3_Page />} />
 
                         {/* additional tools */}
                         <Route path='/additional-tools/text-to-qrcode' element={<TextToQRcodePage />} />
