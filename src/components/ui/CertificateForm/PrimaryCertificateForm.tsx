@@ -1,19 +1,35 @@
 import { useState, useRef } from "react";
 import SignatureCanvas from "react-signature-canvas";
 import { useTranslation } from "react-i18next";
-import type { CertificateProps } from "@/components/ui/CertificateViewer/PrimaryCertificateViewer";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ar } from "date-fns/locale";
+import type { CertificateProps, CertificateTemplate } from "@/components/ui/CertificateViewer/PrimaryCertificateViewer";
 
 // CertificateResult = نفس CertificateProps لكن من غير template
 type CertificateResult = Omit<CertificateProps, "template">;
 
 interface PrimaryCertificateFormProps {
     onSubmit?: (data: CertificateResult[]) => void;
+    template?: Partial<CertificateTemplate>;
 }
 
-function PrimaryCertificateForm({ onSubmit }: PrimaryCertificateFormProps) {
+const defaultFormTemplate: Partial<CertificateTemplate> = {
+    classNames: {
+        formContainer: "bg-form-bg p-7 w-full space-y-6",
+        formLabel: "mb-1 text-sm font-medium text-form-label",
+        formInput: "rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text placeholder:text-form-placeholder focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition",
+        formTextarea: "rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text placeholder:text-form-placeholder focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition h-32 resize-none",
+        formDatePicker: "rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition w-full",
+        formSignature: "w-full max-h-32 object-contain border border-form-border rounded-md bg-white",
+        formButton: "bg-primary hover:bg-primary-hover active:bg-primary-active text-primary-foreground px-5 py-2 rounded-lg font-medium transition disabled:opacity-50 cursor-pointer",
+    },
+};
+
+function PrimaryCertificateForm({
+    onSubmit,
+    template = defaultFormTemplate,
+}: PrimaryCertificateFormProps) {
     const { t } = useTranslation();
     const sigCanvasModal = useRef<SignatureCanvas | null>(null);
     const [sign, setSign] = useState<string | undefined>();
@@ -21,9 +37,11 @@ function PrimaryCertificateForm({ onSubmit }: PrimaryCertificateFormProps) {
     const [namesInput, setNamesInput] = useState("يوسف محمد");
     const [loading, setLoading] = useState(false);
     const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
-
-    // store each extra line separately
-    const [extraLines, setExtraLines] = useState(["و ذلك نظير جهوده", "و بدورنا نقدم له هذا الشكل كتقدير لجهوده المبذولة", "متمنين له دوام التوفيق و السداد"]);
+    const [extraLines, setExtraLines] = useState([
+        "و ذلك نظير جهوده",
+        "و بدورنا نقدم له هذا الشكل كتقدير لجهوده المبذولة",
+        "متمنين له دوام التوفيق و السداد",
+    ]);
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -34,7 +52,6 @@ function PrimaryCertificateForm({ onSubmit }: PrimaryCertificateFormProps) {
         const subtitle = (formData.get("subtitle") as string) || "";
         const personTitle = (formData.get("personTitle") as string) || "";
 
-        // join extra lines with \n
         const line2 = extraLines
             .map((line) => line.trim())
             .filter(Boolean)
@@ -66,7 +83,6 @@ function PrimaryCertificateForm({ onSubmit }: PrimaryCertificateFormProps) {
             },
         }));
 
-
         onSubmit?.(certificates);
         setLoading(false);
     };
@@ -82,11 +98,11 @@ function PrimaryCertificateForm({ onSubmit }: PrimaryCertificateFormProps) {
     return (
         <form
             onSubmit={handleSubmit}
-            className="bg-form-bg p-7 w-full space-y-6"
+            className={template.classNames?.formContainer}
         >
             {/* Title */}
             <div className="flex flex-col">
-                <label className="mb-1 text-sm font-medium text-form-label">
+                <label className={template.classNames?.formLabel}>
                     {t("certificate.title")}
                 </label>
                 <input
@@ -94,13 +110,13 @@ function PrimaryCertificateForm({ onSubmit }: PrimaryCertificateFormProps) {
                     name="title"
                     defaultValue="شهادة تقدير"
                     placeholder={t("certificate.title") || ""}
-                    className="rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text placeholder:text-form-placeholder focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition"
+                    className={template.classNames?.formInput}
                 />
             </div>
 
             {/* Subtitle */}
             <div className="flex flex-col">
-                <label className="mb-1 text-sm font-medium text-form-label">
+                <label className={template.classNames?.formLabel}>
                     {t("certificate.subtitle")}
                 </label>
                 <input
@@ -108,13 +124,13 @@ function PrimaryCertificateForm({ onSubmit }: PrimaryCertificateFormProps) {
                     name="subtitle"
                     defaultValue="تتقدم ادارة مدرسة ___ بالشكر و التقدير"
                     placeholder={t("certificate.subtitle") || ""}
-                    className="rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text placeholder:text-form-placeholder focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition"
+                    className={template.classNames?.formInput}
                 />
             </div>
 
             {/* Person Title */}
             <div className="flex flex-col">
-                <label className="mb-1 text-sm font-medium text-form-label">
+                <label className={template.classNames?.formLabel}>
                     {t("certificate.personTitle")}
                 </label>
                 <input
@@ -122,31 +138,30 @@ function PrimaryCertificateForm({ onSubmit }: PrimaryCertificateFormProps) {
                     name="personTitle"
                     placeholder="المعلم, الطالب,..."
                     defaultValue={"الطالب"}
-                    className="rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text placeholder:text-form-placeholder focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition"
+                    className={template.classNames?.formInput}
                 />
             </div>
 
             {/* Names */}
             <div className="flex flex-col">
-                <label className="mb-1 text-sm font-medium text-form-label">
+                <label className={template.classNames?.formLabel}>
                     {t("certificate.names")}
                 </label>
                 <textarea
                     value={namesInput}
                     onChange={(e) => setNamesInput(e.target.value)}
                     placeholder="اكتب كل اسم في سطر منفصل"
-                    className="rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text placeholder:text-form-placeholder focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition h-32 resize-none"
+                    className={template.classNames?.formTextarea}
                 />
             </div>
 
-            {/* Line 2 (Extra Text split into 3 fields) */}
-            <div className="flex flex-col space-y-2">
-                <label className="mb-1 text-sm font-medium text-form-label">
-                    {t("certificate.line2")}
-                </label>
-                {extraLines.map((line, idx) => (
+            {/* Extra Lines */}
+            {extraLines.map((line, idx) => (
+                <div key={idx} className="flex flex-col">
+                    <label className={template.classNames?.formLabel}>
+                        {t(`certificate.line2`)} {idx + 1}
+                    </label>
                     <input
-                        key={idx}
                         type="text"
                         value={line}
                         onChange={(e) => {
@@ -154,15 +169,14 @@ function PrimaryCertificateForm({ onSubmit }: PrimaryCertificateFormProps) {
                             newLines[idx] = e.target.value;
                             setExtraLines(newLines);
                         }}
-                        placeholder={`سطر ${idx + 1} (اختياري)`}
-                        className="rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text placeholder:text-form-placeholder focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition"
+                        className={template.classNames?.formInput}
                     />
-                ))}
-            </div>
+                </div>
+            ))}
 
             {/* Date */}
             <div className="flex flex-col">
-                <label className="mb-1 text-sm font-medium text-form-label">
+                <label className={template.classNames?.formLabel}>
                     {t("certificate.date") || "التاريخ"}
                 </label>
                 <DatePicker
@@ -170,24 +184,21 @@ function PrimaryCertificateForm({ onSubmit }: PrimaryCertificateFormProps) {
                     onChange={(date: Date | null) => setSelectedDate(date)}
                     dateFormat="dd/MM/yyyy"
                     locale={ar}
-                    className="rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition w-full"
-                    wrapperClassName="w-full"
-                    calendarClassName="!rtl"
+                    className={template.classNames?.formDatePicker}
                 />
             </div>
 
             {/* Signature */}
             <div className="flex flex-col">
-                <label className="mb-1 text-sm font-medium text-form-label">
+                <label className={template.classNames?.formLabel}>
                     {t("certificate.signature") || "التوقيع"}
                 </label>
-
                 {sign ? (
                     <div className="relative">
                         <img
                             src={sign}
                             alt="التوقيع"
-                            className="w-full max-h-32 object-contain border border-form-border rounded-md bg-white"
+                            className={template.classNames?.formSignature}
                         />
                         <button
                             type="button"
@@ -201,18 +212,78 @@ function PrimaryCertificateForm({ onSubmit }: PrimaryCertificateFormProps) {
                     <button
                         type="button"
                         onClick={() => setIsSignCanvasOpen(true)}
-                        className="bg-primary text-primary-foreground px-3 py-2 rounded-md text-sm hover:bg-primary-hover transition cursor-pointer"
+                        className={template.classNames?.formButton}
                     >
                         افتح مساحة التوقيع
                     </button>
                 )}
             </div>
 
-            {/* Fullscreen Signature Modal */}
+            {/* Manager Title & Name */}
+            <div className="flex flex-col">
+                <label className={template.classNames?.formLabel}>
+                    لقب المدير / المديرة
+                </label>
+                <input
+                    type="text"
+                    name="managerTitle"
+                    placeholder="مثال: المدير / المديرة"
+                    defaultValue="المدير"
+                    className={template.classNames?.formInput}
+                />
+            </div>
+            <div className="flex flex-col">
+                <label className={template.classNames?.formLabel}>
+                    اسم المدير / المديرة
+                </label>
+                <input
+                    type="text"
+                    name="managerName"
+                    placeholder="مثال: أحمد علي"
+                    className={template.classNames?.formInput}
+                />
+            </div>
+
+            {/* Teacher Title & Name */}
+            <div className="flex flex-col">
+                <label className={template.classNames?.formLabel}>
+                    لقب المعلم / المعلمة
+                </label>
+                <input
+                    type="text"
+                    name="teacherTitle"
+                    placeholder="مثال: المعلم / المعلمة"
+                    defaultValue="المعلم"
+                    className={template.classNames?.formInput}
+                />
+            </div>
+            <div className="flex flex-col">
+                <label className={template.classNames?.formLabel}>
+                    اسم المعلم / المعلمة
+                </label>
+                <input
+                    type="text"
+                    name="teacherName"
+                    placeholder="مثال: فاطمة حسن"
+                    className={template.classNames?.formInput}
+                />
+            </div>
+
+            {/* Submit */}
+            <div className="flex justify-end">
+                <button
+                    type="submit"
+                    disabled={loading}
+                    className={template.classNames?.formButton}
+                >
+                    {loading ? t("general.loading") : t("general.submit")}
+                </button>
+            </div>
+
+            {/* Signature Canvas Modal */}
             {isSignCanvasOpen && (
                 <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
                     <div className="bg-white rounded-lg shadow-lg w-[90%] max-w-md flex flex-col">
-                        {/* Header */}
                         <div className="flex justify-between items-center px-4 py-2 border-b">
                             <h2 className="font-medium">{t("certificate.signature")}</h2>
                             <button
@@ -223,17 +294,13 @@ function PrimaryCertificateForm({ onSubmit }: PrimaryCertificateFormProps) {
                                 ✕
                             </button>
                         </div>
-
-                        {/* Canvas */}
                         <SignatureCanvas
                             ref={sigCanvasModal}
                             penColor="black"
                             canvasProps={{
-                                className: "w-full h-48 bg-white", // حجم معقول
+                                className: "w-full h-48 bg-white",
                             }}
                         />
-
-                        {/* Actions */}
                         <div className="flex justify-between gap-3 p-3 border-t">
                             <button
                                 type="button"
@@ -253,72 +320,6 @@ function PrimaryCertificateForm({ onSubmit }: PrimaryCertificateFormProps) {
                     </div>
                 </div>
             )}
-
-            {/* Manager Title */}
-            <div className="flex flex-col">
-                <label className="mb-1 text-sm font-medium text-form-label">
-                    لقب المدير / المديرة
-                </label>
-                <input
-                    type="text"
-                    name="managerTitle"
-                    placeholder="مثال: المدير / المديرة"
-                    defaultValue="المدير"
-                    className="rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text placeholder:text-form-placeholder focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition"
-                />
-            </div>
-
-            {/* Manager Name */}
-            <div className="flex flex-col">
-                <label className="mb-1 text-sm font-medium text-form-label">
-                    اسم المدير / المديرة
-                </label>
-                <input
-                    type="text"
-                    name="managerName"
-                    placeholder="مثال: أحمد علي"
-                    className="rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text placeholder:text-form-placeholder focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition"
-                />
-            </div>
-
-            {/* Teacher Title */}
-            <div className="flex flex-col">
-                <label className="mb-1 text-sm font-medium text-form-label">
-                    لقب المعلم / المعلمة
-                </label>
-                <input
-                    type="text"
-                    name="teacherTitle"
-                    placeholder="مثال: المعلم / المعلمة"
-                    defaultValue="المعلم"
-                    className="rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text placeholder:text-form-placeholder focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition"
-                />
-            </div>
-
-            {/* Teacher Name */}
-            <div className="flex flex-col">
-                <label className="mb-1 text-sm font-medium text-form-label">
-                    اسم المعلم / المعلمة
-                </label>
-                <input
-                    type="text"
-                    name="teacherName"
-                    placeholder="مثال: فاطمة حسن"
-                    className="rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text placeholder:text-form-placeholder focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition"
-                />
-            </div>
-
-
-            {/* Submit */}
-            <div className="flex justify-end">
-                <button
-                    type="submit"
-                    disabled={loading}
-                    className="bg-primary hover:bg-primary-hover active:bg-primary-active text-primary-foreground px-5 py-2 rounded-lg font-medium transition disabled:opacity-50 cursor-pointer"
-                >
-                    {loading ? t("general.loading") : t("general.submit")}
-                </button>
-            </div>
         </form>
     );
 }

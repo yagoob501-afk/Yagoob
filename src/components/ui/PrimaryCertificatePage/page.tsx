@@ -46,7 +46,7 @@ export default function PrimaryCertificatePage({ template }: { template: Certifi
             <div className="container mx-auto px-4 py-10 space-y-2">
                 {/* Form Section */}
                 <div className="bg-white relative p-6 rounded-xl shadow-lg w-full">
-                    <PrimaryCertificateForm onSubmit={handleFormDataChange} />
+                    <PrimaryCertificateForm onSubmit={handleFormDataChange} template={template} />
 
                     {/* Loader */}
                     {isLoading && (

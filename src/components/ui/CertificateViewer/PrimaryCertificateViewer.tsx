@@ -35,6 +35,15 @@ export type CertificateTemplate = {
         managerName?: string;
         teacherTitle?: string;
         teacherName?: string;
+
+        // إضافة فورم ستايل
+        formContainer?: string;
+        formLabel?: string;
+        formInput?: string;
+        formTextarea?: string;
+        formDatePicker?: string;
+        formSignature?: string;
+        formButton?: string;
     };
     positions: {
         title?: React.CSSProperties;
@@ -47,8 +56,21 @@ export type CertificateTemplate = {
         managerName?: React.CSSProperties;
         teacherTitle?: React.CSSProperties;
         teacherName?: React.CSSProperties;
+
+        // إضافات فورم
+        formTitle?: React.CSSProperties;
+        formSubtitle?: React.CSSProperties;
+        formName?: React.CSSProperties;
+        formLine2?: React.CSSProperties;
+        formDate?: React.CSSProperties;
+        formSign?: React.CSSProperties;
+        formTeacherTitle?: React.CSSProperties;
+        formTeacherName?: React.CSSProperties;
+        formManagerTitle?: React.CSSProperties;
+        formManagerName?: React.CSSProperties;
     };
 };
+
 
 export type CertificateProps = {
     data: CertificateData;
