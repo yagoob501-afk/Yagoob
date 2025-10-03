@@ -13,6 +13,7 @@ import CertificateOfAppreciationTemplate_4_Page from './pages/forms/certificate-
 import CertificateOfAppreciationTemplate_5_Page from './pages/forms/certificate-of-appreciation/5/page';
 import CertificateOfAppreciationTemplate_6_Page from './pages/forms/certificate-of-appreciation/6/page';
 import CertificateOfAppreciationTemplate_7_Page from './pages/forms/certificate-of-appreciation/7/page';
+import CertificateOfAppreciationTemplate_8_Page from './pages/forms/certificate-of-appreciation/8/page';
 
 function App() {
     return (
@@ -32,6 +33,7 @@ function App() {
                         <Route path='/forms/certificate-of-appreciation/5' element={<CertificateOfAppreciationTemplate_5_Page />} />
                         <Route path='/forms/certificate-of-appreciation/6' element={<CertificateOfAppreciationTemplate_6_Page />} />
                         <Route path='/forms/certificate-of-appreciation/7' element={<CertificateOfAppreciationTemplate_7_Page />} />
+                        <Route path='/forms/certificate-of-appreciation/8' element={<CertificateOfAppreciationTemplate_8_Page />} />
 
                         {/* additional tools */}
                         <Route path='/additional-tools/text-to-qrcode' element={<TextToQRcodePage />} />
