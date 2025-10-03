@@ -31,9 +31,7 @@ export type CertificateTemplate = {
         line2?: string;
         date?: string;
         sign?: string;
-        managerTitle?: string;
         managerName?: string;
-        teacherTitle?: string;
         teacherName?: string;
 
         // إضافة فورم ستايل
@@ -52,9 +50,7 @@ export type CertificateTemplate = {
         line2?: React.CSSProperties;
         date?: React.CSSProperties;
         sign?: React.CSSProperties;
-        managerTitle?: React.CSSProperties;
         managerName?: React.CSSProperties;
-        teacherTitle?: React.CSSProperties;
         teacherName?: React.CSSProperties;
 
         // إضافات فورم
@@ -169,42 +165,25 @@ function PrimaryCertificateViewer({
                     </h2>
 
                     {/* Manager Title */}
-                    {data.managerTitle && (
-                        <h3
-                            className={template.classNames.managerTitle}
-                            style={template.positions.managerTitle}
-                        >
-                            {data.managerTitle}
-                        </h3>
-                    )}
-
-                    {/* Manager Name */}
-                    {data.managerName && (
+                    {data.managerTitle && data.managerTitle && (
                         <h3
                             className={template.classNames.managerName}
                             style={template.positions.managerName}
                         >
-                            {data.managerName}
+                            <span>{data.managerTitle}</span>
+                            <span>{data.managerName}</span>
                         </h3>
                     )}
 
-                    {/* Teacher Title */}
-                    {data.teacherTitle && (
-                        <h3
-                            className={template.classNames.teacherTitle}
-                            style={template.positions.teacherTitle}
-                        >
-                            {data.teacherTitle}
-                        </h3>
-                    )}
 
                     {/* Teacher Name */}
-                    {data.teacherName && (
+                    {data.teacherName && data.teacherTitle && (
                         <h3
                             className={template.classNames.teacherName}
                             style={template.positions.teacherName}
                         >
-                            {data.teacherName}
+                            <span>{data.teacherTitle}</span>
+                            <span>{data.teacherName}</span>
                         </h3>
                     )}
 

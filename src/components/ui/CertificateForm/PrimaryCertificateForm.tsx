@@ -25,12 +25,18 @@ const defaultFormTemplate: Partial<CertificateTemplate> = {
         formButton: "bg-primary hover:bg-primary-hover active:bg-primary-active text-primary-foreground px-5 py-2 rounded-lg font-medium transition disabled:opacity-50 cursor-pointer",
     },
 };
-
 function PrimaryCertificateForm({
     onSubmit,
-    template = defaultFormTemplate,
+    template = {}
 }: PrimaryCertificateFormProps) {
     const { t } = useTranslation();
+
+    // دمج القيم الافتراضية مع القيم الممررة
+    const classNames = {
+        ...defaultFormTemplate.classNames,
+        ...(template.classNames || {}),
+    };
+
     const sigCanvasModal = useRef<SignatureCanvas | null>(null);
     const [sign, setSign] = useState<string | undefined>();
     const [isSignCanvasOpen, setIsSignCanvasOpen] = useState(false);
@@ -98,11 +104,11 @@ function PrimaryCertificateForm({
     return (
         <form
             onSubmit={handleSubmit}
-            className={template.classNames?.formContainer}
+            className={classNames.formContainer}
         >
             {/* Title */}
             <div className="flex flex-col">
-                <label className={template.classNames?.formLabel}>
+                <label className={classNames.formLabel}>
                     {t("certificate.title")}
                 </label>
                 <input
@@ -110,13 +116,13 @@ function PrimaryCertificateForm({
                     name="title"
                     defaultValue="شهادة تقدير"
                     placeholder={t("certificate.title") || ""}
-                    className={template.classNames?.formInput}
+                    className={classNames.formInput}
                 />
             </div>
 
             {/* Subtitle */}
             <div className="flex flex-col">
-                <label className={template.classNames?.formLabel}>
+                <label className={classNames.formLabel}>
                     {t("certificate.subtitle")}
                 </label>
                 <input
@@ -124,13 +130,13 @@ function PrimaryCertificateForm({
                     name="subtitle"
                     defaultValue="تتقدم ادارة مدرسة ___ بالشكر و التقدير"
                     placeholder={t("certificate.subtitle") || ""}
-                    className={template.classNames?.formInput}
+                    className={classNames.formInput}
                 />
             </div>
 
             {/* Person Title */}
             <div className="flex flex-col">
-                <label className={template.classNames?.formLabel}>
+                <label className={classNames.formLabel}>
                     {t("certificate.personTitle")}
                 </label>
                 <input
@@ -138,27 +144,27 @@ function PrimaryCertificateForm({
                     name="personTitle"
                     placeholder="المعلم, الطالب,..."
                     defaultValue={"الطالب"}
-                    className={template.classNames?.formInput}
+                    className={classNames.formInput}
                 />
             </div>
 
             {/* Names */}
             <div className="flex flex-col">
-                <label className={template.classNames?.formLabel}>
+                <label className={classNames.formLabel}>
                     {t("certificate.names")}
                 </label>
                 <textarea
                     value={namesInput}
                     onChange={(e) => setNamesInput(e.target.value)}
                     placeholder="اكتب كل اسم في سطر منفصل"
-                    className={template.classNames?.formTextarea}
+                    className={classNames.formTextarea}
                 />
             </div>
 
             {/* Extra Lines */}
             {extraLines.map((line, idx) => (
                 <div key={idx} className="flex flex-col">
-                    <label className={template.classNames?.formLabel}>
+                    <label className={classNames.formLabel}>
                         {t(`certificate.line2`)} {idx + 1}
                     </label>
                     <input
@@ -169,14 +175,14 @@ function PrimaryCertificateForm({
                             newLines[idx] = e.target.value;
                             setExtraLines(newLines);
                         }}
-                        className={template.classNames?.formInput}
+                        className={classNames.formInput}
                     />
                 </div>
             ))}
 
             {/* Date */}
             <div className="flex flex-col">
-                <label className={template.classNames?.formLabel}>
+                <label className={classNames.formLabel}>
                     {t("certificate.date") || "التاريخ"}
                 </label>
                 <DatePicker
@@ -184,13 +190,13 @@ function PrimaryCertificateForm({
                     onChange={(date: Date | null) => setSelectedDate(date)}
                     dateFormat="dd/MM/yyyy"
                     locale={ar}
-                    className={template.classNames?.formDatePicker}
+                    className={classNames.formDatePicker}
                 />
             </div>
 
             {/* Signature */}
             <div className="flex flex-col">
-                <label className={template.classNames?.formLabel}>
+                <label className={classNames.formLabel}>
                     {t("certificate.signature") || "التوقيع"}
                 </label>
                 {sign ? (
@@ -198,7 +204,7 @@ function PrimaryCertificateForm({
                         <img
                             src={sign}
                             alt="التوقيع"
-                            className={template.classNames?.formSignature}
+                            className={classNames.formSignature}
                         />
                         <button
                             type="button"
@@ -212,7 +218,7 @@ function PrimaryCertificateForm({
                     <button
                         type="button"
                         onClick={() => setIsSignCanvasOpen(true)}
-                        className={template.classNames?.formButton}
+                        className={classNames.formButton}
                     >
                         افتح مساحة التوقيع
                     </button>
@@ -221,7 +227,7 @@ function PrimaryCertificateForm({
 
             {/* Manager Title & Name */}
             <div className="flex flex-col">
-                <label className={template.classNames?.formLabel}>
+                <label className={classNames.formLabel}>
                     لقب المدير / المديرة
                 </label>
                 <input
@@ -229,24 +235,24 @@ function PrimaryCertificateForm({
                     name="managerTitle"
                     placeholder="مثال: المدير / المديرة"
                     defaultValue="المدير"
-                    className={template.classNames?.formInput}
+                    className={classNames.formInput}
                 />
             </div>
             <div className="flex flex-col">
-                <label className={template.classNames?.formLabel}>
+                <label className={classNames.formLabel}>
                     اسم المدير / المديرة
                 </label>
                 <input
                     type="text"
                     name="managerName"
                     placeholder="مثال: أحمد علي"
-                    className={template.classNames?.formInput}
+                    className={classNames.formInput}
                 />
             </div>
 
             {/* Teacher Title & Name */}
             <div className="flex flex-col">
-                <label className={template.classNames?.formLabel}>
+                <label className={classNames.formLabel}>
                     لقب المعلم / المعلمة
                 </label>
                 <input
@@ -254,18 +260,18 @@ function PrimaryCertificateForm({
                     name="teacherTitle"
                     placeholder="مثال: المعلم / المعلمة"
                     defaultValue="المعلم"
-                    className={template.classNames?.formInput}
+                    className={classNames.formInput}
                 />
             </div>
             <div className="flex flex-col">
-                <label className={template.classNames?.formLabel}>
+                <label className={classNames.formLabel}>
                     اسم المعلم / المعلمة
                 </label>
                 <input
                     type="text"
                     name="teacherName"
                     placeholder="مثال: فاطمة حسن"
-                    className={template.classNames?.formInput}
+                    className={classNames.formInput}
                 />
             </div>
 
@@ -274,7 +280,7 @@ function PrimaryCertificateForm({
                 <button
                     type="submit"
                     disabled={loading}
-                    className={template.classNames?.formButton}
+                    className={classNames.formButton}
                 >
                     {loading ? t("general.loading") : t("general.submit")}
                 </button>

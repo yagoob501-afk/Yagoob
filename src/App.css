@@ -16,6 +16,17 @@
 }
 
 @font-face {
+    font-family: "almaria";
+    src: url("assets/fonts/Almarai/Almarai-Regular.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "amiri";
+    src: url("assets/fonts/Amiri/Amiri-Regular.ttf") format("truetype");
+}
+
+
+@font-face {
     font-family: "airstrip";
     src: url("assets/fonts/AirStripArabic.ttf") format("truetype");
 }
@@ -78,6 +89,8 @@
     --font-sharjah: sharjah, sans-serif;
     --font-airstrip: airstrip;
     --font-cairo: cairo;
+    --font-almaria: almaria;
+    --font-amiri: amiri;
 
     --color-primary: var(--color-primary);
     --color-primary-foreground: var(--color-primary-foreground);
