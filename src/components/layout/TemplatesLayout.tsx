@@ -6,7 +6,7 @@ function TemplatesLayout({ children }: PropsWithChildren) {
     return (
         <div className="grow flex flex-col">
             <PrimaryHeader />
-            <main className="grow flex flex-col items-center justify-center px-4 py-8">
+            <main className="grow flex flex-col items-center justify-center md:px-4 md:py-8">
                 {children}
             </main>
 

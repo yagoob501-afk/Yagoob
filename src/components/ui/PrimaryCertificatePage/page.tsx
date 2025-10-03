@@ -71,9 +71,9 @@ export default function PrimaryCertificatePage({ template }: { template: Certifi
 
     return (
         <TemplatesLayout>
-            <div className="container mx-auto px-4 py-10 space-y-2">
+            <div className="container mx-auto md:px-4 md:py-10 space-y-2">
                 {/* Form Section */}
-                <div className="bg-white relative p-6 rounded-xl shadow-lg w-full">
+                <div className="bg-white relative p-6 md:rounded-xl shadow-lg w-full">
                     <PrimaryCertificateForm onSubmit={handleFormDataChange} template={template} />
 
                     {isLoading && (
@@ -106,32 +106,32 @@ export default function PrimaryCertificatePage({ template }: { template: Certifi
 
                 {/* Show Lightbox when all images are ready */}
                 {images.length > 0 && (
-                    <div className="flex flex-col items-center gap-6">
+                    <div className="flex flex-col items-center gap-6 my-4 mx-2">
                         <div className="flex flex-wrap justify-center gap-4">
                             <button
                                 onClick={() => setOpen(true)}
-                                className="bg-primary text-white px-6 py-3 rounded-lg shadow-lg hover:bg-primary-hover transition flex items-center gap-2"
+                                className="bg-primary text-white px-6 py-3 rounded-lg shadow-lg hover:bg-primary-hover transition flex items-center justify-center gap-2 w-full"
                             >
                                 عرض الشهادات <Image />
                             </button>
 
                             <button
                                 onClick={downloadAll}
-                                className="bg-primary text-white px-6 py-3 rounded-lg shadow-lg hover:bg-primary-hover transition flex items-center gap-2"
+                                className="bg-primary text-white px-6 py-3 rounded-lg shadow-lg hover:bg-primary-hover transition flex items-center justify-center gap-2 w-full"
                             >
                                 تحميل الشهادات <Download />
                             </button>
 
                             <button
                                 onClick={downloadPDFSingle}
-                                className="bg-primary text-white px-6 py-3 rounded-lg shadow-lg hover:bg-primary-hover transition flex items-center gap-2"
+                                className="bg-primary text-white px-6 py-3 rounded-lg shadow-lg hover:bg-primary-hover transition flex items-center justify-center gap-2 w-full"
                             >
                                 تحميل PDF منفصل <FileText />
                             </button>
 
                             <button
                                 onClick={downloadPDFCombined}
-                                className="bg-primary text-white px-6 py-3 rounded-lg shadow-lg hover:bg-primary-hover transition flex items-center gap-2"
+                                className="bg-primary text-white px-6 py-3 rounded-lg shadow-lg hover:bg-primary-hover transition flex items-center justify-center gap-2 w-full"
                             >
                                 تحميل PDF مجمع <FileText />
                             </button>

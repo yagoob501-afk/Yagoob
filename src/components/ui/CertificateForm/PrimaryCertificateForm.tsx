@@ -19,9 +19,9 @@ interface PrimaryCertificateFormProps {
 
 const defaultFormTemplate: Partial<CertificateTemplate> = {
     classNames: {
-        formContainer: "bg-form-bg p-7 w-full space-y-6",
+        formContainer: "bg-form-bg md:p-7 w-full space-y-6",
         formLabel: "mb-1 text-sm font-medium text-form-label",
-        formInput: "rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text placeholder:text-form-placeholder focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition",
+        formInput: "rounded-lg border border-form-border text-center bg-form-bg px-3 py-2 text-form-text placeholder:text-form-placeholder focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition",
         formTextarea: "rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text placeholder:text-form-placeholder focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition resize-none",
         formDatePicker: "rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition w-full",
         formSignature: "w-full max-h-32 object-contain border border-form-border rounded-md bg-white",
@@ -198,37 +198,6 @@ function PrimaryCertificateForm({
                 />
             </div>
 
-            {/* Signature */}
-            <div className="flex flex-col">
-                <label className={classNames.formLabel}>
-                    {t("certificate.signature") || "التوقيع"}
-                </label>
-                {sign ? (
-                    <div className="relative">
-                        <img
-                            src={sign}
-                            alt="التوقيع"
-                            className={classNames.formSignature}
-                        />
-                        <button
-                            type="button"
-                            onClick={() => setSign(undefined)}
-                            className="absolute top-1 right-1 bg-red-500 text-white text-xs px-2 py-1 rounded"
-                        >
-                            مسح
-                        </button>
-                    </div>
-                ) : (
-                    <button
-                        type="button"
-                        onClick={() => setIsSignCanvasOpen(true)}
-                        className={classNames.formButton}
-                    >
-                        افتح مساحة التوقيع
-                    </button>
-                )}
-            </div>
-
             {/* Manager Title & Name */}
             <div className="flex flex-col">
                 <label className={classNames.formLabel}>
@@ -278,6 +247,38 @@ function PrimaryCertificateForm({
                     className={classNames.formInput}
                 />
             </div>
+
+            {/* Signature */}
+            <div className="flex flex-col">
+                <label className={classNames.formLabel}>
+                    {t("certificate.signature") || "التوقيع"}
+                </label>
+                {sign ? (
+                    <div className="relative">
+                        <img
+                            src={sign}
+                            alt="التوقيع"
+                            className={classNames.formSignature}
+                        />
+                        <button
+                            type="button"
+                            onClick={() => setSign(undefined)}
+                            className="absolute top-1 right-1 bg-red-500 text-white text-xs px-2 py-1 rounded"
+                        >
+                            مسح
+                        </button>
+                    </div>
+                ) : (
+                    <button
+                        type="button"
+                        onClick={() => setIsSignCanvasOpen(true)}
+                        className={classNames.formButton}
+                    >
+                        افتح مساحة التوقيع
+                    </button>
+                )}
+            </div>
+
 
             {/* Submit */}
             <div className="flex justify-end">
