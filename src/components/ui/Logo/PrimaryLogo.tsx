@@ -1,17 +1,40 @@
-import { HashLink } from 'react-router-hash-link'
+"use client";
+
+import { useState } from "react";
+import { HashLink } from "react-router-hash-link";
 import { useTranslation } from "react-i18next";
 import Logo from "@/assets/logo-main.jpeg";
+import Lightbox from "yet-another-react-lightbox";
+import "yet-another-react-lightbox/styles.css";
 
 function PrimaryLogo() {
     const { t } = useTranslation();
+    const [isOpen, setIsOpen] = useState(false);
 
     return (
         <div className="flex justify-center items-center lg:justify-start w-full">
-            <HashLink to="/" className='flex items-center gap-4'>
-                <img src={Logo} alt="Logo" className="max-w-14" />
-                <p className="text-lg">{t("logo_text")}</p>
+            <HashLink to="/" className="flex items-center gap-4">
+                <img
+                    src={Logo}
+                    alt="Logo"
+                    className="max-w-14 cursor-pointer"
+                    onClick={() => setIsOpen(true)}
+                />
+                <p className="text-lg cursor-pointer">
+                    {t("logo_text")}
+                </p>
             </HashLink>
-        </div>)
+
+            {/* Lightbox */}
+            {isOpen && (
+                <Lightbox
+                    open={isOpen}
+                    close={() => setIsOpen(false)}
+                    slides={[{ src: Logo }]}
+                />
+            )}
+        </div>
+    );
 }
 
-export default PrimaryLogo
+export default PrimaryLogo;
