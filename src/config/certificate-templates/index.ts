@@ -6,6 +6,7 @@ import Template5background from "@/assets/certificates_backgrounds/certificate-b
 import Template6background from "@/assets/certificates_backgrounds/certificate-background-6.png";
 import Template7background from "@/assets/certificates_backgrounds/certificate-background-7.png";
 import Template8background from "@/assets/certificates_backgrounds/certificate-background-8.png";
+import Template9background from "@/assets/certificates_backgrounds/certificate-background-9.png";
 import type { CertificateTemplate } from "@/components/ui/CertificateViewer/PrimaryCertificateViewer";
 
 export const Template1: CertificateTemplate = {
@@ -213,4 +214,33 @@ export const Template8: CertificateTemplate = {
 
         managerName: { bottom: "17%", left: "24%", transform: "translateX(-100%)" },
     },
+};
+
+export const Template9: CertificateTemplate = {
+    background: Template9background,
+    classNames: {
+        title: "absolute font-tajawal text-[70px] text-center text-black whitespace-nowrap",
+        name: "absolute font-tajawal text-[90px] text-[#de7284] whitespace-nowrap",
+        line2: "absolute text-[65px] text-center font-semibold text-black font-tajawal leading-20",
+        date: "absolute text-3xl hidden",
+        sign: "absolute text-3xl",
+
+        teacherName: "absolute text-[40px] text-[#de7284] font-bold font-tajawal flex flex-col items-center gap-2",
+        managerName: "absolute text-[40px] text-[#de7284] font-bold font-tajawal flex flex-col items-center gap-2",
+    },
+    positions: {
+        title: { top: "32%", left: "50%", transform: "translateX(-50%)" },
+        name: { top: "40%", left: "50%", transform: "translateX(-50%)" },
+        line2: { top: "50%", left: "50%", transform: "translateX(-50%)" },
+
+        // date: { bottom: "16%", left: "66.7%" },
+        sign: { bottom: "4%", left: "29.2%" },
+
+        teacherName: { bottom: "14%", left: "76%", },
+
+        managerName: { bottom: "14%", left: "50%", transform: "translateX(-100%)" },
+    },
+    formDisplayedFields: {
+        formSubtitle: false,
+    }
 };

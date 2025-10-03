@@ -31,6 +31,11 @@
     src: url("assets/fonts/AirStripArabic.ttf") format("truetype");
 }
 
+@font-face {
+    font-family: "tajawal";
+    src: url("assets/fonts/Tajawal/Tajawal-Regular.ttf") format("truetype");
+}
+
 
 @layer base {
     :root {
@@ -91,6 +96,7 @@
     --font-cairo: cairo;
     --font-almaria: almaria;
     --font-amiri: amiri;
+    --font-tajawal: tajawal;
 
     --color-primary: var(--color-primary);
     --color-primary-foreground: var(--color-primary-foreground);

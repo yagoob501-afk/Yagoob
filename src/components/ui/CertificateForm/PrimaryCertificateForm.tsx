@@ -110,59 +110,77 @@ function PrimaryCertificateForm({
             className={classNames.formContainer}
         >
             {/* Title */}
-            <div className="flex flex-col">
-                <label className={classNames.formLabel}>
-                    {t("certificate.title")}
-                </label>
-                <TextareaAutosize
-                    name="title"
-                    minRows={1}
-                    defaultValue="شهادة شكر و تقدير"
-                    placeholder={t("certificate.title") || ""}
-                    className={classNames.formInput}
-                />
-            </div>
+            {
+                template.formDisplayedFields?.formTitle !== false ? (
+                    <div className="flex flex-col">
+                        <label className={classNames.formLabel}>
+                            {t("certificate.title")}
+                        </label>
+                        <TextareaAutosize
+                            name="title"
+                            minRows={1}
+                            defaultValue="شهادة شكر و تقدير"
+                            placeholder={t("certificate.title") || ""}
+                            className={classNames.formInput}
+                        />
+                    </div>
+                ) : null
+            }
 
             {/* Subtitle */}
-            <div className="flex flex-col">
-                <label className={classNames.formLabel}>
-                    {t("certificate.subtitle")}
-                </label>
-                <TextareaAutosize
-                    name="subtitle"
-                    minRows={1}
-                    defaultValue="تتقدم ادارة مدرسة ___ بالشكر و التقدير"
-                    placeholder={t("certificate.subtitle") || ""}
-                    className={classNames.formInput}
-                />
-            </div>
+            {
+                template.formDisplayedFields?.formSubtitle !== false ? (
+                    <div className="flex flex-col">
+                        <label className={classNames.formLabel}>
+                            {t("certificate.subtitle")}
+                        </label>
+                        <TextareaAutosize
+                            name="subtitle"
+                            minRows={1}
+                            defaultValue="تتقدم ادارة مدرسة ___ بالشكر و التقدير"
+                            placeholder={t("certificate.subtitle") || ""}
+                            className={classNames.formInput}
+                        />
+                    </div>
+                ) : null
+            }
 
             {/* Person Title */}
-            <div className="flex flex-col">
-                <label className={classNames.formLabel}>
-                    {t("certificate.personTitle")}
-                </label>
-                <TextareaAutosize
-                    name="personTitle"
-                    minRows={1}
-                    placeholder="المعلم, الطالب,..."
-                    defaultValue={"الطالب"}
-                    className={classNames.formInput}
-                />
-            </div>
+            {
+                template.formDisplayedFields?.formPersonTitle !== false ? (
+                    <div className="flex flex-col">
+                        <label className={classNames.formLabel}>
+                            {t("certificate.personTitle")}
+                        </label>
+                        <TextareaAutosize
+                            name="personTitle"
+                            minRows={1}
+                            placeholder="المعلم, الطالب,..."
+                            defaultValue={"الطالب"}
+                            className={classNames.formInput}
+                        />
+                    </div>
+                ) : null
+            }
+
 
             {/* Names */}
-            <div className="flex flex-col">
-                <label className={classNames.formLabel}>
-                    {t("certificate.names")}
-                </label>
-                <TextareaAutosize
-                    value={namesInput}
-                    onChange={(e) => setNamesInput(e.target.value)}
-                    placeholder="اكتب كل اسم في سطر منفصل"
-                    className={classNames.formTextarea}
-                />
-            </div>
+            {
+                template.formDisplayedFields?.formName !== false ? (
+
+                    <div className="flex flex-col">
+                        <label className={classNames.formLabel}>
+                            {t("certificate.names")}
+                        </label>
+                        <TextareaAutosize
+                            value={namesInput}
+                            onChange={(e) => setNamesInput(e.target.value)}
+                            placeholder="اكتب كل اسم في سطر منفصل"
+                            className={classNames.formTextarea}
+                        />
+                    </div>
+                ) : null
+            }
 
             {/* Extra Lines */}
             {extraLines.map((line, idx) => (
@@ -195,99 +213,133 @@ function PrimaryCertificateForm({
             ))}
 
             {/* Date */}
-            <div className="flex flex-col">
-                <label className={classNames.formLabel}>
-                    {t("certificate.date") || "التاريخ"}
-                </label>
-                <DatePicker
-                    selected={selectedDate}
-                    onChange={(date: Date | null) => setSelectedDate(date)}
-                    dateFormat="dd/MM/yyyy"
-                    locale={ar}
-                    className={classNames.formDatePicker}
-                />
-            </div>
+            {
+                template.formDisplayedFields?.formDate !== false ? (
+
+
+                    <div className="flex flex-col">
+                        <label className={classNames.formLabel}>
+                            {t("certificate.date") || "التاريخ"}
+                        </label>
+                        <DatePicker
+                            selected={selectedDate}
+                            onChange={(date: Date | null) => setSelectedDate(date)}
+                            dateFormat="dd/MM/yyyy"
+                            locale={ar}
+                            className={classNames.formDatePicker}
+                        />
+                    </div>
+                ) : null
+            }
 
             {/* Manager Title & Name */}
-            <div className="flex flex-col">
-                <label className={classNames.formLabel}>
-                    لقب المدير / المديرة
-                </label>
-                <TextareaAutosize
-                    name="managerTitle"
-                    minRows={1}
-                    placeholder="مثال: المدير / المديرة"
-                    defaultValue="مدير المدرسة"
-                    className={classNames.formInput}
-                />
-            </div>
-            <div className="flex flex-col">
-                <label className={classNames.formLabel}>
-                    اسم المدير / المديرة
-                </label>
-                <TextareaAutosize
-                    name="managerName"
-                    minRows={1}
-                    placeholder="مثال: أحمد علي"
-                    className={classNames.formInput}
-                />
-            </div>
+            {
+                template.formDisplayedFields?.formManagerTitle !== false ? (
+                    <div className="flex flex-col">
+                        <label className={classNames.formLabel}>
+                            لقب المدير / المديرة
+                        </label>
+                        <TextareaAutosize
+                            name="managerTitle"
+                            minRows={1}
+                            placeholder="مثال: المدير / المديرة"
+                            defaultValue="مدير المدرسة"
+                            className={classNames.formInput}
+                        />
+                    </div>
+                ) : null
+            }
+
+            {
+                template.formDisplayedFields?.formManagerName !== false ? (
+                    <div className="flex flex-col">
+                        <label className={classNames.formLabel}>
+                            اسم المدير / المديرة
+                        </label>
+                        <TextareaAutosize
+                            name="managerName"
+                            minRows={1}
+                            placeholder="مثال: أحمد علي"
+                            className={classNames.formInput}
+                        />
+                    </div>
+                ) : null
+            }
 
             {/* Teacher Title & Name */}
-            <div className="flex flex-col">
-                <label className={classNames.formLabel}>
-                    لقب المعلم / المعلمة
-                </label>
-                <TextareaAutosize
-                    name="teacherTitle"
-                    minRows={1}
-                    placeholder="مثال: المعلم / المعلمة"
-                    defaultValue="المعلم"
-                    className={classNames.formInput}
-                />
-            </div>
-            <div className="flex flex-col">
-                <label className={classNames.formLabel}>
-                    اسم المعلم / المعلمة
-                </label>
-                <TextareaAutosize
-                    name="teacherName"
-                    minRows={1}
-                    placeholder="مثال: فاطمة حسن"
-                    className={classNames.formInput}
-                />
-            </div>
+            {
+                template.formDisplayedFields?.formTeacherTitle !== false ? (
+
+
+                    <div className="flex flex-col">
+                        <label className={classNames.formLabel}>
+                            لقب المعلم / المعلمة
+                        </label>
+                        <TextareaAutosize
+                            name="teacherTitle"
+                            minRows={1}
+                            placeholder="مثال: المعلم / المعلمة"
+                            defaultValue="المعلم"
+                            className={classNames.formInput}
+                        />
+                    </div>
+                ) : null
+            }
+
+            {
+                template.formDisplayedFields?.formTeacherName !== false ? (
+
+
+                    <div className="flex flex-col">
+                        <label className={classNames.formLabel}>
+                            اسم المعلم / المعلمة
+                        </label>
+                        <TextareaAutosize
+                            name="teacherName"
+                            minRows={1}
+                            placeholder="مثال: فاطمة حسن"
+                            className={classNames.formInput}
+                        />
+                    </div>
+                ) : null
+            }
 
             {/* Signature */}
-            <div className="flex flex-col">
-                <label className={classNames.formLabel}>
-                    {t("certificate.signature") || "التوقيع"}
-                </label>
-                {sign ? (
-                    <div className="relative">
-                        <img
-                            src={sign}
-                            alt="التوقيع"
-                            className={classNames.formSignature}
-                        />
-                        <button
-                            type="button"
-                            onClick={() => setSign(undefined)}
-                            className="absolute top-1 right-1 bg-red-500 text-white text-xs px-2 py-1 rounded"
-                        >
-                            مسح
-                        </button>
+            {
+                template.formDisplayedFields?.formSign !== false ? (
+
+
+                    <div className="flex flex-col">
+                        <label className={classNames.formLabel}>
+                            {t("certificate.signature") || "التوقيع"}
+                        </label>
+                        {sign ? (
+                            <div className="relative">
+                                <img
+                                    src={sign}
+                                    alt="التوقيع"
+                                    className={classNames.formSignature}
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setSign(undefined)}
+                                    className="absolute top-1 right-1 bg-red-500 text-white text-xs px-2 py-1 rounded"
+                                >
+                                    مسح
+                                </button>
+                            </div>
+                        ) : (
+                            <button
+                                type="button"
+                                onClick={() => setIsSignCanvasOpen(true)}
+                                className={classNames.formButton}
+                            >
+                                افتح مساحة التوقيع
+                            </button>
+                        )}
                     </div>
-                ) : (
-                    <button
-                        type="button"
-                        onClick={() => setIsSignCanvasOpen(true)}
-                        className={classNames.formButton}
-                    >
-                        افتح مساحة التوقيع
-                    </button>
-                )}
-            </div>
+                ) : null
+            }
 
 
             {/* Submit */}

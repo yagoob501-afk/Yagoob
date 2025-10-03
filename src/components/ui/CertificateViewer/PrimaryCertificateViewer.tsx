@@ -52,19 +52,20 @@ export type CertificateTemplate = {
         sign?: React.CSSProperties;
         managerName?: React.CSSProperties;
         teacherName?: React.CSSProperties;
-
-        // إضافات فورم
-        formTitle?: React.CSSProperties;
-        formSubtitle?: React.CSSProperties;
-        formName?: React.CSSProperties;
-        formLine2?: React.CSSProperties;
-        formDate?: React.CSSProperties;
-        formSign?: React.CSSProperties;
-        formTeacherTitle?: React.CSSProperties;
-        formTeacherName?: React.CSSProperties;
-        formManagerTitle?: React.CSSProperties;
-        formManagerName?: React.CSSProperties;
     };
+    formDisplayedFields?: {
+        formTitle?: boolean;
+        formSubtitle?: boolean;
+        formName?: boolean;
+        formLine2?: boolean;
+        formDate?: boolean;
+        formSign?: boolean;
+        formTeacherTitle?: boolean;
+        formTeacherName?: boolean;
+        formManagerTitle?: boolean;
+        formManagerName?: boolean;
+        formPersonTitle?: boolean;
+    }
 };
 
 
