@@ -43,11 +43,11 @@ function PrimaryCertificateForm({
     const sigCanvasModal = useRef<SignatureCanvas | null>(null);
     const [sign, setSign] = useState<string | undefined>();
     const [isSignCanvasOpen, setIsSignCanvasOpen] = useState(false);
-    const [namesInput, setNamesInput] = useState("يوسف محمد");
+    const [namesInput, setNamesInput] = useState("كريم احمد حسن");
     const [loading, setLoading] = useState(false);
     const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
     const [extraLines, setExtraLines] = useState([
-        "و ذلك نظير جهوده",
+        "و ذلك على جهوده أثناء الحصة الدراسية",
         "و بدورنا نقدم له هذا الشكل كتقدير لجهوده المبذولة",
         "متمنين له دوام التوفيق و السداد",
     ]);
@@ -117,7 +117,7 @@ function PrimaryCertificateForm({
                 <TextareaAutosize
                     name="title"
                     minRows={1}
-                    defaultValue="شهادة تقدير"
+                    defaultValue="شهادة شكر و تقدير"
                     placeholder={t("certificate.title") || ""}
                     className={classNames.formInput}
                 />
@@ -217,7 +217,7 @@ function PrimaryCertificateForm({
                     name="managerTitle"
                     minRows={1}
                     placeholder="مثال: المدير / المديرة"
-                    defaultValue="المدير"
+                    defaultValue="مدير المدرسة"
                     className={classNames.formInput}
                 />
             </div>

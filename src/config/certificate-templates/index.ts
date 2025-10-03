@@ -4,6 +4,7 @@ import Template3background from "@/assets/certificates_backgrounds/certificate-b
 import Template4background from "@/assets/certificates_backgrounds/certificate-background-4.jpeg";
 import Template5background from "@/assets/certificates_backgrounds/certificate-background-5.png";
 import Template6background from "@/assets/certificates_backgrounds/certificate-background-6.png";
+import Template7background from "@/assets/certificates_backgrounds/certificate-background-7.png";
 import type { CertificateTemplate } from "@/components/ui/CertificateViewer/PrimaryCertificateViewer";
 
 export const Template1: CertificateTemplate = {
@@ -128,6 +129,35 @@ export const Template5: CertificateTemplate = {
 
 export const Template6: CertificateTemplate = {
     background: Template6background,
+    classNames: {
+        title: "absolute font-cairo font-bold text-[85px] text-[#61678a]",
+        subtitle: "absolute font-amiri text-[90px] text-[#61678a] max-w-4xl text-center",
+        name: "absolute font-amiri text-[90px] text-[#8b5e3c] whitespace-nowrap",
+        line2: "absolute text-[60px] text-center font-semibold font-amiri text-[#5f6480] leading-20",
+        date: "absolute text-3xl hidden",
+        sign: "absolute text-3xl",
+
+        teacherName: "absolute text-[40px] text-[#8b5e3c] font-bold font-cairo flex flex-col items-center gap-2",
+
+        managerName: "absolute text-[40px] text-[#8b5e3c] font-bold font-cairo flex flex-col items-center gap-2",
+    },
+    positions: {
+        title: { top: "9.8%", left: "50%", transform: "translateX(-50%)" },
+        subtitle: { top: "19%", left: "50%", transform: "translateX(-50%)" },
+        name: { top: "40%", left: "50%", transform: "translateX(-50%)" },
+        line2: { top: "52%", left: "50%", transform: "translateX(-50%)" },
+
+        // date: { bottom: "16%", left: "66.7%" },
+        sign: { bottom: "4%", left: "29.2%" },
+
+        teacherName: { bottom: "17%", left: "76%", },
+
+        managerName: { bottom: "17%", left: "24%", transform: "translateX(-100%)" },
+    },
+};
+
+export const Template7: CertificateTemplate = {
+    background: Template7background,
     classNames: {
         title: "absolute font-cairo font-bold text-[85px] text-[#61678a]",
         subtitle: "absolute font-amiri text-[90px] text-[#61678a] max-w-4xl text-center",
