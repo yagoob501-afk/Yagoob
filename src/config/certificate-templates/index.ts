@@ -18,7 +18,7 @@ export const Template1: CertificateTemplate = {
         sign: "absolute text-3xl text-[#496479]",
     },
     positions: {
-        title: { top: "7.3%", left: "50%", transform: "translateX(-50%)" },
+        title: { top: "10%", left: "50%", transform: "translateX(-50%)" },
         subtitle: { top: "30%", left: "50%", transform: "translateX(-50%)" },
         name: { top: "37%", left: "50%", transform: "translateX(-50%)" },
         line2: { top: "49%", left: "50%", transform: "translateX(-50%)" },
@@ -32,28 +32,28 @@ export const Template2: CertificateTemplate = {
     background: Template2background,
     classNames: {
         title: "absolute font-sharjah text-[134px] text-[#293d5e]",
-        subtitle: "absolute font-alhoda text-4xl text-[#3f588a]",
+        subtitle: "absolute font-alhoda text-[100px] text-[#3f588a] whitespace-nowrap",
         name: "absolute font-bold text-9xl text-[#d4b365] whitespace-nowrap",
-        line2: "absolute text-5xl text-center text-[#293d5e]",
+        line2: "absolute text-[60px] text-center text-[#293d5e]",
         date: "absolute text-3xl hidden",
         sign: "absolute text-3xl",
 
-        teacherName: "absolute text-3xl font-bold font-cairo flex flex-col items-center text-[#865e41]",
-        managerName: "absolute text-3xl font-bold font-cairo flex flex-col items-center text-[#865e41]",
+        teacherName: "absolute text-[40px] text-[#8b5e3c] font-bold font-cairo flex flex-col items-center gap-2",
+        managerName: "absolute text-[40px] text-[#8b5e3c] font-bold font-cairo flex flex-col items-center gap-2",
     },
     positions: {
         title: { top: "3.5%", left: "50%", transform: "translateX(-50%)" },
-        subtitle: { top: "25%", left: "50%", transform: "translateX(-50%)" },
-        name: { top: "31.6%", left: "50%", transform: "translateX(-50%)" },
-        line2: { top: "53%", left: "50%", transform: "translateX(-50%)" },
+        subtitle: { top: "18%", left: "50%", transform: "translateX(-50%)" },
+        name: { top: "33.6%", left: "50%", transform: "translateX(-50%)" },
+        line2: { top: "51%", left: "50%", transform: "translateX(-50%)" },
         // date: { bottom: "16%", left: "66.7%" },
         sign: { bottom: "4%", left: "29.2%" },
 
-        teacherName: { bottom: "16%", left: "69.2%", },
-
-        managerName: { bottom: "16%", left: "29.2%", },
+        teacherName: { bottom: "16%", left: "64.2%" },
+        managerName: { bottom: "16%", right: "64.2%", transform: "" },
     },
 };
+
 
 export const Template3: CertificateTemplate = {
     background: Template3background,
