@@ -134,7 +134,7 @@ function PrimaryToolsSection() {
                         >
                             <PrimaryToolCard
                                 title="نموذج شهادة تقدير"
-                                description="نموذج انشاء شهادة تقدير للطالبات"
+                                description="نموذج انشاء شهادة تقدير للطلاب و المعلمين"
                                 link="/forms/certificate-of-appreciation/5"
                                 img={Template5background}
                             />
@@ -150,7 +150,7 @@ function PrimaryToolsSection() {
                         >
                             <PrimaryToolCard
                                 title="نموذج شهادة تقدير"
-                                description="نموذج انشاء شهادة تقدير للطالبات"
+                                description="نموذج انشاء شهادة تقدير للطلاب"
                                 link="/forms/certificate-of-appreciation/6"
                                 img={Template6background}
                             />
@@ -205,7 +205,7 @@ function PrimaryToolsSection() {
                     >
                         <PrimaryToolCard
                             title="نموذج شهادة تقدير"
-                            description="نموذج انشاء شهادة تقدير للطالبات"
+                            description="نموذج انشاء للمعلمين و الطلاب"
                             link="/forms/certificate-of-appreciation/8"
                             img={Template8background}
                         />
@@ -221,7 +221,7 @@ function PrimaryToolsSection() {
                     >
                         <PrimaryToolCard
                             title="نموذج شهادة تقدير"
-                            description="نموذج انشاء شهادة تقدير للطالبات"
+                            description="نموذج انشاء شهادة تقدير للطالبات و المعلمات"
                             link="/forms/certificate-of-appreciation/9"
                             img={Template9background}
                         />

@@ -1,5 +1,5 @@
 import Template1background from "@/assets/certificates_backgrounds/شهادة تقدير لبني وأبيض.png";
-import Template2background from "@/assets/certificates_backgrounds/certificate-background-2.jpeg";
+import Template2background from "@/assets/certificates_backgrounds/certificate-background-2.png";
 import Template3background from "@/assets/certificates_backgrounds/certificate-background-3.jpeg";
 import Template4background from "@/assets/certificates_backgrounds/certificate-background-4.jpeg";
 import Template5background from "@/assets/certificates_backgrounds/certificate-background-5.png";
@@ -62,8 +62,8 @@ export const Template2: CertificateTemplate = {
         // date: { bottom: "16%", left: "66.7%" },
         sign: { bottom: "4%", left: "29.2%" },
 
-        teacherName: { bottom: "16%", left: "64.2%" },
-        managerName: { bottom: "16%", right: "64.2%", transform: "" },
+        teacherName: { bottom: "13%", left: "64.2%" },
+        managerName: { bottom: "13%", right: "64.2%", transform: "" },
     },
     formDisplayedFields: {
         formDate: false,
