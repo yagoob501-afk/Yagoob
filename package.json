@@ -26,6 +26,7 @@
     "react-router-dom": "^7.9.3",
     "react-router-hash-link": "^2.4.3",
     "react-signature-canvas": "^1.1.0-alpha.2",
+    "react-textarea-autosize": "^8.5.9",
     "respinner": "^4.0.3",
     "yet-another-react-lightbox": "^3.25.0"
   },

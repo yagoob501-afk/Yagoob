@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useRef } from "react";
 import SignatureCanvas from "react-signature-canvas";
 import { useTranslation } from "react-i18next";
@@ -5,6 +7,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ar } from "date-fns/locale";
 import type { CertificateProps, CertificateTemplate } from "@/components/ui/CertificateViewer/PrimaryCertificateViewer";
+import TextareaAutosize from "react-textarea-autosize";
 
 // CertificateResult = نفس CertificateProps لكن من غير template
 type CertificateResult = Omit<CertificateProps, "template">;
@@ -19,19 +22,19 @@ const defaultFormTemplate: Partial<CertificateTemplate> = {
         formContainer: "bg-form-bg p-7 w-full space-y-6",
         formLabel: "mb-1 text-sm font-medium text-form-label",
         formInput: "rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text placeholder:text-form-placeholder focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition",
-        formTextarea: "rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text placeholder:text-form-placeholder focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition h-32 resize-none",
+        formTextarea: "rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text placeholder:text-form-placeholder focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition resize-none",
         formDatePicker: "rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition w-full",
         formSignature: "w-full max-h-32 object-contain border border-form-border rounded-md bg-white",
         formButton: "bg-primary hover:bg-primary-hover active:bg-primary-active text-primary-foreground px-5 py-2 rounded-lg font-medium transition disabled:opacity-50 cursor-pointer",
     },
 };
+
 function PrimaryCertificateForm({
     onSubmit,
     template = {}
 }: PrimaryCertificateFormProps) {
     const { t } = useTranslation();
 
-    // دمج القيم الافتراضية مع القيم الممررة
     const classNames = {
         ...defaultFormTemplate.classNames,
         ...(template.classNames || {}),
@@ -111,9 +114,9 @@ function PrimaryCertificateForm({
                 <label className={classNames.formLabel}>
                     {t("certificate.title")}
                 </label>
-                <input
-                    type="text"
+                <TextareaAutosize
                     name="title"
+                    minRows={1}
                     defaultValue="شهادة تقدير"
                     placeholder={t("certificate.title") || ""}
                     className={classNames.formInput}
@@ -125,9 +128,9 @@ function PrimaryCertificateForm({
                 <label className={classNames.formLabel}>
                     {t("certificate.subtitle")}
                 </label>
-                <input
-                    type="text"
+                <TextareaAutosize
                     name="subtitle"
+                    minRows={1}
                     defaultValue="تتقدم ادارة مدرسة ___ بالشكر و التقدير"
                     placeholder={t("certificate.subtitle") || ""}
                     className={classNames.formInput}
@@ -139,9 +142,9 @@ function PrimaryCertificateForm({
                 <label className={classNames.formLabel}>
                     {t("certificate.personTitle")}
                 </label>
-                <input
-                    type="text"
+                <TextareaAutosize
                     name="personTitle"
+                    minRows={1}
                     placeholder="المعلم, الطالب,..."
                     defaultValue={"الطالب"}
                     className={classNames.formInput}
@@ -153,7 +156,7 @@ function PrimaryCertificateForm({
                 <label className={classNames.formLabel}>
                     {t("certificate.names")}
                 </label>
-                <textarea
+                <TextareaAutosize
                     value={namesInput}
                     onChange={(e) => setNamesInput(e.target.value)}
                     placeholder="اكتب كل اسم في سطر منفصل"
@@ -167,8 +170,9 @@ function PrimaryCertificateForm({
                     <label className={classNames.formLabel}>
                         {t(`certificate.line2`)} {idx + 1}
                     </label>
-                    <input
-                        type="text"
+                    <TextareaAutosize
+                        name={`line2-${idx}`}
+                        minRows={1}
                         value={line}
                         onChange={(e) => {
                             const newLines = [...extraLines];
@@ -230,9 +234,9 @@ function PrimaryCertificateForm({
                 <label className={classNames.formLabel}>
                     لقب المدير / المديرة
                 </label>
-                <input
-                    type="text"
+                <TextareaAutosize
                     name="managerTitle"
+                    minRows={1}
                     placeholder="مثال: المدير / المديرة"
                     defaultValue="المدير"
                     className={classNames.formInput}
@@ -242,9 +246,9 @@ function PrimaryCertificateForm({
                 <label className={classNames.formLabel}>
                     اسم المدير / المديرة
                 </label>
-                <input
-                    type="text"
+                <TextareaAutosize
                     name="managerName"
+                    minRows={1}
                     placeholder="مثال: أحمد علي"
                     className={classNames.formInput}
                 />
@@ -255,9 +259,9 @@ function PrimaryCertificateForm({
                 <label className={classNames.formLabel}>
                     لقب المعلم / المعلمة
                 </label>
-                <input
-                    type="text"
+                <TextareaAutosize
                     name="teacherTitle"
+                    minRows={1}
                     placeholder="مثال: المعلم / المعلمة"
                     defaultValue="المعلم"
                     className={classNames.formInput}
@@ -267,9 +271,9 @@ function PrimaryCertificateForm({
                 <label className={classNames.formLabel}>
                     اسم المعلم / المعلمة
                 </label>
-                <input
-                    type="text"
+                <TextareaAutosize
                     name="teacherName"
+                    minRows={1}
                     placeholder="مثال: فاطمة حسن"
                     className={classNames.formInput}
                 />
