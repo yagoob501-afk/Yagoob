@@ -54,6 +54,10 @@ export const Template2: CertificateTemplate = {
         teacherName: { bottom: "16%", left: "64.2%" },
         managerName: { bottom: "16%", right: "64.2%", transform: "" },
     },
+    formDisplayedFields: {
+        formDate: false,
+        formSign: false,
+    }
 };
 
 
@@ -64,8 +68,10 @@ export const Template3: CertificateTemplate = {
         subtitle: "absolute font-alhoda text-4xl text-[#e07a3d]",
         name: "absolute font-bold text-8xl text-[#5f7f80] whitespace-nowrap",
         line2: "absolute text-5xl text-center text-[#4a6a92]",
-        date: "absolute text-3xl text-[#333333]",
-        sign: "absolute text-3xl text-[#333333]",
+        date: "absolute text-3xl text-[#333333] hidden",
+        sign: "absolute text-3xl text-[#333333] hidden",
+        teacherName: "absolute text-[40px] flex flex-col items-center gap-3",
+        managerName: "absolute text-[40px] flex flex-col items-center gap-3",
     },
     positions: {
         title: { top: "8%", left: "50%", transform: "translateX(-50%)" },
@@ -74,7 +80,13 @@ export const Template3: CertificateTemplate = {
         line2: { top: "53%", left: "50%", transform: "translateX(-50%)" },
         date: { bottom: "16%", left: "66.7%" },
         sign: { bottom: "13%", left: "25%", },
+        teacherName: { bottom: "19%", left: "70%", },
+        managerName: { bottom: "19%", right: "60%", },
     },
+    formDisplayedFields: {
+        formDate: false,
+        formSign: false,
+    }
 };
 
 export const Template4: CertificateTemplate = {
@@ -84,8 +96,10 @@ export const Template4: CertificateTemplate = {
         subtitle: "absolute font-alhoda text-4xl text-[#e07a3d]",
         name: "absolute font-bold text-8xl text-[#5f7f80] whitespace-nowrap",
         line2: "absolute text-5xl text-center text-[#4a6a92]",
-        date: "absolute text-3xl text-[#333333]",
-        sign: "absolute text-3xl text-[#333333]",
+        date: "absolute text-3xl text-[#333333] hidden",
+        sign: "absolute text-3xl text-[#333333] hidden",
+        teacherName: "absolute text-[40px] flex flex-col items-center gap-3",
+        managerName: "absolute text-[40px] flex flex-col items-center gap-3",
     },
     positions: {
         title: { top: "8%", left: "50%", transform: "translateX(-50%)" },
@@ -94,7 +108,13 @@ export const Template4: CertificateTemplate = {
         line2: { top: "53%", left: "50%", transform: "translateX(-50%)" },
         date: { bottom: "16%", left: "66.7%" },
         sign: { bottom: "13%", left: "25%", },
+        teacherName: { bottom: "19%", left: "70%", },
+        managerName: { bottom: "19%", right: "70%", },
     },
+    formDisplayedFields: {
+        formDate: false,
+        formSign: false,
+    }
 };
 
 
