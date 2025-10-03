@@ -27,7 +27,7 @@ function PrimaryFooter() {
                         {t("home")}
                     </HashLink>
                     <HashLink
-                        to="/#about"
+                        to="/about"
                         className="hover:underline hover:text-primary-foreground"
                     >
                         {t("about")}

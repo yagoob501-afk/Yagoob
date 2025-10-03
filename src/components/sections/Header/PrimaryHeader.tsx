@@ -23,7 +23,7 @@ function PrimaryHeader() {
                         {t("home")}
                     </HashLink>
                     <HashLink
-                        to="/#about"
+                        to="/about"
                         className="text-[--color-text-light-solid] hover:text-[--color-primary-foreground] hover:underline transition-colors"
                     >
                         {t("about")}
