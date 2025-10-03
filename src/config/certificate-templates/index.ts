@@ -12,10 +12,10 @@ import type { CertificateTemplate } from "@/components/ui/CertificateViewer/Prim
 export const Template1: CertificateTemplate = {
     background: Template1background,
     classNames: {
-        title: "absolute font-airstrip text-[90px] text-[#4c5f6e]",
-        subtitle: "absolute font-cairo text-4xl text-[#496479]",
+        title: "absolute font-cairo font-bold text-[90px] text-[#4c5f6e]",
+        subtitle: "absolute font-amiri text-[90px] text-[#496479] whitespace-nowrap",
         name: "absolute font-bold font-cairo text-7xl text-[#4c5f6e] whitespace-nowrap",
-        line2: "absolute text-5xl font-cairo text-center text-[#496479]",
+        line2: "absolute text-[50px] font-amiri text-center text-[#496479]",
         date: "absolute text-3xl text-[#496479] hidden",
         sign: "absolute text-3xl text-[#496479] hidden",
 
@@ -23,13 +23,13 @@ export const Template1: CertificateTemplate = {
         managerName: "absolute text-[40px] text-[#4c5f6e] font-bold font-cairo flex flex-col items-center gap-2",
     },
     positions: {
-        title: { top: "10%", left: "50%", transform: "translateX(-50%)" },
-        subtitle: { top: "30%", left: "50%", transform: "translateX(-50%)" },
-        name: { top: "37%", left: "50%", transform: "translateX(-50%)" },
-        line2: { top: "49%", left: "50%", transform: "translateX(-50%)" },
+        title: { top: "9%", left: "50%", transform: "translateX(-50%)" },
+        subtitle: { top: "28%", left: "50%", transform: "translateX(-50%)" },
+        name: { top: "45%", left: "50%", transform: "translateX(-50%)" },
+        line2: { top: "57%", left: "50%", transform: "translateX(-50%)" },
 
-        teacherName: { bottom: "16%", left: "65%" },
-        managerName: { bottom: "16%", right: "65%" },
+        teacherName: { bottom: "13%", left: "75%" },
+        managerName: { bottom: "13%", right: "75%" },
 
         // date: { bottom: "20%", left: "65%" },
         // sign: { bottom: "16%", right: "65%" },
@@ -138,7 +138,7 @@ export const Template5: CertificateTemplate = {
         name: "absolute font-amiri text-[90px] text-[#825939] whitespace-nowrap",
         line2: "absolute text-[50px] text-center font-semibold font-amiri text-[#5f6480] space-y-5",
         date: "absolute text-3xl hidden",
-        sign: "absolute text-3xl",
+        sign: "absolute text-3xl hidden",
 
         teacherName: "absolute text-[40px] flex flex-col items-center gap-3",
 
@@ -157,6 +157,10 @@ export const Template5: CertificateTemplate = {
 
         managerName: { bottom: "19%", right: "70%", },
     },
+    formDisplayedFields: {
+        formDate: false,
+        formSign: false,
+    }
 };
 
 
@@ -187,6 +191,10 @@ export const Template6: CertificateTemplate = {
 
         managerName: { bottom: "17%", left: "24%", transform: "translateX(-100%)" },
     },
+    formDisplayedFields: {
+        formDate: false,
+        formSign: false,
+    }
 };
 
 export const Template7: CertificateTemplate = {
@@ -216,6 +224,10 @@ export const Template7: CertificateTemplate = {
 
         managerName: { bottom: "17%", left: "24%", transform: "translateX(-100%)" },
     },
+    formDisplayedFields: {
+        formDate: false,
+        formSign: false,
+    }
 };
 
 export const Template8: CertificateTemplate = {
@@ -226,7 +238,7 @@ export const Template8: CertificateTemplate = {
         name: "absolute font-amiri text-[90px] text-[#8b5e3c] whitespace-nowrap",
         line2: "absolute text-[65px] text-center font-semibold text-black font-cairo leading-20",
         date: "absolute text-3xl hidden",
-        sign: "absolute text-3xl",
+        sign: "absolute text-3xl hidden",
 
         teacherName: "absolute text-[40px] text-[#8b5e3c] font-bold font-cairo flex flex-col items-center gap-2",
 
@@ -245,6 +257,10 @@ export const Template8: CertificateTemplate = {
 
         managerName: { bottom: "17%", left: "24%", transform: "translateX(-100%)" },
     },
+    formDisplayedFields: {
+        formDate: false,
+        formSign: false,
+    }
 };
 
 export const Template9: CertificateTemplate = {
@@ -273,5 +289,7 @@ export const Template9: CertificateTemplate = {
     },
     formDisplayedFields: {
         formSubtitle: false,
+        formDate: false,
+        formSign: false,
     }
 };
