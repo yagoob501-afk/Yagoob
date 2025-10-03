@@ -16,17 +16,28 @@ export const Template1: CertificateTemplate = {
         subtitle: "absolute font-cairo text-4xl text-[#496479]",
         name: "absolute font-bold font-cairo text-7xl text-[#4c5f6e] whitespace-nowrap",
         line2: "absolute text-5xl font-cairo text-center text-[#496479]",
-        date: "absolute text-3xl text-[#496479]",
-        sign: "absolute text-3xl text-[#496479]",
+        date: "absolute text-3xl text-[#496479] hidden",
+        sign: "absolute text-3xl text-[#496479] hidden",
+
+        teacherName: "absolute text-[40px] text-[#4c5f6e] font-bold font-cairo flex flex-col items-center gap-2",
+        managerName: "absolute text-[40px] text-[#4c5f6e] font-bold font-cairo flex flex-col items-center gap-2",
     },
     positions: {
         title: { top: "10%", left: "50%", transform: "translateX(-50%)" },
         subtitle: { top: "30%", left: "50%", transform: "translateX(-50%)" },
         name: { top: "37%", left: "50%", transform: "translateX(-50%)" },
         line2: { top: "49%", left: "50%", transform: "translateX(-50%)" },
-        date: { bottom: "20%", left: "65%" },
-        sign: { bottom: "16%", right: "65%" },
+
+        teacherName: { bottom: "16%", left: "65%" },
+        managerName: { bottom: "16%", right: "65%" },
+
+        // date: { bottom: "20%", left: "65%" },
+        // sign: { bottom: "16%", right: "65%" },
     },
+    formDisplayedFields: {
+        formDate: false,
+        formSign: false,
+    }
 };
 
 
