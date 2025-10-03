@@ -131,8 +131,8 @@ function PrimaryCertificateViewer({
                 style={{
                     left: "-9999px",
                     top: "-9999px",
-                    width: "1920px",
-                    height: "1080px",
+                    width: "2000px",
+                    height: "1414px",
                     overflow: "hidden",
                     position: "absolute",
                 }}
