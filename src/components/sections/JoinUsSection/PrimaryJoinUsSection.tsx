@@ -1,4 +1,4 @@
-import { Youtube, Send, Instagram, Facebook, Twitter } from "lucide-react";
+import { Youtube, Send, Instagram } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 function PrimaryJoinUsSection() {
@@ -30,39 +30,28 @@ function PrimaryJoinUsSection() {
             {/* Social Links */}
             <div className="flex justify-center gap-6 text-xl">
                 <a
-                    href="#"
+                    href="https://youtube.com/@yaqoob_alenezi?si=7eY7zhbArjjAhtEZ"
                     className="hover:text-primary transition-transform transform hover:scale-110"
                     aria-label="YouTube"
+                    target="_blank"
                 >
                     <Youtube size={28} />
                 </a>
                 <a
-                    href="#"
+                    href="https://t.me/Group_teacher_yagoob"
                     className="hover:text-primary transition-transform transform hover:scale-110"
                     aria-label="Telegram"
+                    target="_blank"
                 >
                     <Send size={28} />
                 </a>
                 <a
-                    href="#"
+                    href="https://www.instagram.com/yagoob_0?igsh=MWVlcGt0aGM3bWo0MA%3D%3D&utm_source=qr"
                     className="hover:text-primary transition-transform transform hover:scale-110"
                     aria-label="Instagram"
+                    target="_blank"
                 >
                     <Instagram size={28} />
-                </a>
-                <a
-                    href="#"
-                    className="hover:text-primary transition-transform transform hover:scale-110"
-                    aria-label="Facebook"
-                >
-                    <Facebook size={28} />
-                </a>
-                <a
-                    href="#"
-                    className="hover:text-primary transition-transform transform hover:scale-110"
-                    aria-label="Twitter"
-                >
-                    <Twitter size={28} />
                 </a>
             </div>
         </section>

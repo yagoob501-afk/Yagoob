@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import Img4 from "@/assets/4.png";
 import { useTranslation } from "react-i18next";
-import { Facebook, Twitter, Linkedin, Github } from "lucide-react";
+import { Youtube, Send, Instagram } from "lucide-react";
 import { HashLink } from "react-router-hash-link";
 
 function PrimaryFooter() {
@@ -53,17 +53,16 @@ function PrimaryFooter() {
                 <div className="flex flex-col items-center lg:items-start">
                     <p className="font-semibold mb-3">{t("follow_us") || "Follow us"}</p>
                     <div className="flex gap-4 text-xl">
-                        <a href="#" className="hover:text-primary-foreground transition-colors">
-                            <Facebook size={20} />
+                        <a href="https://t.me/Group_teacher_yagoob" target="_blank" className="hover:text-primary-foreground transition-colors">
+                            <Send size={20} />
                         </a>
-                        <a href="#" className="hover:text-primary-foreground transition-colors">
-                            <Twitter size={20} />
+
+                        <a href="https://www.instagram.com/yagoob_0?igsh=MWVlcGt0aGM3bWo0MA%3D%3D&utm_source=qr" target="_blank" className="hover:text-primary-foreground transition-colors">
+                            <Instagram size={20} />
                         </a>
-                        <a href="#" className="hover:text-primary-foreground transition-colors">
-                            <Linkedin size={20} />
-                        </a>
-                        <a href="#" className="hover:text-primary-foreground transition-colors">
-                            <Github size={20} />
+
+                        <a href="https://youtube.com/@yaqoob_alenezi?si=7eY7zhbArjjAhtEZ" target="_blank" className="hover:text-primary-foreground transition-colors">
+                            <Youtube size={20} />
                         </a>
                     </div>
                 </div>
