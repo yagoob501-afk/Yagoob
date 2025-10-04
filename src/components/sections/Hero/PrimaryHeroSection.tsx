@@ -48,7 +48,7 @@ function PrimaryHeroSection() {
             </div>
 
             {/* placeholder for media */}
-            <div className="rounded-md grow w-full self-center">
+            <div className="rounded-md grow w-full self-center z-100 rounded-xl overflow-hidden border-2 border-primary">
                 <motion.div
                     className=""
                     initial={{ opacity: 0, scale: 0.9 }}
