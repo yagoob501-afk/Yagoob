@@ -3,8 +3,8 @@ import PrimaryToolCard from "@/components/cards/ToolCard/PrimaryToolCard";
 import DocForm1 from "@/assets/cards_thumbnails/doc_form_1.jpeg";
 import Template1background from "@/assets/cards_thumbnails/certificate-1.png";
 import Template2background from "@/assets/cards_thumbnails/certificate-2.png";
-import Template3background from "@/assets/cards_thumbnails/certificate-3.png";
-import Template4background from "@/assets/cards_thumbnails/certificate-4.png";
+// import Template3background from "@/assets/cards_thumbnails/certificate-3.png";
+// import Template4background from "@/assets/cards_thumbnails/certificate-4.png";
 import Template5background from "@/assets/cards_thumbnails/certificate-5.png";
 import Template6background from "@/assets/cards_thumbnails/certificate-6.png";
 import Template7background from "@/assets/cards_thumbnails/certificate-7.png";
@@ -91,7 +91,7 @@ function PrimaryToolsSection() {
                         </motion.div>
 
 
-                        <motion.div
+                        {/* <motion.div
                             // key={i}
                             variants={{
                                 hidden: { opacity: 0, y: 30 },
@@ -122,7 +122,7 @@ function PrimaryToolsSection() {
                                 link="/forms/certificate-of-appreciation/4"
                                 img={Template4background}
                             />
-                        </motion.div>
+                        </motion.div> */}
 
                         <motion.div
                             // key={i}
