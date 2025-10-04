@@ -135,19 +135,19 @@ export const Template2: CertificateTemplate = {
 export const Template5: CertificateTemplate = {
     background: Template5background,
     classNames: {
-        title: "absolute font-almaria font-bold text-[60px] text-[#61678a]",
-        subtitle: "absolute font-amiri text-[80px] text-[#61678a] whitespace-nowrap",
+        title: "absolute font-cairo font-bold text-[60px] text-[#626786]",
+        subtitle: "absolute font-amiri text-[80px] text-[#825939] whitespace-nowrap",
         name: "absolute font-amiri text-[90px] text-[#825939] whitespace-nowrap",
-        line2: "absolute text-[50px] text-center font-semibold font-amiri text-[#5f6480] space-y-5",
+        line2: "absolute text-[50px] text-center font-bold font-cairo text-[#5f6480] space-y-5",
         date: "absolute text-3xl hidden",
         sign: "absolute text-3xl hidden",
 
-        teacherName: "absolute text-[40px] flex flex-col items-center gap-3",
+        teacherName: "absolute text-[40px] text-[#825939] font-bold flex flex-col items-center gap-3",
 
-        managerName: "absolute text-[40px] flex flex-col items-center gap-3",
+        managerName: "absolute text-[40px] text-[#825939] font-bold flex flex-col items-center gap-3",
     },
     positions: {
-        title: { top: "11.8%", left: "50%", transform: "translateX(-50%)" },
+        title: { top: "12.8%", left: "48.7%", transform: "translateX(-50%)" },
         subtitle: { top: "25%", left: "50%", transform: "translateX(-50%)" },
         name: { top: "35%", left: "50%", transform: "translateX(-50%)" },
         line2: { top: "46%", left: "50%", transform: "translateX(-50%)" },
@@ -169,10 +169,10 @@ export const Template5: CertificateTemplate = {
 export const Template6: CertificateTemplate = {
     background: Template6background,
     classNames: {
-        title: "absolute font-cairo font-bold text-[85px] text-[#61678a]",
-        subtitle: "absolute font-amiri text-[90px] text-[#61678a] max-w-4xl text-center",
+        title: "absolute font-cairo font-bold text-[60px] text-[#61678a]",
+        subtitle: "absolute font-amiri text-[80px] text-[#61678a] max-w-4xl text-center",
         name: "absolute font-amiri text-[90px] text-[#8b5e3c] whitespace-nowrap",
-        line2: "absolute text-[60px] text-center font-semibold font-amiri text-[#5f6480] leading-20",
+        line2: "absolute text-[50px] text-center font-bold font-cairo text-[#5f6480] leading-20",
         date: "absolute text-3xl hidden",
         sign: "absolute text-3xl",
 
@@ -181,10 +181,10 @@ export const Template6: CertificateTemplate = {
         managerName: "absolute text-[40px] text-[#8b5e3c] font-bold font-cairo flex flex-col items-center gap-2",
     },
     positions: {
-        title: { top: "9.8%", left: "50%", transform: "translateX(-50%)" },
-        subtitle: { top: "19%", left: "50%", transform: "translateX(-50%)" },
-        name: { top: "40%", left: "50%", transform: "translateX(-50%)" },
-        line2: { top: "52%", left: "50%", transform: "translateX(-50%)" },
+        title: { top: "12.8%", left: "50%", transform: "translateX(-50%)" },
+        subtitle: { top: "24%", left: "50%", transform: "translateX(-50%)" },
+        name: { top: "42%", left: "50%", transform: "translateX(-50%)" },
+        line2: { top: "56%", left: "50%", transform: "translateX(-50%)" },
 
         // date: { bottom: "16%", left: "66.7%" },
         sign: { bottom: "4%", left: "29.2%" },
@@ -202,10 +202,10 @@ export const Template6: CertificateTemplate = {
 export const Template7: CertificateTemplate = {
     background: Template7background,
     classNames: {
-        title: "absolute font-cairo font-bold text-[85px] text-[#61678a]",
-        subtitle: "absolute font-amiri text-[90px] text-[#61678a] max-w-4xl text-center",
+        title: "absolute font-cairo font-bold text-[60px] text-[#61678a]",
+        subtitle: "absolute font-amiri text-[80px] text-[#61678a] max-w-4xl text-center",
         name: "absolute font-amiri text-[90px] text-[#8b5e3c] whitespace-nowrap",
-        line2: "absolute text-[60px] text-center font-semibold font-amiri text-[#5f6480] leading-20",
+        line2: "absolute text-[50px] text-center font-bold font-cairo text-[#5f6480] leading-20",
         date: "absolute text-3xl hidden",
         sign: "absolute text-3xl",
 
@@ -214,10 +214,10 @@ export const Template7: CertificateTemplate = {
         managerName: "absolute text-[40px] text-[#8b5e3c] font-bold font-cairo flex flex-col items-center gap-2",
     },
     positions: {
-        title: { top: "9.8%", left: "50%", transform: "translateX(-50%)" },
-        subtitle: { top: "19%", left: "50%", transform: "translateX(-50%)" },
-        name: { top: "40%", left: "50%", transform: "translateX(-50%)" },
-        line2: { top: "52%", left: "50%", transform: "translateX(-50%)" },
+        title: { top: "12.8%", left: "50%", transform: "translateX(-50%)" },
+        subtitle: { top: "24%", left: "50%", transform: "translateX(-50%)" },
+        name: { top: "42%", left: "50%", transform: "translateX(-50%)" },
+        line2: { top: "56%", left: "50%", transform: "translateX(-50%)" },
 
         // date: { bottom: "16%", left: "66.7%" },
         sign: { bottom: "4%", left: "29.2%" },
@@ -235,10 +235,10 @@ export const Template7: CertificateTemplate = {
 export const Template8: CertificateTemplate = {
     background: Template8background,
     classNames: {
-        title: "absolute font-cairo font-bold text-[85px] text-black",
-        subtitle: "absolute font-amiri text-[90px] text-center text-black whitespace-nowrap",
+        title: "absolute font-cairo font-bold text-[60px] text-[#8b5e3c]",
+        subtitle: "absolute font-amiri text-[80px] text-center text-black whitespace-nowrap",
         name: "absolute font-amiri text-[90px] text-[#8b5e3c] whitespace-nowrap",
-        line2: "absolute text-[65px] text-center font-semibold text-black font-cairo leading-20",
+        line2: "absolute text-[50px] text-center font-bold text-black font-cairo leading-20",
         date: "absolute text-3xl hidden",
         sign: "absolute text-3xl hidden",
 
@@ -247,10 +247,10 @@ export const Template8: CertificateTemplate = {
         managerName: "absolute text-[40px] text-[#8b5e3c] font-bold font-cairo flex flex-col items-center gap-2",
     },
     positions: {
-        title: { top: "9.8%", left: "50%", transform: "translateX(-50%)" },
-        subtitle: { top: "19%", left: "50%", transform: "translateX(-50%)" },
-        name: { top: "30%", left: "50%", transform: "translateX(-50%)" },
-        line2: { top: "45%", left: "50%", transform: "translateX(-50%)" },
+        title: { top: "12.8%", left: "50%", transform: "translateX(-50%)" },
+        subtitle: { top: "24%", left: "50%", transform: "translateX(-50%)" },
+        name: { top: "37%", left: "50%", transform: "translateX(-50%)" },
+        line2: { top: "50%", left: "50%", transform: "translateX(-50%)" },
 
         // date: { bottom: "16%", left: "66.7%" },
         sign: { bottom: "4%", left: "29.2%" },
@@ -268,9 +268,9 @@ export const Template8: CertificateTemplate = {
 export const Template9: CertificateTemplate = {
     background: Template9background,
     classNames: {
-        title: "absolute font-tajawal text-[70px] text-center text-black whitespace-nowrap",
-        name: "absolute font-tajawal text-[90px] text-[#de7284] whitespace-nowrap",
-        line2: "absolute text-[65px] text-center font-semibold text-black font-tajawal leading-20",
+        title: "absolute font-tajawal text-[50px] text-center text-black whitespace-nowrap",
+        name: "absolute font-tajawal text-[50px] text-[#de7284] whitespace-nowrap",
+        line2: "absolute text-[50px] text-center text-black font-tajawal leading-20",
         date: "absolute text-3xl hidden",
         sign: "absolute text-3xl",
 
@@ -279,7 +279,7 @@ export const Template9: CertificateTemplate = {
     },
     positions: {
         title: { top: "32%", left: "50%", transform: "translateX(-50%)" },
-        name: { top: "40%", left: "50%", transform: "translateX(-50%)" },
+        name: { top: "41.5%", left: "50%", transform: "translateX(-50%)" },
         line2: { top: "50%", left: "50%", transform: "translateX(-50%)" },
 
         // date: { bottom: "16%", left: "66.7%" },
