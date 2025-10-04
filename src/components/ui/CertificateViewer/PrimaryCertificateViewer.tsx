@@ -159,14 +159,24 @@ function PrimaryCertificateViewer({
 
                     {/* Subtitle */}
                     <h2
-                        className={template.classNames.subtitle}
+                        className={`${template.classNames.subtitle}`}
                         style={template.positions.subtitle}
                     >
-                        {subtitle}
+
+                        {
+                            subtitle.split("\n").map((value, index) => (
+                                <span
+                                    key={value + index}
+                                    className="block p-4"
+                                >
+                                    {value}
+                                </span>
+                            ))
+                        }
                     </h2>
 
                     {/* Manager Title */}
-                    {data.managerTitle && data.managerTitle && (
+                    {data.managerTitle && data.managerName && (
                         <h3
                             className={template.classNames.managerName}
                             style={template.positions.managerName}
