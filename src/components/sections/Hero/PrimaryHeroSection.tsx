@@ -58,9 +58,8 @@ function PrimaryHeroSection() {
                     viewport={{ once: false, amount: 0.4 }}
                 >
                     <video
-                        autoPlay
-                        loop
-                        controls={false}
+                        autoPlay={false}
+                        controls={true}
                         className="w-full h-full object-cover"
                     >
                         <source src={Video} />
