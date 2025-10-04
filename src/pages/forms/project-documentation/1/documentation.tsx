@@ -2,7 +2,7 @@ import { useMemo, useRef } from "react";
 // import { useTranslation } from "react-i18next";
 import ministryLogo from "@/assets/شعار_وزارة_التعليم_العالي__الكويت_-removebg-preview.png";
 import { format } from "date-fns-tz";
-import html2canvas from "html2canvas";
+import html2canvas from "html2canvas-pro";
 import jsPDF from "jspdf";
 
 export interface DocumentationData {

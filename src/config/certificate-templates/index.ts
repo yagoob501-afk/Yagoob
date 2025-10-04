@@ -23,7 +23,7 @@ export const Template1: CertificateTemplate = {
         managerName: "absolute text-[40px] text-[#4c5f6e] font-bold font-cairo flex flex-col items-center gap-2",
     },
     positions: {
-        title: { top: "9%", left: "50%", transform: "translateX(-50%)" },
+        title: { top: "11%", left: "50%", transform: "translateX(-50%)" },
         subtitle: { top: "28%", left: "50%", transform: "translateX(-50%)" },
         name: { top: "45%", left: "50%", transform: "translateX(-50%)" },
         line2: { top: "57%", left: "50%", transform: "translateX(-50%)" },
