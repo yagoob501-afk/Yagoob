@@ -7,8 +7,8 @@ import HomePage from '@/pages/page'
 import TextToQRcodePage from './pages/additional-tools/TextToQRcode';
 import CertificateOfAppreciationTemplate_2_Page from './pages/forms/certificate-of-appreciation/2/page';
 import CertificateOfAppreciationTemplate_1_Page from './pages/forms/certificate-of-appreciation/1/page';
-import CertificateOfAppreciationTemplate_3_Page from './pages/forms/certificate-of-appreciation/3/page';
-import CertificateOfAppreciationTemplate_4_Page from './pages/forms/certificate-of-appreciation/4/page';
+// import CertificateOfAppreciationTemplate_3_Page from './pages/forms/certificate-of-appreciation/3/page';
+// import CertificateOfAppreciationTemplate_4_Page from './pages/forms/certificate-of-appreciation/4/page';
 import CertificateOfAppreciationTemplate_5_Page from './pages/forms/certificate-of-appreciation/5/page';
 import CertificateOfAppreciationTemplate_6_Page from './pages/forms/certificate-of-appreciation/6/page';
 import CertificateOfAppreciationTemplate_7_Page from './pages/forms/certificate-of-appreciation/7/page';
@@ -30,8 +30,8 @@ function App() {
                         <Route path='/forms/project-documentation/1' element={<ProjectDocumentation1 />} />
                         <Route path='/forms/certificate-of-appreciation/1' element={<CertificateOfAppreciationTemplate_1_Page />} />
                         <Route path='/forms/certificate-of-appreciation/2' element={<CertificateOfAppreciationTemplate_2_Page />} />
-                        <Route path='/forms/certificate-of-appreciation/3' element={<CertificateOfAppreciationTemplate_3_Page />} />
-                        <Route path='/forms/certificate-of-appreciation/4' element={<CertificateOfAppreciationTemplate_4_Page />} />
+                        {/* <Route path='/forms/certificate-of-appreciation/3' element={<CertificateOfAppreciationTemplate_3_Page />} /> */}
+                        {/* <Route path='/forms/certificate-of-appreciation/4' element={<CertificateOfAppreciationTemplate_4_Page />} /> */}
                         <Route path='/forms/certificate-of-appreciation/5' element={<CertificateOfAppreciationTemplate_5_Page />} />
                         <Route path='/forms/certificate-of-appreciation/6' element={<CertificateOfAppreciationTemplate_6_Page />} />
                         <Route path='/forms/certificate-of-appreciation/7' element={<CertificateOfAppreciationTemplate_7_Page />} />

@@ -1,7 +1,7 @@
 import Template1background from "@/assets/certificates_backgrounds/شهادة تقدير لبني وأبيض.png";
 import Template2background from "@/assets/certificates_backgrounds/certificate-background-2.png";
-import Template3background from "@/assets/certificates_backgrounds/certificate-background-3.jpeg";
-import Template4background from "@/assets/certificates_backgrounds/certificate-background-4.jpeg";
+// import Template3background from "@/assets/certificates_backgrounds/certificate-background-3.jpeg";
+// import Template4background from "@/assets/certificates_backgrounds/certificate-background-4.jpeg";
 import Template5background from "@/assets/certificates_backgrounds/certificate-background-5.png";
 import Template6background from "@/assets/certificates_backgrounds/certificate-background-6.png";
 import Template7background from "@/assets/certificates_backgrounds/certificate-background-7.png";
@@ -72,61 +72,61 @@ export const Template2: CertificateTemplate = {
 };
 
 
-export const Template3: CertificateTemplate = {
-    background: Template3background,
-    classNames: {
-        title: "absolute font-sharjah text-[134px] text-[#5f7f80]",
-        subtitle: "absolute font-alhoda text-[100px] text-[#e07a3d]",
-        name: "absolute font-bold text-8xl text-[#5f7f80] whitespace-nowrap",
-        line2: "absolute text-[60px] text-center text-[#4a6a92]",
-        date: "absolute text-3xl text-[#333333] hidden",
-        sign: "absolute text-3xl text-[#333333] hidden",
-        teacherName: "absolute text-[40px] flex flex-col items-center gap-3",
-        managerName: "absolute text-[40px] flex flex-col items-center gap-3",
-    },
-    positions: {
-        title: { top: "11%", left: "40%", transform: "translateX(-50%)" },
-        subtitle: { top: "25%", left: "40%", transform: "translateX(-50%)" },
-        name: { top: "37.6%", left: "40%", transform: "translateX(-50%)" },
-        line2: { top: "46%", left: "50%", transform: "translateX(-50%)" },
-        date: { bottom: "16%", left: "66.7%" },
-        sign: { bottom: "13%", left: "25%", },
-        teacherName: { bottom: "19%", left: "70%", },
-        managerName: { bottom: "19%", right: "60%", },
-    },
-    formDisplayedFields: {
-        formDate: false,
-        formSign: false,
-    }
-};
+// export const Template3: CertificateTemplate = {
+//     background: Template3background,
+//     classNames: {
+//         title: "absolute font-sharjah text-[134px] text-[#5f7f80]",
+//         subtitle: "absolute font-alhoda text-[100px] text-[#e07a3d]",
+//         name: "absolute font-bold text-8xl text-[#5f7f80] whitespace-nowrap",
+//         line2: "absolute text-[60px] text-center text-[#4a6a92]",
+//         date: "absolute text-3xl text-[#333333] hidden",
+//         sign: "absolute text-3xl text-[#333333] hidden",
+//         teacherName: "absolute text-[40px] flex flex-col items-center gap-3",
+//         managerName: "absolute text-[40px] flex flex-col items-center gap-3",
+//     },
+//     positions: {
+//         title: { top: "11%", left: "40%", transform: "translateX(-50%)" },
+//         subtitle: { top: "25%", left: "40%", transform: "translateX(-50%)" },
+//         name: { top: "37.6%", left: "40%", transform: "translateX(-50%)" },
+//         line2: { top: "46%", left: "50%", transform: "translateX(-50%)" },
+//         date: { bottom: "16%", left: "66.7%" },
+//         sign: { bottom: "13%", left: "25%", },
+//         teacherName: { bottom: "19%", left: "70%", },
+//         managerName: { bottom: "19%", right: "60%", },
+//     },
+//     formDisplayedFields: {
+//         formDate: false,
+//         formSign: false,
+//     }
+// };
 
-export const Template4: CertificateTemplate = {
-    background: Template4background,
-    classNames: {
-        title: "absolute font-sharjah text-[134px] text-[#5f7f80]",
-        subtitle: "absolute font-alhoda text-[100px] text-[#e07a3d]",
-        name: "absolute font-bold text-8xl text-[#5f7f80] whitespace-nowrap",
-        line2: "absolute text-[60px] text-center text-[#4a6a92]",
-        date: "absolute text-3xl text-[#333333] hidden",
-        sign: "absolute text-3xl text-[#333333] hidden",
-        teacherName: "absolute text-[40px] flex flex-col items-center gap-3",
-        managerName: "absolute text-[40px] flex flex-col items-center gap-3",
-    },
-    positions: {
-        title: { top: "11%", left: "40%", transform: "translateX(-50%)" },
-        subtitle: { top: "25%", left: "40%", transform: "translateX(-50%)" },
-        name: { top: "37.6%", left: "40%", transform: "translateX(-50%)" },
-        line2: { top: "46%", left: "50%", transform: "translateX(-50%)" },
-        date: { bottom: "16%", left: "66.7%" },
-        sign: { bottom: "13%", left: "25%", },
-        teacherName: { bottom: "19%", left: "70%", },
-        managerName: { bottom: "19%", right: "60%", },
-    },
-    formDisplayedFields: {
-        formDate: false,
-        formSign: false,
-    }
-};
+// export const Template4: CertificateTemplate = {
+//     background: Template4background,
+//     classNames: {
+//         title: "absolute font-sharjah text-[134px] text-[#5f7f80]",
+//         subtitle: "absolute font-alhoda text-[100px] text-[#e07a3d]",
+//         name: "absolute font-bold text-8xl text-[#5f7f80] whitespace-nowrap",
+//         line2: "absolute text-[60px] text-center text-[#4a6a92]",
+//         date: "absolute text-3xl text-[#333333] hidden",
+//         sign: "absolute text-3xl text-[#333333] hidden",
+//         teacherName: "absolute text-[40px] flex flex-col items-center gap-3",
+//         managerName: "absolute text-[40px] flex flex-col items-center gap-3",
+//     },
+//     positions: {
+//         title: { top: "11%", left: "40%", transform: "translateX(-50%)" },
+//         subtitle: { top: "25%", left: "40%", transform: "translateX(-50%)" },
+//         name: { top: "37.6%", left: "40%", transform: "translateX(-50%)" },
+//         line2: { top: "46%", left: "50%", transform: "translateX(-50%)" },
+//         date: { bottom: "16%", left: "66.7%" },
+//         sign: { bottom: "13%", left: "25%", },
+//         teacherName: { bottom: "19%", left: "70%", },
+//         managerName: { bottom: "19%", right: "60%", },
+//     },
+//     formDisplayedFields: {
+//         formDate: false,
+//         formSign: false,
+//     }
+// };
 
 
 
