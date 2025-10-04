@@ -18,7 +18,7 @@ const stats = [
   },
   {
     icon: BookOpen,
-    number: "10+",
+    number: "7+",
     label: "سنوات خبرة",
     description: "في التعليم والتدريب",
   },

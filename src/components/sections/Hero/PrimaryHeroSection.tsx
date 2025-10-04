@@ -1,13 +1,14 @@
 "use client"
 import { motion } from "framer-motion"
 import { useTranslation } from "react-i18next"
+import Video from "@/assets/home-hero-video.mp4";
 
 function PrimaryHeroSection() {
     const { t } = useTranslation();
 
     return (
         <motion.section
-            className="flex flex-col text-center py-7 md:text-start relative gap-14 md:flex-row justify-between mx-auto min-h-[70vh] px-14"
+            className="flex flex-col text-center py-7 xl:text-start relative gap-14 xl:flex-row justify-between mx-auto min-h-[70vh] px-14"
             initial={{ opacity: 0, y: 50 }} // start hidden
             whileInView={{ opacity: 1, y: 0 }} // animate when in view
             exit={{ opacity: 0, y: -50 }} // animate when leaving
@@ -47,14 +48,26 @@ function PrimaryHeroSection() {
             </div>
 
             {/* placeholder for media */}
-            <motion.div
-                className="border rounded-md grow w-full self-center min-h-96"
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
-                viewport={{ once: false, amount: 0.4 }}
-            />
+            <div className="rounded-md grow w-full self-center">
+                <motion.div
+                    className=""
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ duration: 0.8, ease: "easeOut" }}
+                    viewport={{ once: false, amount: 0.4 }}
+                >
+                    <video
+                        autoPlay
+                        loop
+                        controls={false}
+                        className="w-full h-full object-cover"
+                    >
+                        <source src={Video} />
+                    </video>
+                </motion.div>
+            </div>
+
         </motion.section>
     )
 }
