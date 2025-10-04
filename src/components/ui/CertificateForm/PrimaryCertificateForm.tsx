@@ -43,7 +43,7 @@ function PrimaryCertificateForm({
     const sigCanvasModal = useRef<SignatureCanvas | null>(null);
     const [sign, setSign] = useState<string | undefined>();
     const [isSignCanvasOpen, setIsSignCanvasOpen] = useState(false);
-    const [namesInput, setNamesInput] = useState("كريم احمد حسن");
+    const [namesInput, setNamesInput] = useState("");
     const [loading, setLoading] = useState(false);
     const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
     const [extraLines, setExtraLines] = useState([
