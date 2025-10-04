@@ -13,7 +13,7 @@ i18n
             escapeValue: false, // react already escapes by default
         },
         backend: {
-            loadPath: '/locales/{{lng}}/common.json',
+            loadPath: '/teacher-yagoob/locales/{{lng}}/common.json',
         },
     });
 
