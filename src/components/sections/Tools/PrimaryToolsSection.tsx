@@ -47,6 +47,7 @@ function PrimaryToolsSection() {
                                 show: { opacity: 1, y: 0 },
                             }}
                             transition={{ duration: 0.6, ease: "easeOut" }}
+                            className="max-w-xs"
                         >
                             <PrimaryToolCard
                                 title="نموذج توثيق"
@@ -64,6 +65,7 @@ function PrimaryToolsSection() {
                                 show: { opacity: 1, y: 0 },
                             }}
                             transition={{ duration: 0.6, ease: "easeOut" }}
+                            className="max-w-xs"
                         >
                             <PrimaryToolCard
                                 title="نموذج شهادة تقدير"
@@ -81,6 +83,7 @@ function PrimaryToolsSection() {
                                 show: { opacity: 1, y: 0 },
                             }}
                             transition={{ duration: 0.6, ease: "easeOut" }}
+                            className="max-w-xs"
                         >
                             <PrimaryToolCard
                                 title="نموذج شهادة تقدير"
@@ -131,6 +134,7 @@ function PrimaryToolsSection() {
                                 show: { opacity: 1, y: 0 },
                             }}
                             transition={{ duration: 0.6, ease: "easeOut" }}
+                            className="max-w-xs"
                         >
                             <PrimaryToolCard
                                 title="نموذج شهادة تقدير"
@@ -147,6 +151,7 @@ function PrimaryToolsSection() {
                                 show: { opacity: 1, y: 0 },
                             }}
                             transition={{ duration: 0.6, ease: "easeOut" }}
+                            className="max-w-xs"
                         >
                             <PrimaryToolCard
                                 title="نموذج شهادة تقدير"
