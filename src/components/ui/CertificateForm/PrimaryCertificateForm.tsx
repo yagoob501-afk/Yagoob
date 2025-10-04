@@ -259,7 +259,7 @@ function PrimaryCertificateForm({
                         <TextareaAutosize
                             name="managerName"
                             minRows={1}
-                            placeholder="مثال: أحمد علي"
+                            placeholder="اكتب اسم المدير"
                             className={classNames.formInput}
                         />
                     </div>
@@ -297,7 +297,7 @@ function PrimaryCertificateForm({
                         <TextareaAutosize
                             name="teacherName"
                             minRows={1}
-                            placeholder="مثال: فاطمة حسن"
+                            placeholder="اكتب اسم المعلم / المعلمة"
                             className={classNames.formInput}
                         />
                     </div>
