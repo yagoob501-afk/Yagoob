@@ -29,7 +29,7 @@ function PrimaryToolsSection() {
                     />
 
                     <motion.div
-                        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-14"
+                        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-14"
                         initial="hidden"
                         whileInView="show"
                         viewport={{ once: false, amount: 0.2 }}
@@ -47,7 +47,7 @@ function PrimaryToolsSection() {
                                 show: { opacity: 1, y: 0 },
                             }}
                             transition={{ duration: 0.6, ease: "easeOut" }}
-                            className="max-w-xs"
+                            className="max-w-xs mx-auto min-w-xs"
                         >
                             <PrimaryToolCard
                                 title="نموذج توثيق"
@@ -65,7 +65,7 @@ function PrimaryToolsSection() {
                                 show: { opacity: 1, y: 0 },
                             }}
                             transition={{ duration: 0.6, ease: "easeOut" }}
-                            className="max-w-xs"
+                            className="max-w-xs mx-auto min-w-xs"
                         >
                             <PrimaryToolCard
                                 title="نموذج شهادة تقدير"
@@ -83,7 +83,7 @@ function PrimaryToolsSection() {
                                 show: { opacity: 1, y: 0 },
                             }}
                             transition={{ duration: 0.6, ease: "easeOut" }}
-                            className="max-w-xs"
+                            className="max-w-xs mx-auto min-w-xs"
                         >
                             <PrimaryToolCard
                                 title="نموذج شهادة تقدير"
@@ -134,7 +134,7 @@ function PrimaryToolsSection() {
                                 show: { opacity: 1, y: 0 },
                             }}
                             transition={{ duration: 0.6, ease: "easeOut" }}
-                            className="max-w-xs"
+                            className="max-w-xs mx-auto min-w-xs"
                         >
                             <PrimaryToolCard
                                 title="نموذج شهادة تقدير"
@@ -151,7 +151,7 @@ function PrimaryToolsSection() {
                                 show: { opacity: 1, y: 0 },
                             }}
                             transition={{ duration: 0.6, ease: "easeOut" }}
-                            className="max-w-xs"
+                            className="max-w-xs mx-auto min-w-xs"
                         >
                             <PrimaryToolCard
                                 title="نموذج شهادة تقدير"
