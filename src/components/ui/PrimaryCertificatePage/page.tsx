@@ -2,10 +2,6 @@
 
 import { useState, useCallback } from "react";
 import PrimaryCertificateForm from "@/components/ui/CertificateForm/PrimaryCertificateForm";
-import PrimaryCertificateViewer, {
-    type CertificateProps,
-    type CertificateTemplate,
-} from "@/components/ui/CertificateViewer/PrimaryCertificateViewer";
 import TemplatesLayout from "@/components/layout/TemplatesLayout";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
@@ -13,21 +9,37 @@ import Fullscreen from "yet-another-react-lightbox/plugins/fullscreen";
 import { Download, Image, FileText } from "lucide-react";
 import { WaveLoading } from "respinner";
 import jsPDF from "jspdf";
+import { createCertificateToImage } from "@/lib/createCertificateImage";
+import type { CertificateProps, CertificateTemplate } from "../CertificateViewer/PrimaryCertificateViewer";
 
 export default function PrimaryCertificatePage({ template }: { template: CertificateTemplate }) {
-    const [formData, setFormData] = useState<Omit<CertificateProps, "template">[]>([]);
+    const [_formData, setFormData] = useState<Omit<CertificateProps, "template">[]>([]);
     const [images, setImages] = useState<string[]>([]);
     const [open, setOpen] = useState(false);
-
-    const isLoading = images.length !== formData.length && formData.length > 0;
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleFormDataChange = useCallback(
         (newData: Omit<CertificateProps, "template">[]) => {
             setImages([]);
             setFormData(newData);
+            generateAllImagesSequentially(newData);
         },
         []
     );
+
+    const generateAllImagesSequentially = async (dataList: Omit<CertificateProps, "template">[]) => {
+        setIsLoading(true);
+        const results: string[] = [];
+        for (const data of dataList) {
+            const img = await createCertificateToImage({
+                data: data.data,
+                template,
+            });
+            results.push(img);
+            setImages([...results]);
+        }
+        setIsLoading(false);
+    };
 
     const downloadAll = useCallback(() => {
         images.forEach((img, index) => {
@@ -46,7 +58,6 @@ export default function PrimaryCertificatePage({ template }: { template: Certifi
             const imgProps = pdf.getImageProperties(img);
             const pdfWidth = pdf.internal.pageSize.getWidth();
             const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-
             pdf.addImage(img, "PNG", 0, 0, pdfWidth, pdfHeight);
             pdf.save(`certificate-${index + 1}.pdf`);
         });
@@ -54,18 +65,14 @@ export default function PrimaryCertificatePage({ template }: { template: Certifi
 
     const downloadPDFCombined = useCallback(() => {
         if (!images.length) return;
-
         const pdf = new jsPDF("landscape", "pt", "a4");
-
         images.forEach((img, index) => {
             const imgProps = pdf.getImageProperties(img);
             const pdfWidth = pdf.internal.pageSize.getWidth();
             const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-
             if (index > 0) pdf.addPage();
             pdf.addImage(img, "PNG", 0, 0, pdfWidth, pdfHeight);
         });
-
         pdf.save("certificates.pdf");
     }, [images]);
 
@@ -85,24 +92,6 @@ export default function PrimaryCertificatePage({ template }: { template: Certifi
                         </div>
                     )}
                 </div>
-
-                {/* Hidden viewers to render images */}
-                {formData.map((data, i) => (
-                    <PrimaryCertificateViewer
-                        key={i + JSON.stringify(data)}
-                        data={data.data}
-                        template={template}
-                        displayImage={false}
-                        onImageReady={(img) =>
-                            setImages((prev) => {
-                                if (!prev.includes(img)) {
-                                    return [...prev, img];
-                                }
-                                return prev;
-                            })
-                        }
-                    />
-                ))}
 
                 {/* Show Lightbox when all images are ready */}
                 {images.length > 0 && (
