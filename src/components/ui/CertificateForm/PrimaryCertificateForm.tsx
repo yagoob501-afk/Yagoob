@@ -48,7 +48,7 @@ function PrimaryCertificateForm({
     const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
     const [extraLines, setExtraLines] = useState([
         "و ذلك على جهوده أثناء الحصة الدراسية",
-        "و بدورنا نقدم له هذا الشكل كتقدير لجهوده المبذولة",
+        "و بدورنا نقدم له هذا الشكر كتقدير لجهوده المبذولة",
         "متمنين له دوام التوفيق و السداد",
     ]);
 
