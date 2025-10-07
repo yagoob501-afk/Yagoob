@@ -1,3 +1,4 @@
+import SpecialTeacherSection from "@/components/about/special-teacher-section"
 import PrimaryFooter from "@/components/sections/Footer/PrimaryFooter"
 import PrimaryHeader from "@/components/sections/Header/PrimaryHeader"
 import PrimaryHeroSection from "@/components/sections/Hero/PrimaryHeroSection"
@@ -12,6 +13,7 @@ function HomePage() {
             <PrimaryHeroSection />
             <PrimaryToolsSection />
             <PrimaryAdditionalToolsSection />
+            <SpecialTeacherSection />
             <PrimaryJoinUsSection />
             <div className="mt-10"></div>
             <PrimaryFooter />
