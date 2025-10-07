@@ -1,10 +1,16 @@
 import { motion } from "framer-motion"
 import { Award, Star, Trophy, CheckCircle } from "lucide-react"
+import { useState } from "react"
+import Lightbox from "yet-another-react-lightbox"
+import "yet-another-react-lightbox/styles.css"
 import Picture from "@/assets/about/صورة 4.jpeg"
 
 export default function SpecialTeacherSection() {
+    const [lightboxOpen, setLightboxOpen] = useState(false)
     return (
         <section className="py-20 bg-gradient-to-br from-[var(--color-bg-base)] to-[var(--color-bg-container)] relative overflow-hidden">
+            <Lightbox slides={[{ src: Picture }]} open={lightboxOpen} close={() => setLightboxOpen(false)} />
+
             {/* Decorative Background Elements */}
             <div className="absolute inset-0 opacity-5">
                 <div className="absolute top-1/4 left-10 w-64 h-64 bg-[var(--color-primary)] rounded-full blur-3xl" />
@@ -26,10 +32,16 @@ export default function SpecialTeacherSection() {
                             <div className="relative rounded-3xl overflow-hidden shadow-2xl">
                                 <div className="aspect-[4/3] bg-gradient-to-br from-[var(--color-primary)]/20 to-[var(--color-primary)]/5 flex items-center justify-center">
                                     {/* Placeholder - Replace with actual certificate/award image */}
+                                    {/* <div className="text-center p-8">
+                                        <Trophy className="w-32 h-32 text-[var(--color-primary)] mx-auto mb-4" />
+                                        <p className="text-[var(--color-text-secondary)] text-lg">صورة شهادة التكريم</p>
+                                    </div> */}
+
                                     <img
                                         src={Picture}
                                         alt="شهادة المعلم المتميز"
-                                        className="w-full h-full object-cover"
+                                        className="w-full h-full object-cover cursor-pointer"
+                                        onClick={() => setLightboxOpen(true)}
                                     />
                                 </div>
                             </div>
