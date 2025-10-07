@@ -7,9 +7,11 @@ import Lightbox from "yet-another-react-lightbox"
 import "yet-another-react-lightbox/styles.css"
 import Picture1 from "@/assets/about/صورة مع وزير التربية.jpeg"
 import Picture2 from "@/assets/about/صورة مع الموجه الفني الأول لمادة التربية الإسلامية بمنطقة العاصمة التعليمية.jpeg"
+import Picture3 from "@/assets/about/صورة 3.jpeg"
+import Picture4 from "@/assets/about/صورة 4.jpeg"
 
-const PictureSlides = [Picture1, Picture2]
-const SLIDE_INTERVAL = 5000 // 5 seconds
+const PictureSlides = [Picture1, Picture2, Picture3, Picture4];
+const SLIDE_INTERVAL = 7000 // 5 seconds
 
 export default function HeroSection() {
     const [currentIndex, setCurrentIndex] = useState(0)
@@ -46,7 +48,7 @@ export default function HeroSection() {
                             transition={{ delay: 0.2 }}
                             className="inline-block mb-4 px-6 py-2 bg-[var(--color-primary)]/10 rounded-full"
                         >
-                            <span className="text-[var(--color-primary)] font-[var(--font-amiri)] text-lg font-semibold">
+                            <span className="text-[var(--color-primary)] font-amiri text-lg font-semibold">
                                 معلم تربية إسلامية
                             </span>
                         </motion.div>
@@ -55,7 +57,7 @@ export default function HeroSection() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.3 }}
-                            className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[var(--color-text-heading)] mb-6 font-[var(--font-alhoda)] leading-tight"
+                            className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[var(--color-text-heading)] mb-6 font-alhoda leading-tight"
                         >
                             يعقوب يوسف العنزي
                         </motion.h1>

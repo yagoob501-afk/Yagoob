@@ -17,9 +17,9 @@ function PrimaryToolsSection() {
         <>
             <motion.section
                 className="py-14 px-3 container mx-auto"
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, ease: "easeInOut" }}
+                // initial={{ opacity: 0, y: 50 }}
+                // animate={{ opacity: 1, y: 0 }}
+                // transition={{ duration: 0.8, ease: "easeInOut" }}
                 id="tools"
             >
                 <div className="flex flex-col gap-20">
@@ -30,9 +30,9 @@ function PrimaryToolsSection() {
 
                     <motion.div
                         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-14"
-                        initial="hidden"
-                        whileInView="show"
-                        viewport={{ once: false, amount: 0.2 }}
+                        // initial="hidden"
+                        // whileInView="show"
+                        // viewport={{ once: false, amount: 0.2 }}
                         variants={{
                             hidden: {},
                             show: {
@@ -42,11 +42,11 @@ function PrimaryToolsSection() {
                     >
                         <motion.div
                             // key={i}
-                            variants={{
-                                hidden: { opacity: 0, y: 30 },
-                                show: { opacity: 1, y: 0 },
-                            }}
-                            transition={{ duration: 0.6, ease: "easeOut" }}
+                            // variants={{
+                            //     hidden: { opacity: 0, y: 30 },
+                            //     show: { opacity: 1, y: 0 },
+                            // }}
+                            // transition={{ duration: 0.6, ease: "easeOut" }}
                             className="max-w-xs mx-auto min-w-xs"
                         >
                             <PrimaryToolCard
@@ -60,11 +60,11 @@ function PrimaryToolsSection() {
 
                         <motion.div
                             // key={i}
-                            variants={{
-                                hidden: { opacity: 0, y: 30 },
-                                show: { opacity: 1, y: 0 },
-                            }}
-                            transition={{ duration: 0.6, ease: "easeOut" }}
+                            // variants={{
+                            //     hidden: { opacity: 0, y: 30 },
+                            //     show: { opacity: 1, y: 0 },
+                            // }}
+                            // transition={{ duration: 0.6, ease: "easeOut" }}
                             className="max-w-xs mx-auto min-w-xs"
                         >
                             <PrimaryToolCard
@@ -78,11 +78,11 @@ function PrimaryToolsSection() {
 
                         <motion.div
                             // key={i}
-                            variants={{
-                                hidden: { opacity: 0, y: 30 },
-                                show: { opacity: 1, y: 0 },
-                            }}
-                            transition={{ duration: 0.6, ease: "easeOut" }}
+                            // variants={{
+                            //     hidden: { opacity: 0, y: 30 },
+                            //     show: { opacity: 1, y: 0 },
+                            // }}
+                            // transition={{ duration: 0.6, ease: "easeOut" }}
                             className="max-w-xs mx-auto min-w-xs"
                         >
                             <PrimaryToolCard
@@ -129,11 +129,11 @@ function PrimaryToolsSection() {
 
                         <motion.div
                             // key={i}
-                            variants={{
-                                hidden: { opacity: 0, y: 30 },
-                                show: { opacity: 1, y: 0 },
-                            }}
-                            transition={{ duration: 0.6, ease: "easeOut" }}
+                            // variants={{
+                            //     hidden: { opacity: 0, y: 30 },
+                            //     show: { opacity: 1, y: 0 },
+                            // }}
+                            // transition={{ duration: 0.6, ease: "easeOut" }}
                             className="max-w-xs mx-auto min-w-xs"
                         >
                             <PrimaryToolCard
@@ -146,11 +146,11 @@ function PrimaryToolsSection() {
 
                         <motion.div
                             // key={i}
-                            variants={{
-                                hidden: { opacity: 0, y: 30 },
-                                show: { opacity: 1, y: 0 },
-                            }}
-                            transition={{ duration: 0.6, ease: "easeOut" }}
+                            // variants={{
+                            //     hidden: { opacity: 0, y: 30 },
+                            //     show: { opacity: 1, y: 0 },
+                            // }}
+                            // transition={{ duration: 0.6, ease: "easeOut" }}
                             className="max-w-xs mx-auto min-w-xs"
                         >
                             <PrimaryToolCard
@@ -169,9 +169,9 @@ function PrimaryToolsSection() {
             {/* section 2 */}
             <motion.section
                 className="bg-cta-bg text-cta-foreground py-16 px-6 rounded-2xl shadow-lg container mx-auto text-center flex flex-col gap-14"
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, ease: "easeInOut" }}
+                // initial={{ opacity: 0, y: 50 }}
+                // animate={{ opacity: 1, y: 0 }}
+                // transition={{ duration: 0.8, ease: "easeInOut" }}
                 id="tools"
             >
                 {/* CTA Section Header */}
@@ -187,11 +187,11 @@ function PrimaryToolsSection() {
                         (img, index) => (
                             <motion.div
                                 key={index}
-                                variants={{
-                                    hidden: { opacity: 0, y: 30 },
-                                    show: { opacity: 1, y: 0 },
-                                }}
-                                transition={{ duration: 0.6, ease: "easeOut" }}
+                                // variants={{
+                                //     hidden: { opacity: 0, y: 30 },
+                                //     show: { opacity: 1, y: 0 },
+                                // }}
+                                // transition={{ duration: 0.6, ease: "easeOut" }}
                                 className="flex-1 max-w-xs"
                             >
                                 <PrimaryToolCard

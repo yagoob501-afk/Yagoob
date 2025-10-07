@@ -7,6 +7,7 @@ import StatsSection from "@/components/about/stats-section"
 import CTASection from "@/components/about/cta-section"
 import PrimaryHeader from "@/components/sections/Header/PrimaryHeader"
 import PrimaryFooter from "@/components/sections/Footer/PrimaryFooter"
+import SpecialTeacherSection from "@/components/about/special-teacher-section"
 
 export default function AboutPage() {
     return (
@@ -14,6 +15,7 @@ export default function AboutPage() {
             <PrimaryHeader />
             <HeroSection />
             <QualificationsSection />
+            <SpecialTeacherSection />
             <ExperienceTimeline />
             <SkillsSection />
             <VisionSection />
