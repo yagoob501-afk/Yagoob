@@ -7,32 +7,40 @@ import "react-datepicker/dist/react-datepicker.css";
 function ProjectDocumentation1Form({ onSubmit }: { onSubmit?: (data: DocumentationData) => void }) {
     const { t } = useTranslation();
     const [loading, setLoading] = useState(false);
-    const [date, setDate] = useState(null as Date | null);
-    const [images, setImages] = useState([] as File[]);
+    const [date, setDate] = useState<Date | null>(null);
+    const [images, setImages] = useState<File[]>([]);
+    const [logoPicture, setLogoPicture] = useState<File | null>(null);
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
         setLoading(true);
 
         const formData = new FormData(e.target);
-        formData.set("date", date?.toISOString() || ""); // replace date input with picker value
+        formData.set("date", date?.toISOString() || "");
         images.forEach((img) => formData.append("images[]", img));
+        if (logoPicture) formData.append("logoPicture", logoPicture);
 
         const data: any = Object.fromEntries(formData.entries());
         data.images = images;
         data.date = date;
-        onSubmit?.(data);
+        data.logoPicture = logoPicture;
 
+        onSubmit?.(data);
         setLoading(false);
     };
 
     const handleImageChange = (e: any) => {
         const files = Array.from(e.target.files);
-        setImages((prev: any) => [...prev, ...files]);
+        setImages((prev) => [...prev, ...files] as any);
     };
 
-    const removeImage = (index: any) => {
+    const removeImage = (index: number) => {
         setImages((prev) => prev.filter((_, i) => i !== index));
+    };
+
+    const handleLogoChange = (e: any) => {
+        const file = e.target.files?.[0];
+        if (file) setLogoPicture(file);
     };
 
     return (
@@ -191,6 +199,7 @@ function ProjectDocumentation1Form({ onSubmit }: { onSubmit?: (data: Documentati
                     />
                 </div>
 
+                {/* Event Type */}
                 <div className="flex flex-col">
                     <label className="mb-1 text-sm font-medium text-form-label">
                         {t("documentation.event type")}
@@ -214,6 +223,36 @@ function ProjectDocumentation1Form({ onSubmit }: { onSubmit?: (data: Documentati
                     placeholder={t("documentation.description")}
                     className="rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text placeholder:text-form-placeholder focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition h-28 resize-none"
                 />
+            </div>
+
+            {/* Logo Picture */}
+            <div className="flex flex-col space-y-3">
+                <label className="mb-1 text-sm font-medium text-form-label">
+                    {t("documentation.logoPicture")}
+                </label>
+                <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleLogoChange}
+                    className="rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text file:mr-4 file:rounded-md file:border-0 file:bg-primary file:px-3 file:py-1 file:text-sm file:font-medium file:text-primary-foreground hover:file:bg-primary-hover transition"
+                />
+
+                {logoPicture && (
+                    <div className="relative w-32 h-32 border border-form-border rounded-lg overflow-hidden">
+                        <img
+                            src={URL.createObjectURL(logoPicture)}
+                            alt="Logo Preview"
+                            className="w-full h-full object-cover"
+                        />
+                        <button
+                            type="button"
+                            onClick={() => setLogoPicture(null)}
+                            className="absolute top-1 right-1 bg-error text-white rounded-full p-1 text-xs"
+                        >
+                            ✕
+                        </button>
+                    </div>
+                )}
             </div>
 
             {/* Files with preview */}
@@ -263,7 +302,6 @@ function ProjectDocumentation1Form({ onSubmit }: { onSubmit?: (data: Documentati
                 </button>
             </div>
         </form>
-
     );
 }
 

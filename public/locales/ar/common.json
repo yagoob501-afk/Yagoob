@@ -38,6 +38,7 @@
         "targetGroup": "الفئة المستهدفة",
         "description": "الشرح",
         "images": "الصور",
+        "logoPicture": "الشعار",
         "event type": "نوع الفعالية"
     },
     "certificate": {
