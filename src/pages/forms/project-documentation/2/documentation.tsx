@@ -3,7 +3,7 @@ import html2canvas from "html2canvas-pro";
 import jsPDF from "jspdf";
 import { Download, FileDown, Eye } from "lucide-react";
 import Lightbox from "yet-another-react-lightbox";
-import EducationMinistryLogo from "@/assets/شعار_وزارة_التعليم_العالي_(الكويت).jpg";
+import EducationMinistryLogo from "@/assets/شعار_وزارة_التعليم_العالي_(الكويت).jpeg";
 
 export interface DocumentationData {
     title: string;
