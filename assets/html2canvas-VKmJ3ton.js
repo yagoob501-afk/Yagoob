@@ -1,4 +1,4 @@
-import{n as e}from"./index-QX0eBJ3L.js";var t=e(((exports,t)=>{
+import{n as e}from"./index-CvjUmXjD.js";var t=e(((exports,t)=>{
 /*!
 * html2canvas 1.4.1 <https://html2canvas.hertzen.com>
 * Copyright (c) 2022 Niklas von Hertzen <https://hertzen.com>
