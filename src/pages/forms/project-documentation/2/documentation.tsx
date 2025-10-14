@@ -187,11 +187,11 @@ export default function ProjectDocumentationPreview({ data }: { data: Documentat
                         ref={documentRef}
                         style={{
                             width: `${A4_WIDTH_PX}px`,
-                            height: "1754px",
+                            minHeight: "1754px", // ✅ بدل height الثابت بـ minHeight
                             backgroundColor: "#F5F1E8",
                             display: "flex",
                             justifyContent: "center",
-                            alignItems: "center",
+                            alignItems: "flex-start", // ✅ المحتوى يبدأ من الأعلى
                             direction: "rtl",
                             fontFamily: "Arial, sans-serif",
                         }}
@@ -200,7 +200,7 @@ export default function ProjectDocumentationPreview({ data }: { data: Documentat
                         <div
                             style={{
                                 width: "96%",
-                                height: "96%",
+                                minHeight: "96%", // ✅ نفس المنطق، حتى يتمدد لو المحتوى أطول
                                 border: "5px solid #8B4513",
                                 borderRadius: "20px",
                                 padding: "40px",
@@ -208,7 +208,6 @@ export default function ProjectDocumentationPreview({ data }: { data: Documentat
                                 display: "flex",
                                 flexDirection: "column",
                                 gap: "25px",
-                                justifyContent: "center",
                             }}
                         >
                             {/* Header */}
@@ -221,10 +220,10 @@ export default function ProjectDocumentationPreview({ data }: { data: Documentat
                                     alignItems: "center",
                                     justifyContent: "space-between",
                                     backgroundColor: "#FFFFFF",
-                                    marginTop: "40px",
+                                    marginTop: "20px",
                                 }}
                             >
-                                <div className="flex flex-col">
+                                <div className="flex flex-col font-almaria">
                                     <img src={EducationMinistryLogo} className="max-w-40" />
                                     <div style={{ textAlign: "center", fontSize: "16px", lineHeight: "1.8" }}>
                                         <div style={{ fontWeight: "bold", color: "#000" }}>وزارة التربية</div>
@@ -234,6 +233,7 @@ export default function ProjectDocumentationPreview({ data }: { data: Documentat
                                 </div>
 
                                 <div
+                                    className="font-almaria"
                                     style={{
                                         fontSize: "44px",
                                         fontWeight: "bold",
@@ -245,10 +245,7 @@ export default function ProjectDocumentationPreview({ data }: { data: Documentat
                                     {data.school || "مدرسة الاصمعي الثانوية"}
                                 </div>
 
-                                {/* ✅ Use custom logo if provided, otherwise hide */}
-                                {logoUrl ? (
-                                    <img src={logoUrl} className="max-w-40" />
-                                ) : null}
+                                {logoUrl ? <img src={logoUrl} className="max-w-40" /> : null}
                             </div>
 
                             {/* Title */}
@@ -293,13 +290,14 @@ export default function ProjectDocumentationPreview({ data }: { data: Documentat
                                     style={{
                                         border: "2px solid #8B4513",
                                         borderRadius: "12px",
-                                        padding: "30px",
+                                        padding: "25px",
                                         backgroundColor: "#FFFFFF",
                                         fontSize: "18px",
-                                        lineHeight: "2",
+                                        lineHeight: "1.8",
+                                        wordBreak: "break-word",
                                     }}
                                 >
-                                    <div style={{ fontWeight: "bold", marginBottom: "15px", fontSize: "20px" }}>الشرح</div>
+                                    <div style={{ fontWeight: "bold", marginBottom: "10px", fontSize: "20px" }}>الشرح</div>
                                     <div>{data.description}</div>
                                 </div>
                             )}
@@ -312,28 +310,41 @@ export default function ProjectDocumentationPreview({ data }: { data: Documentat
                                         gap: "15px",
                                         gridTemplateColumns:
                                             imageUrls.length === 1
-                                                ? "1fr"
-                                                : imageUrls.length === 3
-                                                    ? "1fr 1fr"
-                                                    : "1fr 1fr",
-                                        justifyItems: imageUrls.length === 3 ? "center" : "stretch",
+                                                ? "repeat(2, 1fr)"
+                                                : "repeat(2, 1fr)",
+                                        gridAutoRows: "22vh", // ✅ نسبة متكيفة حسب الصفحة
                                     }}
                                 >
-                                    {imageUrls.map((img, i) => (
-                                        <div
-                                            key={i}
-                                            style={{
-                                                border: "1px solid #ddd",
-                                                borderRadius: "8px",
-                                                overflow: "hidden",
-                                                height: imageUrls.length <= 2 ? "300px" : "200px",
-                                                gridColumn: imageUrls.length === 3 && i === 2 ? "1 / span 2" : "auto",
-                                                width: imageUrls.length === 3 && i === 2 ? "50%" : "100%",
-                                            }}
-                                        >
-                                            <img src={img} alt={`صورة ${i + 1}`} style={{ width: "100%", height: "100%" }} />
-                                        </div>
-                                    ))}
+                                    {imageUrls.map((img, i) => {
+                                        let gridColumn = "auto";
+                                        let gridRow = "auto";
+
+                                        if (imageUrls.length === 1) {
+                                            gridColumn = "1 / span 2";
+                                            gridRow = "1 / span 2";
+                                        } else if (imageUrls.length === 2) {
+                                            gridRow = "span 2";
+                                        } else if (imageUrls.length === 3 && i === 2) {
+                                            gridColumn = "1 / span 2";
+                                        }
+
+                                        return (
+                                            <div
+                                                key={i}
+                                                style={{
+                                                    border: "1px solid #ddd",
+                                                    borderRadius: "8px",
+                                                    overflow: "hidden",
+                                                    width: "100%",
+                                                    height: "100%",
+                                                    gridColumn,
+                                                    gridRow,
+                                                }}
+                                            >
+                                                <img src={img} alt={`صورة ${i + 1}`} style={{ width: "100%", height: "100%", }} />
+                                            </div>
+                                        );
+                                    })}
                                 </div>
                             )}
 
@@ -341,13 +352,13 @@ export default function ProjectDocumentationPreview({ data }: { data: Documentat
                             <div
                                 style={{
                                     display: "flex",
-                                    justifyContent: "end",
+                                    justifyContent: "flex-end",
                                     alignItems: "center",
                                     textAlign: "center",
                                     fontSize: "32px",
                                     color: "#666",
                                     paddingTop: "20px",
-                                    paddingLeft: "44px",
+                                    marginTop: "auto",
                                 }}
                             >
                                 <div>
@@ -361,6 +372,7 @@ export default function ProjectDocumentationPreview({ data }: { data: Documentat
                         </div>
                     </div>
                 </div>
+
             </div>
 
             <Lightbox open={isLightBoxOpen} close={() => setIsLightBoxOpen(false)} slides={[{ src: previewImage }]} />
