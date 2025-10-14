@@ -1,9 +1,9 @@
-import { useMemo, useRef } from "react";
-// import { useTranslation } from "react-i18next";
-import ministryLogo from "@/assets/شعار_وزارة_التعليم_العالي__الكويت_-removebg-preview.png";
-import { format } from "date-fns-tz";
+import { useMemo, useRef, useState, useEffect } from "react";
 import html2canvas from "html2canvas-pro";
 import jsPDF from "jspdf";
+import { Download, FileDown, Eye } from "lucide-react";
+import Lightbox from "yet-another-react-lightbox";
+import EducationMinistryLogo from "@/assets/شعار_وزارة_التعليم_العالي_(الكويت).jpg";
 
 export interface DocumentationData {
     title: string;
@@ -22,9 +22,14 @@ export interface DocumentationData {
     images: File[] | string[];
 }
 
-function ProjectDocumentationPreview({ data }: { data: DocumentationData }) {
-    // const { t } = useTranslation();
-    const componentRef = useRef<HTMLDivElement>(null);
+const A4_WIDTH_PX = 1240;
+
+export default function ProjectDocumentationPreview({ data }: { data: DocumentationData }) {
+    const documentRef = useRef<HTMLDivElement>(null);
+    const [isDownloading, setIsDownloading] = useState(false);
+    const [previewImage, setPreviewImage] = useState<string>("");
+    const [isGenerating, setIsGenerating] = useState(false);
+    const [isLightBoxOpen, setIsLightBoxOpen] = useState(false);
 
     const imageUrls = useMemo(() => {
         return data.images.map(value => {
@@ -33,178 +38,334 @@ function ProjectDocumentationPreview({ data }: { data: DocumentationData }) {
         });
     }, [data]);
 
-    // ---- Download as Image ----
-    // ---- Download as Image (fit to A4) ----
+    const formatDate = (dateStr: string) => {
+        if (!dateStr) return "............";
+        const d = new Date(dateStr);
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${year}/${month}/${day}`;
+    };
+
+    const hasDescription = data.description && data.description.trim() && data.description !== "ss";
+    const hasImages = imageUrls.length > 0;
+
+    const generatePreview = async () => {
+        if (!documentRef.current) return;
+        setIsGenerating(true);
+
+        try {
+            const canvas = await html2canvas(documentRef.current, {
+                scale: 2,
+                backgroundColor: '#F5F1E8',
+                logging: false
+            });
+
+            const imgData = canvas.toDataURL("image/png");
+            setPreviewImage(imgData);
+        } catch (error) {
+            console.error("Error generating preview:", error);
+        } finally {
+            setIsGenerating(false);
+        }
+    };
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            generatePreview();
+        }, 100);
+        return () => clearTimeout(timer);
+    }, [data, imageUrls]);
+
     const downloadAsImage = async () => {
-        if (!componentRef.current) return;
-        const originalCanvas = await html2canvas(componentRef.current, { scale: 2 });
+        if (!documentRef.current) return;
+        setIsDownloading(true);
 
-        // مقاس A4 بالبيكسل على 96dpi تقريباً
-        const a4Width = 1123; // px
-        const a4Height = 794; // px
+        try {
+            const canvas = await html2canvas(documentRef.current, {
+                scale: 3,
+                backgroundColor: '#F5F1E8',
+                logging: false
+            });
 
-        // Canvas جديد مقاس A4
-        const a4Canvas = document.createElement("canvas");
-        a4Canvas.width = a4Width;
-        a4Canvas.height = a4Height;
-        const ctx = a4Canvas.getContext("2d");
-
-        if (!ctx) return;
-
-        // حساب نسبة التصغير عشان يحافظ على الابعاد
-        let imgWidth = a4Width;
-        let imgHeight = (originalCanvas.height * imgWidth) / originalCanvas.width;
-
-        if (imgHeight > a4Height) {
-            imgHeight = a4Height;
-            imgWidth = (originalCanvas.width * imgHeight) / originalCanvas.height;
+            const imgData = canvas.toDataURL("image/png");
+            const link = document.createElement("a");
+            link.href = imgData;
+            link.download = `${data.title || "documentation"}.png`;
+            link.click();
+        } finally {
+            setIsDownloading(false);
         }
-
-        const x = (a4Width - imgWidth) / 2;
-        const y = (a4Height - imgHeight) / 2;
-
-        ctx.fillStyle = "#ffffff"; // خلفية بيضاء
-        ctx.fillRect(0, 0, a4Width, a4Height);
-        ctx.drawImage(originalCanvas, x, y, imgWidth, imgHeight);
-
-        const imgData = a4Canvas.toDataURL("image/png");
-        const link = document.createElement("a");
-        link.href = imgData;
-        link.download = `${data.title || "documentation"}.png`;
-        link.click();
     };
 
-
-    // ---- Download as PDF ----
-    // ---- Download as PDF (fit all in one page) ----
     const downloadAsPDF = async () => {
-        if (!componentRef.current) return;
-        const canvas = await html2canvas(componentRef.current, { scale: 2 });
-        const imgData = canvas.toDataURL("image/png");
+        if (!documentRef.current) return;
+        setIsDownloading(true);
 
-        const pdf = new jsPDF("p", "mm", "a4");
-        const pageWidth = pdf.internal.pageSize.getWidth();
-        const pageHeight = pdf.internal.pageSize.getHeight();
+        try {
+            const canvas = await html2canvas(documentRef.current, {
+                scale: 3,
+                backgroundColor: '#F5F1E8',
+                logging: false
+            });
+            const imgData = canvas.toDataURL("image/png");
 
-        // calculate aspect ratio to fit the content in one page
-        const imgWidth = pageWidth;
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+            const pdf = new jsPDF("p", "mm", "a4");
+            const pageWidth = pdf.internal.pageSize.getWidth();
+            const pageHeight = pdf.internal.pageSize.getHeight();
 
-        let finalWidth = imgWidth;
-        let finalHeight = imgHeight;
+            const imgWidth = pageWidth;
+            const imgHeight = (canvas.height * pageWidth) / canvas.width;
 
-        if (imgHeight > pageHeight) {
-            finalHeight = pageHeight;
-            finalWidth = (canvas.width * finalHeight) / canvas.height;
+            if (imgHeight <= pageHeight) {
+                pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+            } else {
+                pdf.addImage(imgData, "PNG", 0, 0, imgWidth, pageHeight);
+            }
+
+            pdf.save(`${data.title || "documentation"}.pdf`);
+        } finally {
+            setIsDownloading(false);
         }
-
-        const x = (pageWidth - finalWidth) / 2;
-        const y = (pageHeight - finalHeight) / 2;
-
-        pdf.addImage(imgData, "PNG", x, y, finalWidth, finalHeight);
-        pdf.save(`${data.title || "documentation"}.pdf`);
     };
-
 
     return (
-        <div className="flex flex-col gap-4">
-            {/* Action buttons */}
-            <div className="flex gap-2 justify-end">
-                <button
-                    onClick={downloadAsImage}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-lg"
-                >
-                    تحميل صورة
-                </button>
-                <button
-                    onClick={downloadAsPDF}
-                    className="px-4 py-2 bg-green-600 text-white rounded-lg"
-                >
-                    تحميل PDF
-                </button>
-            </div>
-
-            {/* Content to export */}
-            <div
-                ref={componentRef}
-                className="bg-white text-black max-w-4xl p-10 w-full mx-auto shadow-md rounded-lg print:shadow-none print:rounded-none print:p-0 print:max-w-full flex flex-col gap-4"
-            >
-                <div className="border border-primary rounded-xl flex flex-col p-10">
-                    <img src={ministryLogo} alt="Logo" className="max-w-30" />
-                    <p>
-                        الادارة العامة لمنطقة
-                        <br />
-                        <span>{data.area || " ....... "}</span>
-                        <span> التعليمية</span>
-                    </p>
-                    <h1 className="text-center text-text-heading">
-                        {data.title || "...."}
-                    </h1>
+        <div className="min-h-screen p-8">
+            <div className="max-w-6xl mx-auto">
+                {/* Action Buttons */}
+                <div className="flex gap-3 justify-end mb-6">
+                    <button
+                        onClick={generatePreview}
+                        disabled={isGenerating}
+                        className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                    >
+                        <Eye className="w-5 h-5" />
+                        <span>تحديث المعاينة</span>
+                    </button>
+                    <button
+                        onClick={downloadAsImage}
+                        disabled={isDownloading}
+                        className="px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                    >
+                        <Download className="w-5 h-5" />
+                        <span>تحميل صورة</span>
+                    </button>
+                    <button
+                        onClick={downloadAsPDF}
+                        disabled={isDownloading}
+                        className="px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-xl font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                    >
+                        <FileDown className="w-5 h-5" />
+                        <span>تحميل PDF</span>
+                    </button>
                 </div>
 
-                <div className="flex justify-center items-center p-10">
-                    <p className="border px-2 py-4 rounded-md border-primary-active w-full max-w-[70%] text-center">
-                        {data.description || "الوصف"}
-                    </p>
-                </div>
+                {/* Preview */}
+                {previewImage && (
+                    <div className="bg-white p-4 rounded-xl shadow-2xl">
+                        <img
+                            src={previewImage}
+                            onClick={() => setIsLightBoxOpen(true)}
+                            alt="Preview"
+                            className="w-full h-auto cursor-pointer"
+                            style={{ maxWidth: '100%' }}
+                        />
+                    </div>
+                )}
 
-                <div className="grid grid-cols-2 gap-4">
-                    <p className="border px-7 py-4 rounded-md border-primary-active w-full">
-                        {data.teacherGender === "male" ? "معلم" : "معلمة"}
-                        <br />
-                        {data.teacherName || "..."}
-                    </p>
+                {/* Hidden A4 Document */}
+                <div style={{ position: 'absolute', left: '-9999px', top: 0 }}>
+                    <div
+                        ref={documentRef}
+                        style={{
+                            width: `${A4_WIDTH_PX}px`,
+                            minHeight: 'auto',
+                            backgroundColor: '#F5F1E8',
+                            padding: '60px',
+                            boxSizing: 'border-box',
+                            direction: 'rtl',
+                            fontFamily: 'Arial, sans-serif'
+                        }}
+                    >
+                        {/* Outer Border */}
+                        <div style={{
+                            width: '100%',
+                            border: '3px solid #8B4513',
+                            borderRadius: '20px',
+                            padding: '30px',
+                            boxSizing: 'border-box',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '25px'
+                        }}>
+                            {/* Header Section */}
+                            <div style={{
+                                border: '2px solid #8B4513',
+                                borderRadius: '15px',
+                                padding: '30px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                backgroundColor: '#FFFFFF'
+                            }}>
+                                <img src={EducationMinistryLogo} className="max-w-40" />
+                                <div style={{ fontSize: '28px', fontWeight: 'bold', color: '#8B4513', flex: 1, textAlign: 'center' }}>
+                                    {data.school || "مدرسة الاصمعي الثانوية"}
+                                </div>
+                                <div style={{ textAlign: 'center', fontSize: '16px', lineHeight: '1.8' }}>
+                                    <div style={{ fontWeight: 'bold', color: '#000' }}>وزارة التربية</div>
+                                    <div>الإدارة العامة لمنطقة</div>
+                                    <div>{data.area || "الجهراء"} التعليمية</div>
+                                </div>
 
-                    <p className="border px-7 py-4 rounded-md border-primary-active w-full">
-                        قسم
-                        <br />
-                        {data.department || "..."}
-                    </p>
+                            </div>
 
-                    <p className="border px-7 py-4 rounded-md border-primary-active w-full">
-                        المكان
-                        <br />
-                        {data.place || "..."}
-                    </p>
+                            {/* Title */}
+                            <div style={{
+                                border: '2px solid #8B4513',
+                                borderRadius: '12px',
+                                padding: '20px',
+                                textAlign: 'center',
+                                fontSize: '26px',
+                                fontWeight: 'bold',
+                                color: '#8B4513',
+                                backgroundColor: '#FFFFFF'
+                            }}>
+                                {data.title || "عنوان التوثيق"}
+                            </div>
 
-                    <p className="border px-7 py-4 rounded-md border-primary-active w-full">
-                        التاريخ
-                        <br />
-                        {data.date ? format(data.date, "yyyy/MM/dd") : "..."}
-                    </p>
-
-                    <p className="border px-7 py-4 rounded-md border-primary-active w-full">
-                        نوع الفعالية
-                        <br />
-                        {data.eventType || "..."}
-                    </p>
-
-                    <p className="border px-7 py-4 rounded-md border-primary-active w-full">
-                        الفئة المستهدفة
-                        <br />
-                        {data.targetGroup || "..."}
-                    </p>
-                </div>
-
-                <div className="p-4 rounded-xl border-2 border-primary flex flex-col gap-2 min-h-64">
-                    <h2>الصور المرفقة</h2>
-                    <div className="grid grid-cols-2 gap-4">
-                        {imageUrls.length ? (
-                            imageUrls.map((img, i) => (
-                                <img
-                                    key={i}
-                                    src={img}
-                                    className="max-h-32 object-contain w-full"
+                            {/* Info Grid */}
+                            <div style={{
+                                display: 'grid',
+                                gridTemplateColumns: '1fr 1fr',
+                                gap: '20px'
+                            }}>
+                                <InfoBox
+                                    label={data.teacherGender === "male" ? "المعلم" : "المعلمة"}
+                                    value={data.teacherName || "يعقوب"}
                                 />
-                            ))
-                        ) : (
-                            "لا توجد صور مرفقة"
-                        )}
+                                <InfoBox
+                                    label="القسم"
+                                    value={data.department || "الإدارة"}
+                                />
+                                <InfoBox
+                                    label="المكان"
+                                    value={data.place || "شارع مدرسة الاصمعي"}
+                                />
+                                <InfoBox
+                                    label="التاريخ"
+                                    value={formatDate(data.date)}
+                                />
+                                <InfoBox
+                                    label="نوع الفعالية"
+                                    value={data.eventType || "احتفال بالطلاب الناجحين"}
+                                />
+                                <InfoBox
+                                    label="الفئة المستهدفة"
+                                    value={data.targetGroup || "الصف الثالث الثانوي"}
+                                />
+                            </div>
+
+                            {/* Description - only if exists */}
+                            {hasDescription && (
+                                <div style={{
+                                    border: '2px solid #8B4513',
+                                    borderRadius: '12px',
+                                    padding: '30px',
+                                    backgroundColor: '#FFFFFF',
+                                    fontSize: '18px',
+                                    lineHeight: '2'
+                                }}>
+                                    <div style={{ fontWeight: 'bold', marginBottom: '15px', fontSize: '20px' }}>الشرح</div>
+                                    <div>{data.description}</div>
+                                </div>
+                            )}
+
+                            {/* Images Section - only if exists */}
+                            {hasImages && (
+                                <div style={{
+                                    border: '2px solid #8B4513',
+                                    borderRadius: '12px',
+                                    padding: '25px',
+                                    backgroundColor: '#FFFFFF'
+                                }}>
+                                    <div style={{ fontWeight: 'bold', marginBottom: '15px', fontSize: '20px' }}>الصور المرفقة</div>
+                                    <div style={{
+                                        display: 'grid',
+                                        gridTemplateColumns: imageUrls.length === 1 ? '1fr' : '1fr 1fr',
+                                        gap: '15px'
+                                    }}>
+                                        {imageUrls.map((img, i) => (
+                                            <div key={i} style={{
+                                                border: '1px solid #ddd',
+                                                borderRadius: '8px',
+                                                overflow: 'hidden',
+                                                height: imageUrls.length <= 2 ? '300px' : '200px'
+                                            }}>
+                                                <img
+                                                    src={img}
+                                                    alt={`صورة ${i + 1}`}
+                                                    style={{
+                                                        width: '100%',
+                                                        height: '100%',
+                                                        objectFit: 'cover'
+                                                    }}
+                                                />
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Footer */}
+                            <div style={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                fontSize: '16px',
+                                color: '#666',
+                                paddingTop: '20px'
+                            }}>
+                                <div>
+                                    {data.managerGender === "male" ? "مدير المدرسة" : "مديرة المدرسة"}
+                                    <br />
+                                    <span style={{ fontWeight: 'bold', color: '#000' }}>
+                                        {data.managerName || "المدير محمود"}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <Lightbox
+                open={isLightBoxOpen}
+                close={() => setIsLightBoxOpen(false)}
+                slides={[{ src: previewImage }]}
+            />
+
         </div>
     );
 }
 
-export default ProjectDocumentationPreview;
+function InfoBox({ label, value }: { label: string; value: string }) {
+    return (
+        <div style={{
+            border: '2px solid #8B4513',
+            borderRadius: '10px',
+            padding: '20px',
+            backgroundColor: '#FFFFFF',
+            fontSize: '18px',
+            display: 'flex',
+            gap: '10px',
+            alignItems: 'center'
+        }}>
+            <div style={{ color: '#8B4513', fontWeight: 'bold' }}>
+                {label}:
+            </div>
+            <div style={{ color: '#000', fontSize: '20px' }}>
+                {value}
+            </div>
+        </div>
+    );
+}
