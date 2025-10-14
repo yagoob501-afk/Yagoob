@@ -2,7 +2,8 @@ import './i18n';
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
 import './App.css'
 import ThemeProvider from './providers/ThemeProvider'
-import ProjectDocumentation1 from '@/pages/forms/project-documentation/1/page'
+import ProjectDocumentation1 from './pages/forms/project-documentation/1/page';
+import ProjectDocumentation2 from '@/pages/forms/project-documentation/2/page'
 import HomePage from '@/pages/page'
 import TextToQRcodePage from './pages/additional-tools/TextToQRcode';
 import CertificateOfAppreciationTemplate_2_Page from './pages/forms/certificate-of-appreciation/2/page';
@@ -28,6 +29,7 @@ function App() {
 
                         {/* forms */}
                         <Route path='/forms/project-documentation/1' element={<ProjectDocumentation1 />} />
+                        <Route path='/forms/project-documentation/2' element={<ProjectDocumentation2 />} />
                         <Route path='/forms/certificate-of-appreciation/1' element={<CertificateOfAppreciationTemplate_1_Page />} />
                         <Route path='/forms/certificate-of-appreciation/2' element={<CertificateOfAppreciationTemplate_2_Page />} />
                         {/* <Route path='/forms/certificate-of-appreciation/3' element={<CertificateOfAppreciationTemplate_3_Page />} /> */}
