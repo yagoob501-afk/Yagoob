@@ -184,14 +184,16 @@ export default function ProjectDocumentationPreview({ data }: { data: Documentat
                 {/* Hidden A4 Document */}
                 <div style={{ position: "absolute", left: "-9999px", top: 0 }}>
                     <div
+
                         ref={documentRef}
                         style={{
                             width: `${A4_WIDTH_PX}px`,
-                            minHeight: "1754px", // ✅ بدل height الثابت بـ minHeight
+                            height: `${A4_WIDTH_PX * (297 / 210)}px`, // = 1754px
+
                             backgroundColor: "#F5F1E8",
                             display: "flex",
                             justifyContent: "center",
-                            alignItems: "flex-start", // ✅ المحتوى يبدأ من الأعلى
+                            alignItems: "center",
                             direction: "rtl",
                             fontFamily: "Arial, sans-serif",
                         }}
@@ -200,13 +202,14 @@ export default function ProjectDocumentationPreview({ data }: { data: Documentat
                         <div
                             style={{
                                 width: "96%",
-                                minHeight: "96%", // ✅ نفس المنطق، حتى يتمدد لو المحتوى أطول
+                                height: "calc(1754px * 0.96)",
                                 border: "5px solid #8B4513",
                                 borderRadius: "20px",
                                 padding: "40px",
                                 backgroundColor: "#F5F1E8",
                                 display: "flex",
                                 flexDirection: "column",
+                                justifyContent: "center",
                                 gap: "25px",
                             }}
                         >
@@ -287,7 +290,9 @@ export default function ProjectDocumentationPreview({ data }: { data: Documentat
                             {/* Description */}
                             {hasDescription && (
                                 <div
+                                    // className
                                     style={{
+                                        maxWidth: `${A4_WIDTH_PX}px`,
                                         border: "2px solid #8B4513",
                                         borderRadius: "12px",
                                         padding: "25px",
@@ -306,6 +311,7 @@ export default function ProjectDocumentationPreview({ data }: { data: Documentat
                             {hasImages && (
                                 <div
                                     style={{
+                                        marginTop: "auto",
                                         display: "grid",
                                         gap: "15px",
                                         gridTemplateColumns:
@@ -358,7 +364,7 @@ export default function ProjectDocumentationPreview({ data }: { data: Documentat
                                     fontSize: "32px",
                                     color: "#666",
                                     paddingTop: "20px",
-                                    marginTop: "auto",
+                                    marginTop: hasImages ? "auto" : "",
                                 }}
                             >
                                 <div>
@@ -395,7 +401,7 @@ function InfoBox({ label, value }: { label: string; value: string }) {
             }}
         >
             <div style={{ color: "#8B4513", fontWeight: "bold" }} className="font-alhoda whitespace-nowrap">{label} :</div>
-            <div style={{ color: "#000", fontSize: "40px" }} className="font-cairo whitespace-nowrap">{value}</div>
+            <div style={{ color: "#000", fontSize: "30px" }} className="font-cairo whitespace-nowrap">{value}</div>
         </div>
     );
 }
