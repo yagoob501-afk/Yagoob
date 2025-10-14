@@ -282,49 +282,51 @@ export default function ProjectDocumentationPreview({ data }: { data: Documentat
                             )}
 
                             {/* Images Section - only if exists */}
-                            <div
-                                style={{
-                                    display: 'grid',
-                                    gap: '15px',
-                                    gridTemplateColumns:
-                                        imageUrls.length === 1
-                                            ? '1fr'
-                                            : imageUrls.length === 3
-                                                ? '1fr 1fr' // صفين اثنين، الثالث سيكون في صف جديد
-                                                : '1fr 1fr',
-                                    justifyItems: imageUrls.length === 3 ? 'center' : 'stretch',
-                                }}
-                            >
-                                {imageUrls.map((img, i) => (
-                                    <div
-                                        key={i}
-                                        style={{
-                                            border: '1px solid #ddd',
-                                            borderRadius: '8px',
-                                            overflow: 'hidden',
-                                            height:
-                                                imageUrls.length <= 2
-                                                    ? '300px'
-                                                    : '200px',
-                                            gridColumn:
-                                                imageUrls.length === 3 && i === 2
-                                                    ? '1 / span 2' // يجعل الصورة الثالثة في صف جديد بمنتصف العرض
-                                                    : 'auto',
-                                            width: imageUrls.length === 3 && i === 2 ? '50%' : '100%',
-                                        }}
-                                    >
-                                        <img
-                                            src={img}
-                                            alt={`صورة ${i + 1}`}
+                            {hasImages && (
+                                <div
+                                    style={{
+                                        display: 'grid',
+                                        gap: '15px',
+                                        gridTemplateColumns:
+                                            imageUrls.length === 1
+                                                ? '1fr'
+                                                : imageUrls.length === 3
+                                                    ? '1fr 1fr' // صفين اثنين، الثالث سيكون في صف جديد
+                                                    : '1fr 1fr',
+                                        justifyItems: imageUrls.length === 3 ? 'center' : 'stretch',
+                                    }}
+                                >
+                                    {imageUrls.map((img, i) => (
+                                        <div
+                                            key={i}
                                             style={{
-                                                width: '100%',
-                                                height: '100%',
-                                                // objectFit: 'cover',
+                                                border: '1px solid #ddd',
+                                                borderRadius: '8px',
+                                                overflow: 'hidden',
+                                                height:
+                                                    imageUrls.length <= 2
+                                                        ? '300px'
+                                                        : '200px',
+                                                gridColumn:
+                                                    imageUrls.length === 3 && i === 2
+                                                        ? '1 / span 2' // يجعل الصورة الثالثة في صف جديد بمنتصف العرض
+                                                        : 'auto',
+                                                width: imageUrls.length === 3 && i === 2 ? '50%' : '100%',
                                             }}
-                                        />
-                                    </div>
-                                ))}
-                            </div>
+                                        >
+                                            <img
+                                                src={img}
+                                                alt={`صورة ${i + 1}`}
+                                                style={{
+                                                    width: '100%',
+                                                    height: '100%',
+                                                    // objectFit: 'cover',
+                                                }}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
 
 
                             {/* Footer */}
