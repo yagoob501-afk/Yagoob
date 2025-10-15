@@ -53,7 +53,7 @@ export default function ProjectDocumentationPreview({
     const [isDownloading, setIsDownloading] = useState(false)
     const [previewImage, setPreviewImage] = useState<string>("")
     const [isGenerating, setIsGenerating] = useState(false)
-    const [isLightBoxOpen, setIsLightBoxOpen] = useState(false)
+    const [isLightBoxOpen, setIsLightBoxOpen] = useState(false);
 
     // ✅ Extract colors with fallbacks
     const colors = {
@@ -92,7 +92,7 @@ export default function ProjectDocumentationPreview({
     }
 
     const hasDescription = data.description && data.description.trim()
-    // const hasImages = imageUrls.length > 0;
+    const hasImages = imageUrls.length > 0;
 
     const generatePreview = async () => {
         if (!documentRef.current) return
@@ -291,6 +291,7 @@ export default function ProjectDocumentationPreview({
                                 flexDirection: "column",
                                 justifyContent: "center",
                                 gap: "25px",
+                                overflow: "hidden",
                             }}
                         >
                             {/* Header */}
@@ -372,22 +373,88 @@ export default function ProjectDocumentationPreview({
                             {/* Description */}
                             {hasDescription && (
                                 <div
+
                                     style={{
                                         maxWidth: `${A4_WIDTH_PX}px`,
                                         border: `2px solid ${colors.inputBorder}`,
+                                        backgroundColor: colors.inputBg,
                                         borderRadius: "12px",
                                         padding: "25px",
-                                        backgroundColor: colors.inputBg,
-                                        fontSize: "18px",
                                         lineHeight: "1.8",
                                         wordBreak: "break-word",
-                                        color: colors.inputText,
                                     }}
                                 >
-                                    <div style={{ fontWeight: "bold", marginBottom: "10px", fontSize: "20px" }}>الشرح</div>
-                                    <div>{data.description}</div>
+                                    <div style={{ fontWeight: "bold", marginBottom: "10px", color: colors.inputLabelText }} className="font-alhoda text-4xl" >
+                                        الشرح
+                                    </div>
+                                    <div style={{
+                                        color: colors.inputText
+                                    }}
+                                        className="font-cairo text-4xl">
+                                        {data.description}
+                                    </div>
+
                                 </div>
                             )}
+
+                            {
+                                hasImages && (
+                                    <div
+                                        className="mt-auto mb-auto"
+                                        style={{
+                                            display: "grid",
+                                            gap: "15px",
+                                            gridTemplateColumns: "repeat(2, 1fr)",
+                                        }}
+                                    >
+                                        {imageUrls.map((img, index) => {
+                                            let style: React.CSSProperties = {}
+
+                                            switch (imageUrls.length) {
+                                                case 1:
+                                                    style = { gridColumn: "span 2", gridRow: "span 2" }
+                                                    break
+                                                case 2:
+                                                    style = { gridColumn: "span 1", gridRow: "span 2" }
+                                                    break
+                                                case 3:
+                                                    if (index < 2) {
+                                                        style = { gridColumn: "span 1", gridRow: "span 1" }
+                                                    } else {
+                                                        style = { gridColumn: "span 2", gridRow: "span 1" }
+                                                    }
+                                                    break
+                                                case 4:
+                                                    style = { gridColumn: "span 1", gridRow: "span 1" }
+                                                    break
+                                                default:
+                                                    style = { gridColumn: "span 1", gridRow: "span 1" }
+                                            }
+
+                                            return <img key={index} src={img} style={{ width: "100%", height: "100%", ...style, maxHeight: "350px" }} />
+                                        })}
+                                    </div>
+                                )
+                            }
+
+
+                            {
+                                !!data.managerGender && !!data.managerName && (
+                                    <div
+                                        className="text-[40px] flex flex-col items-center w-fit self-end"
+                                        style={{
+                                            marginTop: hasImages ? "auto" : "",
+                                            marginBottom: hasImages ? "auto" : ""
+                                        }}>
+                                        <span>
+                                            {data.managerGender === "male" ? "مدير المدرسة" : "مديرة المدرسة"}
+                                        </span>
+                                        <span className="font-bold">
+                                            {data.managerName}
+                                        </span>
+                                    </div>
+                                )
+                            }
                         </div>
                     </div>
                 </div>
