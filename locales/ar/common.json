@@ -41,8 +41,10 @@
         "logoPicture": "الشعار",
         "eventType": "نوع الفعالية",
         "colorsSettings": "تعديل الالوان",
-        "departmentManager": "اسم مدير القسم",
-        "departmentManagerGender": "صفحة مدير القسم (مدير / مديرة)"
+        "departmentManager": "اسم رئيس القسم",
+        "departmentManagerGender": "رئيس القسم (رئيس / رئيسة)",
+        "maleDepartmentManager": "رئيس",
+        "femaleDepartmentManager": "رئيسة"
     },
     "certificate": {
         "title": "العنوان",
