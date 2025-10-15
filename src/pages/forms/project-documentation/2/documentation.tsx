@@ -320,7 +320,8 @@ export default function ProjectDocumentationPreview({
                                 style={{
                                     border: `2px solid ${colors.headerBorder}`,
                                     borderRadius: "15px",
-                                    padding: "30px",
+                                    padding: "30px 70px",
+                                    maxHeight: "278px",
                                     display: "flex",
                                     alignItems: "center",
                                     justifyContent: "space-between",
@@ -329,9 +330,9 @@ export default function ProjectDocumentationPreview({
                                     color: colors.headerText,
                                 }}
                             >
-                                <div className="flex flex-col font-almaria">
+                                <div className="flex flex-col items-center font-almaria">
                                     <img src={EducationMinistryLogo || "/placeholder.svg"} className="max-w-40" />
-                                    <div style={{ textAlign: "center", fontSize: "16px", lineHeight: "1.8" }}>
+                                    <div style={{ textAlign: "center", fontSize: "25px", lineHeight: "1.8" }}>
                                         <div style={{ fontWeight: "bold" }}>وزارة التربية</div>
                                         <div>الإدارة العامة لمنطقة</div>
                                         <div>{data.area || "الجهراء"} التعليمية</div>
@@ -339,9 +340,9 @@ export default function ProjectDocumentationPreview({
                                 </div>
 
                                 <div
-                                    className="font-almaria"
+                                    className="font-almaria text-center"
                                     style={{
-                                        fontSize: "44px",
+                                        fontSize: "56px",
                                         fontWeight: "bold",
                                         color: colors.headerText,
                                         flex: 1,
@@ -351,7 +352,7 @@ export default function ProjectDocumentationPreview({
                                     {data.school || "مدرسة الاصمعي الثانوية"}
                                 </div>
 
-                                {logoUrl ? <img src={logoUrl || "/placeholder.svg"} className="max-w-40" /> : null}
+                                {logoUrl ? <img src={logoUrl || "/placeholder.svg"} className="max-w-60" /> : null}
                             </div>
 
                             {/* Title */}
@@ -404,13 +405,13 @@ export default function ProjectDocumentationPreview({
                                         wordBreak: "break-word",
                                     }}
                                 >
-                                    <div style={{ fontWeight: "bold", marginBottom: "10px", color: colors.inputLabelText }} className="font-alhoda text-4xl" >
+                                    {/* <div style={{ fontWeight: "bold", marginBottom: "10px", color: colors.inputLabelText }} className="font-alhoda text-4xl" >
                                         الشرح
-                                    </div>
+                                    </div> */}
                                     <div style={{
                                         color: colors.inputText
                                     }}
-                                        className="font-cairo text-4xl line-clamp-2">
+                                        className="font-cairo text-4xl line-clamp-2 overflow-visible">
                                         {data.description}
                                     </div>
 
