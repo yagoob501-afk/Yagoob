@@ -1,57 +1,59 @@
-import { useMemo, useRef, useState, useEffect } from "react";
-import html2canvas from "html2canvas-pro";
-import jsPDF from "jspdf";
-import { Download, FileDown, Eye, Edit } from "lucide-react";
-import Lightbox from "yet-another-react-lightbox";
-import EducationMinistryLogo from "@/assets/شعار_وزارة_التعليم_العالي__الكويت_.png";
+"use client"
+
+import { useMemo, useRef, useState, useEffect } from "react"
+import html2canvas from "html2canvas-pro"
+import jsPDF from "jspdf"
+import { Download, FileDown, Eye, Edit, Palette } from "lucide-react"
+import Lightbox from "yet-another-react-lightbox"
+import EducationMinistryLogo from "@/assets/شعار_وزارة_التعليم_العالي__الكويت_.png"
 
 export interface DocumentationData {
-    title: string;
-    area: string;
-    school: string;
-    teacherGender: string;
-    teacherName: string;
-    department: string;
-    place: string;
-    date: string;
-    managerGender: string;
-    managerName: string;
-    eventType: string;
-    targetGroup: string;
-    description: string;
-    images: File[] | string[];
-    logoPicture?: File | string;
+    title: string
+    area: string
+    school: string
+    teacherGender: string
+    teacherName: string
+    department: string
+    place: string
+    date: string
+    managerGender: string
+    managerName: string
+    eventType: string
+    targetGroup: string
+    description: string
+    images: File[] | string[]
+    logoPicture?: File | string
     colors?: {
-        headerBg?: string;
-        headerText?: string;
-        headerBorder?: string;
-        containerBg?: string;
-        containerText?: string;
-        containerBorder?: string;
-        inputBg?: string;
-        inputText?: string;
-        inputBorder?: string;
-        inputLabelText?: string;
-        titleText?: string;
-        titleBorder?: string;
-        titleBg?: string;
-    };
+        headerBg?: string
+        headerText?: string
+        headerBorder?: string
+        containerBg?: string
+        containerText?: string
+        containerBorder?: string
+        inputBg?: string
+        inputText?: string
+        inputBorder?: string
+        inputLabelText?: string
+        titleText?: string
+        titleBorder?: string
+        titleBg?: string
+    }
 }
 
-const A4_WIDTH_PX = 1240;
+const A4_WIDTH_PX = 1240
 
 export default function ProjectDocumentationPreview({
     data,
     onRequestChange,
 }: {
-    data: DocumentationData;
-    onRequestChange: () => void;
+    data: DocumentationData
+    onRequestChange: () => void
 }) {
-    const documentRef = useRef<HTMLDivElement>(null);
-    const [isDownloading, setIsDownloading] = useState(false);
-    const [previewImage, setPreviewImage] = useState<string>("");
-    const [isGenerating, setIsGenerating] = useState(false);
-    const [isLightBoxOpen, setIsLightBoxOpen] = useState(false);
+    const documentRef = useRef<HTMLDivElement>(null)
+    const [isDownloading, setIsDownloading] = useState(false)
+    const [previewImage, setPreviewImage] = useState<string>("")
+    const [isGenerating, setIsGenerating] = useState(false)
+    const [isLightBoxOpen, setIsLightBoxOpen] = useState(false)
 
     // ✅ Extract colors with fallbacks
     const colors = {
@@ -69,114 +71,137 @@ export default function ProjectDocumentationPreview({
         titleText: data.colors?.titleText || "#8B4513",
         titleBorder: data.colors?.titleBorder || "#8B4513",
         titleBg: data.colors?.titleBg || "#FFFFFF",
-    };
+    }
 
     const imageUrls = useMemo(() => {
-        return data.images.map((value) =>
-            typeof value === "string" ? value : URL.createObjectURL(value)
-        );
-    }, [data.images]);
+        return data.images.map((value) => (typeof value === "string" ? value : URL.createObjectURL(value)))
+    }, [data.images])
 
     const logoUrl = useMemo(() => {
-        if (!data.logoPicture) return null;
-        return typeof data.logoPicture === "string"
-            ? data.logoPicture
-            : URL.createObjectURL(data.logoPicture);
-    }, [data.logoPicture]);
+        if (!data.logoPicture) return null
+        return typeof data.logoPicture === "string" ? data.logoPicture : URL.createObjectURL(data.logoPicture)
+    }, [data.logoPicture])
 
     const formatDate = (dateStr: string) => {
-        if (!dateStr) return "............";
-        const d = new Date(dateStr);
-        const year = d.getFullYear();
-        const month = String(d.getMonth() + 1).padStart(2, "0");
-        const day = String(d.getDate()).padStart(2, "0");
-        return `${year}/${month}/${day}`;
-    };
+        if (!dateStr) return "............"
+        const d = new Date(dateStr)
+        const year = d.getFullYear()
+        const month = String(d.getMonth() + 1).padStart(2, "0")
+        const day = String(d.getDate()).padStart(2, "0")
+        return `${year}/${month}/${day}`
+    }
 
-    const hasDescription = data.description && data.description.trim();
+    const hasDescription = data.description && data.description.trim()
     // const hasImages = imageUrls.length > 0;
 
     const generatePreview = async () => {
-        if (!documentRef.current) return;
-        setIsGenerating(true);
+        if (!documentRef.current) return
+        setIsGenerating(true)
         try {
             const canvas = await html2canvas(documentRef.current, {
                 scale: 2,
                 backgroundColor: colors.containerBg,
                 logging: false,
-            });
-            setPreviewImage(canvas.toDataURL("image/png"));
+            })
+            setPreviewImage(canvas.toDataURL("image/png"))
         } catch (error) {
-            console.error("Error generating preview:", error);
+            console.error("Error generating preview:", error)
         } finally {
-            setIsGenerating(false);
+            setIsGenerating(false)
         }
-    };
+    }
 
     useEffect(() => {
-        const timer = setTimeout(generatePreview, 100);
-        return () => clearTimeout(timer);
-    }, [data, imageUrls, logoUrl]);
+        const timer = setTimeout(generatePreview, 100)
+        return () => clearTimeout(timer)
+    }, [data, imageUrls, logoUrl])
 
     const downloadAsImage = async () => {
-        if (!documentRef.current) return;
-        setIsDownloading(true);
+        if (!documentRef.current) return
+        setIsDownloading(true)
         try {
             const canvas = await html2canvas(documentRef.current, {
                 scale: 3,
                 backgroundColor: colors.containerBg,
                 logging: false,
-            });
-            const imgData = canvas.toDataURL("image/png");
-            const link = document.createElement("a");
-            link.href = imgData;
-            link.download = `${data.title || "documentation"}.png`;
-            link.click();
+            })
+            const imgData = canvas.toDataURL("image/png")
+            const link = document.createElement("a")
+            link.href = imgData
+            link.download = `${data.title || "documentation"}.png`
+            link.click()
         } finally {
-            setIsDownloading(false);
+            setIsDownloading(false)
         }
-    };
+    }
 
     const downloadAsPDF = async () => {
-        if (!documentRef.current) return;
-        setIsDownloading(true);
+        if (!documentRef.current) return
+        setIsDownloading(true)
 
         try {
             const canvas = await html2canvas(documentRef.current, {
                 scale: 3,
                 backgroundColor: colors.containerBg,
                 logging: false,
-            });
-            const imgData = canvas.toDataURL("image/png");
+            })
+            const imgData = canvas.toDataURL("image/png")
 
-            const pdf = new jsPDF("p", "mm", "a4");
-            const pageWidth = pdf.internal.pageSize.getWidth();
-            const pageHeight = pdf.internal.pageSize.getHeight();
+            const pdf = new jsPDF("p", "mm", "a4")
+            const pageWidth = pdf.internal.pageSize.getWidth()
+            const pageHeight = pdf.internal.pageSize.getHeight()
 
-            const imgWidthPx = canvas.width;
-            const imgHeightPx = canvas.height;
-            const pageRatio = pageWidth / pageHeight;
-            const imgRatio = imgWidthPx / imgHeightPx;
+            const imgWidthPx = canvas.width
+            const imgHeightPx = canvas.height
+            const pageRatio = pageWidth / pageHeight
+            const imgRatio = imgWidthPx / imgHeightPx
 
-            let renderWidth = pageWidth;
-            let renderHeight = pageHeight;
-            let offsetX = 0;
-            let offsetY = 0;
+            let renderWidth = pageWidth
+            let renderHeight = pageHeight
+            let offsetX = 0
+            let offsetY = 0
 
             if (imgRatio > pageRatio) {
-                renderHeight = (pageWidth / imgWidthPx) * imgHeightPx;
-                offsetY = (pageHeight - renderHeight) / 2;
+                renderHeight = (pageWidth / imgWidthPx) * imgHeightPx
+                offsetY = (pageHeight - renderHeight) / 2
             } else {
-                renderWidth = (pageHeight / imgHeightPx) * imgWidthPx;
-                offsetX = (pageWidth - renderWidth) / 2;
+                renderWidth = (pageHeight / imgHeightPx) * imgWidthPx
+                offsetX = (pageWidth - renderWidth) / 2
             }
 
-            pdf.addImage(imgData, "PNG", offsetX, offsetY, renderWidth, renderHeight);
-            pdf.save(`${data.title || "documentation"}.pdf`);
+            pdf.addImage(imgData, "PNG", offsetX, offsetY, renderWidth, renderHeight)
+            pdf.save(`${data.title || "documentation"}.pdf`)
         } finally {
-            setIsDownloading(false);
+            setIsDownloading(false)
         }
-    };
+    }
+
+    const exportColorsAsJSON = () => {
+        const colorsToExport = {
+            headerBg: colors.headerBg,
+            headerText: colors.headerText,
+            headerBorder: colors.headerBorder,
+            containerBg: colors.containerBg,
+            containerText: colors.containerText,
+            containerBorder: colors.containerBorder,
+            inputBg: colors.inputBg,
+            inputText: colors.inputText,
+            inputBorder: colors.inputBorder,
+            inputLabelText: colors.inputLabelText,
+            titleText: colors.titleText,
+            titleBorder: colors.titleBorder,
+            titleBg: colors.titleBg,
+        }
+
+        const jsonString = JSON.stringify(colorsToExport, null, 2)
+        const blob = new Blob([jsonString], { type: "application/json" })
+        const url = URL.createObjectURL(blob)
+        const link = document.createElement("a")
+        link.href = url
+        link.download = `${data.title || "documentation"}-colors.json`
+        link.click()
+        URL.revokeObjectURL(url)
+    }
 
     return (
         <div className="min-h-screen">
@@ -190,6 +215,13 @@ export default function ProjectDocumentationPreview({
                     >
                         <Eye className="w-5 h-5" />
                         <span>تحديث المعاينة</span>
+                    </button>
+                    <button
+                        onClick={exportColorsAsJSON}
+                        className="text-center px-6 py-3 bg-gradient-to-r from-amber-600 to-orange-600 text-white rounded-xl font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2"
+                    >
+                        <Palette className="w-5 h-5" />
+                        <span>تصدير الألوان</span>
                     </button>
                     <button
                         onClick={downloadAsImage}
@@ -223,7 +255,7 @@ export default function ProjectDocumentationPreview({
                 {previewImage && (
                     <div className="bg-white p-4 rounded-xl shadow-2xl">
                         <img
-                            src={previewImage}
+                            src={previewImage || "/placeholder.svg"}
                             onClick={() => setIsLightBoxOpen(true)}
                             alt="Preview"
                             className="w-full h-auto cursor-pointer"
@@ -276,7 +308,7 @@ export default function ProjectDocumentationPreview({
                                 }}
                             >
                                 <div className="flex flex-col font-almaria">
-                                    <img src={EducationMinistryLogo} className="max-w-40" />
+                                    <img src={EducationMinistryLogo || "/placeholder.svg"} className="max-w-40" />
                                     <div style={{ textAlign: "center", fontSize: "16px", lineHeight: "1.8" }}>
                                         <div style={{ fontWeight: "bold" }}>وزارة التربية</div>
                                         <div>الإدارة العامة لمنطقة</div>
@@ -297,7 +329,7 @@ export default function ProjectDocumentationPreview({
                                     {data.school || "مدرسة الاصمعي الثانوية"}
                                 </div>
 
-                                {logoUrl ? <img src={logoUrl} className="max-w-40" /> : null}
+                                {logoUrl ? <img src={logoUrl || "/placeholder.svg"} className="max-w-40" /> : null}
                             </div>
 
                             {/* Title */}
@@ -325,7 +357,11 @@ export default function ProjectDocumentationPreview({
                                     gap: "20px",
                                 }}
                             >
-                                <InfoBox label={data.teacherGender === "male" ? "المعلم" : "المعلمة"} value={data.teacherName || "يعقوب"} colors={colors} />
+                                <InfoBox
+                                    label={data.teacherGender === "male" ? "المعلم" : "المعلمة"}
+                                    value={data.teacherName || "يعقوب"}
+                                    colors={colors}
+                                />
                                 <InfoBox label="القسم" value={data.department || "الإدارة"} colors={colors} />
                                 <InfoBox label="المكان" value={data.place || "شارع مدرسة الاصمعي"} colors={colors} />
                                 <InfoBox label="التاريخ" value={formatDate(data.date)} colors={colors} />
@@ -359,7 +395,7 @@ export default function ProjectDocumentationPreview({
 
             <Lightbox open={isLightBoxOpen} close={() => setIsLightBoxOpen(false)} slides={[{ src: previewImage }]} />
         </div>
-    );
+    )
 }
 
 function InfoBox({
@@ -367,9 +403,9 @@ function InfoBox({
     value,
     colors,
 }: {
-    label: string;
-    value: string;
-    colors: DocumentationData["colors"];
+    label: string
+    value: string
+    colors: DocumentationData["colors"]
 }) {
     return (
         <div
@@ -387,7 +423,9 @@ function InfoBox({
             <div style={{ fontWeight: "bold", color: colors?.inputLabelText }} className="font-alhoda whitespace-nowrap">
                 {label} :
             </div>
-            <div className="font-cairo whitespace-nowrap" style={{ color: colors?.inputText || "#000", }}>{value}</div>
+            <div className="font-cairo whitespace-nowrap" style={{ color: colors?.inputText || "#000" }}>
+                {value}
+            </div>
         </div>
-    );
+    )
 }

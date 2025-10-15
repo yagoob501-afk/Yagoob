@@ -110,51 +110,112 @@ function ProjectDocumentation1Form({ onSubmit, initialData }: Props) {
                         <h3 className="font-semibold text-lg text-gray-800">{t("documentation.colorsSettings")} </h3>
                     </div>
                     <ChevronDown
-                        className={`w-5 h-5 text-gray-500 transition-transform duration-300 ${showColorSettings ? "rotate-180" : ""}`}
+                        className={`w-5 h-5 text-gray-500 transition-transform duration-300 ${showColorSettings ? "rotate-180" : ""
+                            }`}
                     />
                 </button>
 
                 <div
-                    className={`transition-all duration-300 ease-in-out ${showColorSettings ? "max-h-[800px] opacity-100" : "max-h-0 opacity-0"
+                    className={`transition-all duration-300 ease-in-out ${showColorSettings ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
                         } overflow-hidden`}
                 >
-                    <div className="p-6 pt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                        {Object.entries({
-                            headerBg: "لون خلفية الجزء العلوي",
-                            headerText: "لون نص الجزء العلوي",
-                            headerBorder: "لون اطار الجزء العلوي",
-                            containerBg: "لون خلفية الصفحة",
-                            containerBorder: "لون اطار الصفحة",
-                            inputBg: "لون خلفية حقل المعلومة",
-                            inputText: "لون نص حقل المعلومة",
-                            inputBorder: "لون اطار حقل المعلومة",
-                            inputLabelText: "لون عنوان حقل المعلومة",
+                    <div className="p-6 pt-2 flex flex-col gap-6">
+                        {/* استيراد ملف JSON */}
+                        <div className="flex flex-col gap-2">
+                            <label className="text-sm font-medium text-gray-700">
+                                استيراد الألوان من ملف JSON
+                            </label>
 
-                            titleText: "لون نص العنوان",
-                            titleBg: "لون خلفية العنوان",
-                            titleBorder: "لون اطار العنوان",
-                        }).map(([key, label]) => (
-                            <div key={key} className="flex flex-col gap-2">
-                                <label className="text-sm font-medium text-gray-700">{label}</label>
-                                <div className="relative group">
-                                    <input
-                                        type="color"
-                                        value={colors[key as keyof typeof colors]}
-                                        onChange={(e) => handleColorChange(key, e.target.value)}
-                                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                                    />
-                                    <div className="h-12 rounded-lg border-2 border-gray-200 group-hover:border-purple-400 transition-all duration-200 flex items-center gap-3 px-3 bg-white shadow-sm group-hover:shadow-md">
-                                        <div
-                                            className="w-8 h-8 rounded-md border-2 border-white shadow-inner ring-1 ring-gray-200"
-                                            style={{ backgroundColor: colors[key as keyof typeof colors] }}
-                                        />
-                                        <span className="text-sm font-mono text-gray-600 select-none">
-                                            {colors[key as keyof typeof colors]}
-                                        </span>
+                            <div className="relative group">
+                                <input
+                                    id="importColors"
+                                    type="file"
+                                    accept="application/json"
+                                    onChange={(e) => {
+                                        const file = e.target.files?.[0];
+                                        if (!file) return;
+                                        const reader = new FileReader();
+                                        reader.onload = (ev) => {
+                                            try {
+                                                const imported = JSON.parse(ev.target?.result as string);
+                                                setColors((prev) => ({ ...prev, ...imported }));
+                                                setTimeout(() => {
+                                                    alert("تم استيراد الالوان بنجاح")
+                                                }, 300);
+                                            } catch (err) {
+                                                alert("ملف JSON غير صالح!");
+                                            }
+                                        };
+                                        reader.readAsText(file);
+                                    }}
+                                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                                />
+
+                                <div className="h-14 rounded-lg border-2 border-gray-200 group-hover:border-purple-400 transition-all duration-200 flex items-center gap-3 px-4 bg-white shadow-sm group-hover:shadow-md">
+                                    <div className="w-10 h-10 flex items-center justify-center rounded-md bg-gradient-to-br from-purple-500 to-pink-500 text-white">
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={2}
+                                                d="M12 4v16m8-8H4"
+                                            />
+                                        </svg>
                                     </div>
+                                    <span className="text-sm text-gray-700 font-medium select-none group-hover:text-purple-600">
+                                        اختر ملف JSON
+                                    </span>
                                 </div>
                             </div>
-                        ))}
+
+                            {/* اسم الملف بعد اختياره */}
+                            <p
+                                id="fileNameDisplay"
+                                className="text-xs text-gray-500 mt-1"
+                            >
+                                لم يتم اختيار ملف بعد
+                            </p>
+                        </div>
+
+
+                        {/* جدول الألوان */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                            {Object.entries({
+                                headerBg: "لون خلفية الجزء العلوي",
+                                headerText: "لون نص الجزء العلوي",
+                                headerBorder: "لون اطار الجزء العلوي",
+                                containerBg: "لون خلفية الصفحة",
+                                containerBorder: "لون اطار الصفحة",
+                                inputBg: "لون خلفية حقل المعلومة",
+                                inputText: "لون نص حقل المعلومة",
+                                inputBorder: "لون اطار حقل المعلومة",
+                                inputLabelText: "لون عنوان حقل المعلومة",
+                                titleText: "لون نص العنوان",
+                                titleBg: "لون خلفية العنوان",
+                                titleBorder: "لون اطار العنوان",
+                            }).map(([key, label]) => (
+                                <div key={key} className="flex flex-col gap-2">
+                                    <label className="text-sm font-medium text-gray-700">{label}</label>
+                                    <div className="relative group">
+                                        <input
+                                            type="color"
+                                            value={colors[key as keyof typeof colors]}
+                                            onChange={(e) => handleColorChange(key, e.target.value)}
+                                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                        />
+                                        <div className="h-12 rounded-lg border-2 border-gray-200 group-hover:border-purple-400 transition-all duration-200 flex items-center gap-3 px-3 bg-white shadow-sm group-hover:shadow-md">
+                                            <div
+                                                className="w-8 h-8 rounded-md border-2 border-white shadow-inner ring-1 ring-gray-200"
+                                                style={{ backgroundColor: colors[key as keyof typeof colors] }}
+                                            />
+                                            <span className="text-sm font-mono text-gray-600 select-none">
+                                                {colors[key as keyof typeof colors]}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>
