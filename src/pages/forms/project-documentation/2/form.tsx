@@ -29,6 +29,11 @@ const defaultColors = {
     titleText: "#8B4513",
     titleBorder: "#8B4513",
     titleBg: "#FFFFFF",
+
+    manager: "#000000",
+    managerGender: "#8B4513",
+    departmentManager: "#000000",
+    departmentManagerGender: "#8B4513",
 };
 
 
@@ -215,6 +220,11 @@ function ProjectDocumentation1Form({ onSubmit, initialData }: Props) {
                                 titleText: "لون نص العنوان",
                                 titleBg: "لون خلفية العنوان",
                                 titleBorder: "لون اطار العنوان",
+
+                                manager: "لون اسم مدير المدرسة",
+                                managerGender: "لون صفة مدير المدرسة",
+                                departmentManager: "لون اسم مدير القسم",
+                                departmentManagerGender: "لون صفة مدير القسم",
                             }).map(([key, label]) => (
                                 <div key={key} className="flex flex-col gap-2">
                                     <label className="text-sm font-medium text-gray-700">{label}</label>
@@ -310,6 +320,22 @@ function ProjectDocumentation1Form({ onSubmit, initialData }: Props) {
                     name="managerName"
                     label={t("documentation.managerName")}
                     defaultValue={initialData?.managerName || ""}
+                />
+
+                <Select
+                    name="departmentManagerGender"
+                    label={t("documentation.departmentManagerGender")}
+                    defaultValue={initialData?.departmentManagerGender || "male"}
+                    options={[
+                        { value: "male", label: t("documentation.maleManager") },
+                        { value: "female", label: t("documentation.femaleManager") },
+                    ]}
+                />
+
+                <Input
+                    name="departmentManager"
+                    label={t("documentation.departmentManager")}
+                    defaultValue={initialData?.departmentManager || ""}
                 />
 
                 <Input

@@ -14,6 +14,8 @@ export interface DocumentationData {
     teacherGender: string
     teacherName: string
     department: string
+    departmentManager?: string;
+    departmentManagerGender?: string;
     place: string
     date: string
     managerGender: string
@@ -37,6 +39,11 @@ export interface DocumentationData {
         titleText?: string
         titleBorder?: string
         titleBg?: string
+
+        manager?: string;
+        managerGender?: string;
+        departmentManager?: string;
+        departmentManagerGender?: string;
     }
 }
 
@@ -60,18 +67,27 @@ export default function ProjectDocumentationPreview({
         headerBg: data.colors?.headerBg || "#FFFFFF",
         headerText: data.colors?.headerText || "#8B4513",
         headerBorder: data.colors?.headerBorder || "#8B4513",
+
         containerBg: data.colors?.containerBg || "#F5F1E8",
-        containerText: data.colors?.containerText || "#000",
+        containerText: data.colors?.containerText || "#000000",
         containerBorder: data.colors?.containerBorder || "#8B4513",
+
         inputBg: data.colors?.inputBg || "#FFFFFF",
-        inputText: data.colors?.inputText || "#000",
+        inputText: data.colors?.inputText || "#000000",
         inputBorder: data.colors?.inputBorder || "#8B4513",
         inputLabelText: data.colors?.inputLabelText || "#8B4513",
 
         titleText: data.colors?.titleText || "#8B4513",
         titleBorder: data.colors?.titleBorder || "#8B4513",
         titleBg: data.colors?.titleBg || "#FFFFFF",
+
+        // ✅ إضافات جديدة خاصة بالمديرين
+        manager: data.colors?.manager || "#000000",
+        managerGender: data.colors?.managerGender || "#8B4513",
+        departmentManager: data.colors?.departmentManager || "#000000",
+        departmentManagerGender: data.colors?.departmentManagerGender || "#8B4513",
     }
+
 
     const imageUrls = useMemo(() => {
         return data.images.map((value) => (typeof value === "string" ? value : URL.createObjectURL(value)))
@@ -191,6 +207,11 @@ export default function ProjectDocumentationPreview({
             titleText: colors.titleText,
             titleBorder: colors.titleBorder,
             titleBg: colors.titleBg,
+
+            manager: colors.manager,
+            managerGender: colors.managerGender,
+            departmentManager: colors.departmentManager,
+            departmentManagerGender: colors.departmentManagerGender,
         }
 
         const jsonString = JSON.stringify(colorsToExport, null, 2)
@@ -373,13 +394,12 @@ export default function ProjectDocumentationPreview({
                             {/* Description */}
                             {hasDescription && (
                                 <div
-
                                     style={{
                                         maxWidth: `${A4_WIDTH_PX}px`,
                                         border: `2px solid ${colors.inputBorder}`,
                                         backgroundColor: colors.inputBg,
                                         borderRadius: "12px",
-                                        padding: "25px",
+                                        padding: "20px 25px",
                                         lineHeight: "1.8",
                                         wordBreak: "break-word",
                                     }}
@@ -390,7 +410,7 @@ export default function ProjectDocumentationPreview({
                                     <div style={{
                                         color: colors.inputText
                                     }}
-                                        className="font-cairo text-4xl">
+                                        className="font-cairo text-4xl line-clamp-2">
                                         {data.description}
                                     </div>
 
@@ -425,13 +445,13 @@ export default function ProjectDocumentationPreview({
                                                     }
                                                     break
                                                 case 4:
-                                                    style = { gridColumn: "span 1", gridRow: "span 1" }
+                                                    style = { gridColumn: "span 1", gridRow: "span 2" }
                                                     break
                                                 default:
                                                     style = { gridColumn: "span 1", gridRow: "span 1" }
                                             }
 
-                                            return <img key={index} src={img} style={{ width: "100%", height: "100%", ...style, maxHeight: "350px" }} />
+                                            return <img key={index} src={img} style={{ width: "100%", height: "100%", ...style, maxHeight: "250px" }} />
                                         })}
                                     </div>
                                 )
@@ -439,22 +459,42 @@ export default function ProjectDocumentationPreview({
 
 
                             {
-                                !!data.managerGender && !!data.managerName && (
+                                ((!!data.managerGender && !!data.managerName) || (!!data.departmentManager && !!data.departmentManagerGender)) && (
                                     <div
-                                        className="text-[40px] flex flex-col items-center w-fit self-end"
+                                        className="flex justify-between"
                                         style={{
                                             marginTop: hasImages ? "auto" : "",
                                             marginBottom: hasImages ? "auto" : ""
-                                        }}>
-                                        <span>
-                                            {data.managerGender === "male" ? "مدير المدرسة" : "مديرة المدرسة"}
-                                        </span>
-                                        <span className="font-bold">
-                                            {data.managerName}
-                                        </span>
+                                        }}
+                                    >
+                                        {/* ✅ مدير القسم */}
+                                        {!!data.departmentManager && !!data.departmentManagerGender && (
+                                            <div
+                                                className="text-[40px] flex flex-col items-center w-fit"
+
+                                            >
+                                                <span style={{ color: colors.departmentManagerGender }}>
+                                                    {data.departmentManagerGender === "male" ? "مدير القسم" : "مديرة القسم"}
+                                                </span>
+                                                <span className="font-bold" style={{ color: colors.departmentManager }}>  {data.departmentManager}</span>
+                                            </div>
+                                        )}
+
+                                        {/* ✅ مدير المدرسة */}
+                                        {!!data.managerGender && !!data.managerName && (
+                                            <div
+                                                className="text-[40px] flex flex-col items-center w-fit"
+                                            >
+                                                <span style={{ color: colors.managerGender }}>
+                                                    {data.managerGender === "male" ? "مدير المدرسة" : "مديرة المدرسة"}
+                                                </span>
+                                                <span className="font-bold" style={{ color: colors.manager }}>{data.managerName}</span>
+                                            </div>
+                                        )}
                                     </div>
                                 )
                             }
+
                         </div>
                     </div>
                 </div>

@@ -31,7 +31,7 @@
         "department": "اسم القسم",
         "place": "المكان",
         "date": "تاريخ التنفيذ",
-        "managerGender": "الصفة (مدير / مديرة)",
+        "managerGender": "صفة المدير (مدير / مديرة)",
         "maleManager": "مدير",
         "femaleManager": "مديرة",
         "managerName": "اسم المدير / مديرة",
@@ -40,7 +40,9 @@
         "images": "الصور",
         "logoPicture": "الشعار",
         "eventType": "نوع الفعالية",
-        "colorsSettings": "تعديل الالوان"
+        "colorsSettings": "تعديل الالوان",
+        "departmentManager": "اسم مدير القسم",
+        "departmentManagerGender": "صفحة مدير القسم (مدير / مديرة)"
     },
     "certificate": {
         "title": "العنوان",
