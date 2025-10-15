@@ -468,7 +468,7 @@ export default function ProjectDocumentationPreview({
                                         }}
                                     >
                                         {/* ✅ مدير القسم */}
-                                        {!!data.departmentManager && !!data.departmentManagerGender && (
+                                        {!!data.departmentManager && !!data.departmentManagerGender ? (
                                             <div
                                                 className="text-[40px] flex flex-col items-center w-fit"
 
@@ -478,7 +478,7 @@ export default function ProjectDocumentationPreview({
                                                 </span>
                                                 <span className="font-bold" style={{ color: colors.departmentManager }}>  {data.departmentManager}</span>
                                             </div>
-                                        )}
+                                        ) : <div></div>}
 
                                         {/* ✅ مدير المدرسة */}
                                         {!!data.managerGender && !!data.managerName && (
