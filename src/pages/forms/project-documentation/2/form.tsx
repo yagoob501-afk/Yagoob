@@ -15,6 +15,23 @@ interface Props {
     initialData?: Partial<DocumentationData>
 }
 
+const defaultColors = {
+    headerBg: "#FFFFFF",
+    headerText: "#8B4513",
+    headerBorder: "#8B4513",
+    containerBg: "#F5F1E8",
+    containerBorder: "#8B4513",
+    inputBg: "#FFFFFF",
+    inputText: "#000000",
+    inputBorder: "#8B4513",
+    inputLabelText: "#8B4513",
+
+    titleText: "#8B4513",
+    titleBorder: "#8B4513",
+    titleBg: "#FFFFFF",
+};
+
+
 function ProjectDocumentation1Form({ onSubmit, initialData }: Props) {
     const { t } = useTranslation()
     const [loading, setLoading] = useState(false)
@@ -23,21 +40,26 @@ function ProjectDocumentation1Form({ onSubmit, initialData }: Props) {
     const [logoPicture, setLogoPicture] = useState<File | null>(null)
     const [showColorSettings, setShowColorSettings] = useState(false)
 
-    const [colors, setColors] = useState({
-        headerBg: "#FFFFFF",
-        headerText: "#8B4513",
-        headerBorder: "#8B4513",
-        containerBg: "#F5F1E8",
-        containerBorder: "#8B4513",
-        inputBg: "#FFFFFF",
-        inputText: "#000000",
-        inputBorder: "#8B4513",
-        inputLabelText: "#8B4513",
-
-        titleText: "#8B4513",
-        titleBorder: "#8B4513",
-        titleBg: "#FFFFFF",
+    const [colors, setColors] = useState<typeof defaultColors>(() => {
+        // عند التحميل، نحاول قراءة الألوان من localStorage
+        if (typeof window !== "undefined") {
+            const saved = localStorage.getItem("projectColors")
+            if (saved) {
+                try {
+                    return JSON.parse(saved)
+                } catch (err) {
+                    return defaultColors
+                }
+            }
+        }
+        return defaultColors
     })
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            localStorage.setItem("projectColors", JSON.stringify(colors))
+        }
+    }, [colors]);
 
     useEffect(() => {
         if (initialData?.date) {
