@@ -28,11 +28,15 @@ function ProjectDocumentation1Form({ onSubmit, initialData }: Props) {
         headerText: "#8B4513",
         headerBorder: "#8B4513",
         containerBg: "#F5F1E8",
-        containerText: "#000000",
         containerBorder: "#8B4513",
         inputBg: "#FFFFFF",
         inputText: "#000000",
         inputBorder: "#8B4513",
+        inputLabelText: "#8B4513",
+
+        titleText: "#8B4513",
+        titleBorder: "#8B4513",
+        titleBg: "#FFFFFF",
     })
 
     useEffect(() => {
@@ -120,11 +124,15 @@ function ProjectDocumentation1Form({ onSubmit, initialData }: Props) {
                             headerText: "لون نص الجزء العلوي",
                             headerBorder: "لون اطار الجزء العلوي",
                             containerBg: "لون خلفية الصفحة",
-                            containerText: "لون نصوص الصفحة",
                             containerBorder: "لون اطار الصفحة",
                             inputBg: "لون خلفية حقل المعلومة",
                             inputText: "لون نص حقل المعلومة",
                             inputBorder: "لون اطار حقل المعلومة",
+                            inputLabelText: "لون عنوان حقل المعلومة",
+
+                            titleText: "لون نص العنوان",
+                            titleBg: "لون خلفية العنوان",
+                            titleBorder: "لون اطار العنوان",
                         }).map(([key, label]) => (
                             <div key={key} className="flex flex-col gap-2">
                                 <label className="text-sm font-medium text-gray-700">{label}</label>

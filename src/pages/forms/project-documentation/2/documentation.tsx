@@ -31,6 +31,10 @@ export interface DocumentationData {
         inputBg?: string;
         inputText?: string;
         inputBorder?: string;
+        inputLabelText?: string;
+        titleText?: string;
+        titleBorder?: string;
+        titleBg?: string;
     };
 }
 
@@ -60,6 +64,11 @@ export default function ProjectDocumentationPreview({
         inputBg: data.colors?.inputBg || "#FFFFFF",
         inputText: data.colors?.inputText || "#000",
         inputBorder: data.colors?.inputBorder || "#8B4513",
+        inputLabelText: data.colors?.inputLabelText || "#8B4513",
+
+        titleText: data.colors?.titleText || "#8B4513",
+        titleBorder: data.colors?.titleBorder || "#8B4513",
+        titleBg: data.colors?.titleBg || "#FFFFFF",
     };
 
     const imageUrls = useMemo(() => {
@@ -295,14 +304,14 @@ export default function ProjectDocumentationPreview({
                             <div
                                 className="font-amiri"
                                 style={{
-                                    border: `2px solid ${colors.inputBorder}`,
+                                    border: `2px solid ${colors.titleBorder}`,
                                     borderRadius: "12px",
                                     padding: "20px",
                                     textAlign: "center",
                                     fontSize: "44px",
                                     fontWeight: "bold",
-                                    color: colors.inputText,
-                                    backgroundColor: colors.inputBg,
+                                    color: colors.titleText,
+                                    backgroundColor: colors.titleBg,
                                 }}
                             >
                                 {data.title || "عنوان التوثيق"}
@@ -373,13 +382,12 @@ function InfoBox({
                 display: "flex",
                 gap: "10px",
                 alignItems: "center",
-                color: colors?.inputText || "#000",
             }}
         >
-            <div style={{ fontWeight: "bold" }} className="font-alhoda whitespace-nowrap">
+            <div style={{ fontWeight: "bold", color: colors?.inputLabelText }} className="font-alhoda whitespace-nowrap">
                 {label} :
             </div>
-            <div className="font-cairo whitespace-nowrap">{value}</div>
+            <div className="font-cairo whitespace-nowrap" style={{ color: colors?.inputText || "#000", }}>{value}</div>
         </div>
     );
 }
