@@ -1,21 +1,40 @@
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import type { DocumentationData } from "./documentation";
 import "react-datepicker/dist/react-datepicker.css";
 
-function ProjectDocumentation1Form({ onSubmit }: { onSubmit?: (data: DocumentationData) => void }) {
+interface Props {
+    onSubmit?: (data: DocumentationData) => void;
+    initialData?: Partial<DocumentationData>; // ✅ Optional initial data
+}
+
+function ProjectDocumentation1Form({ onSubmit, initialData }: Props) {
     const { t } = useTranslation();
     const [loading, setLoading] = useState(false);
     const [date, setDate] = useState<Date | null>(null);
     const [images, setImages] = useState<File[]>([]);
     const [logoPicture, setLogoPicture] = useState<File | null>(null);
 
-    const handleSubmit = (e: any) => {
+    // ✅ Set initial data when component mounts
+    useEffect(() => {
+        if (initialData?.date) {
+            setDate(new Date(initialData.date));
+        }
+        if (initialData?.images && Array.isArray(initialData.images)) {
+            // ignore strings since they're URLs, not files
+            setImages(initialData.images.filter((i): i is File => i instanceof File));
+        }
+        if (initialData?.logoPicture && initialData.logoPicture instanceof File) {
+            setLogoPicture(initialData.logoPicture);
+        }
+    }, [initialData]);
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
 
-        const formData = new FormData(e.target);
+        const formData = new FormData(e.currentTarget);
         formData.set("date", date?.toISOString() || "");
         images.forEach((img) => formData.append("images[]", img));
         if (logoPicture) formData.append("logoPicture", logoPicture);
@@ -29,16 +48,16 @@ function ProjectDocumentation1Form({ onSubmit }: { onSubmit?: (data: Documentati
         setLoading(false);
     };
 
-    const handleImageChange = (e: any) => {
-        const files = Array.from(e.target.files);
-        setImages((prev) => [...prev, ...files] as any);
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = Array.from(e.target.files || []);
+        setImages((prev) => [...prev, ...files]);
     };
 
     const removeImage = (index: number) => {
         setImages((prev) => prev.filter((_, i) => i !== index));
     };
 
-    const handleLogoChange = (e: any) => {
+    const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) setLogoPicture(file);
     };
@@ -51,99 +70,59 @@ function ProjectDocumentation1Form({ onSubmit }: { onSubmit?: (data: Documentati
             {/* Grid for inputs */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 {/* Title */}
-                <div className="flex flex-col">
-                    <label className="mb-1 text-sm font-medium text-form-label">
-                        {t("documentation.title")}
-                    </label>
-                    <input
-                        type="text"
-                        name="title"
-                        autoComplete="title"
-                        placeholder={t("documentation.title")}
-                        className="rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text placeholder:text-form-placeholder focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition"
-                    />
-                </div>
+                <Input
+                    name="title"
+                    label={t("documentation.title")}
+                    defaultValue={initialData?.title || ""}
+                />
 
                 {/* Educational Area */}
-                <div className="flex flex-col">
-                    <label className="mb-1 text-sm font-medium text-form-label">
-                        {t("documentation.educationalArea")}
-                    </label>
-                    <input
-                        type="text"
-                        name="area"
-                        placeholder={t("documentation.educationalArea")}
-                        className="rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text placeholder:text-form-placeholder focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition"
-                    />
-                </div>
+                <Input
+                    name="area"
+                    label={t("documentation.educationalArea")}
+                    defaultValue={initialData?.area || ""}
+                />
 
                 {/* School Name */}
-                <div className="flex flex-col">
-                    <label className="mb-1 text-sm font-medium text-form-label">
-                        {t("documentation.schoolName")}
-                    </label>
-                    <input
-                        type="text"
-                        name="school"
-                        placeholder={t("documentation.schoolName")}
-                        className="rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text placeholder:text-form-placeholder focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition"
-                    />
-                </div>
+                <Input
+                    name="school"
+                    label={t("documentation.schoolName")}
+                    defaultValue={initialData?.school || ""}
+                />
 
                 {/* Teacher Gender */}
-                <div className="flex flex-col">
-                    <label className="mb-1 text-sm font-medium text-form-label">
-                        {t("documentation.teacherGender")}
-                    </label>
-                    <select
-                        name="teacherGender"
-                        className="rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition"
-                    >
-                        <option value="male">{t("documentation.maleTeacher")}</option>
-                        <option value="female">{t("documentation.femaleTeacher")}</option>
-                        <option value="maleStudent">{t("documentation.maleStudent")}</option>
-                        <option value="femaleStudent">{t("documentation.femaleStudent")}</option>
-                    </select>
-                </div>
+                <Select
+                    name="teacherGender"
+                    label={t("documentation.teacherGender")}
+                    defaultValue={initialData?.teacherGender || "male"}
+                    options={[
+                        { value: "male", label: t("documentation.maleTeacher") },
+                        { value: "female", label: t("documentation.femaleTeacher") },
+                        { value: "maleStudent", label: t("documentation.maleStudent") },
+                        { value: "femaleStudent", label: t("documentation.femaleStudent") },
+                    ]}
+                />
 
                 {/* Teacher Name */}
-                <div className="flex flex-col">
-                    <label className="mb-1 text-sm font-medium text-form-label">
-                        {t("documentation.teacherName")}
-                    </label>
-                    <input
-                        type="text"
-                        name="teacherName"
-                        placeholder={t("documentation.teacherName")}
-                        className="rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text placeholder:text-form-placeholder focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition"
-                    />
-                </div>
+                <Input
+                    name="teacherName"
+                    label={t("documentation.teacherName")}
+                    defaultValue={initialData?.teacherName || ""}
+                />
 
                 {/* Department */}
-                <div className="flex flex-col">
-                    <label className="mb-1 text-sm font-medium text-form-label">
-                        {t("documentation.department")}
-                    </label>
-                    <input
-                        type="text"
-                        name="department"
-                        placeholder={t("documentation.department")}
-                        className="rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text placeholder:text-form-placeholder focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition"
-                    />
-                </div>
+                <Input
+                    name="department"
+                    label={t("documentation.department")}
+                    defaultValue={initialData?.department || ""}
+                />
 
                 {/* Place */}
-                <div className="flex flex-col">
-                    <label className="mb-1 text-sm font-medium text-form-label">
-                        {t("documentation.place")}
-                    </label>
-                    <input
-                        type="text"
-                        name="place"
-                        placeholder={t("documentation.place")}
-                        className="rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text placeholder:text-form-placeholder focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition"
-                    />
-                </div>
+                <Input
+                    name="place"
+                    label={t("documentation.place")}
+                    defaultValue={initialData?.place || ""}
+                />
 
                 {/* Date Picker */}
                 <div className="flex flex-col">
@@ -160,57 +139,36 @@ function ProjectDocumentation1Form({ onSubmit }: { onSubmit?: (data: Documentati
                 </div>
 
                 {/* Manager Gender */}
-                <div className="flex flex-col">
-                    <label className="mb-1 text-sm font-medium text-form-label">
-                        {t("documentation.managerGender")}
-                    </label>
-                    <select
-                        name="managerGender"
-                        className="rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition"
-                    >
-                        <option value="male">{t("documentation.maleManager")}</option>
-                        <option value="female">{t("documentation.femaleManager")}</option>
-                    </select>
-                </div>
+                <Select
+                    name="managerGender"
+                    label={t("documentation.managerGender")}
+                    defaultValue={initialData?.managerGender || "male"}
+                    options={[
+                        { value: "male", label: t("documentation.maleManager") },
+                        { value: "female", label: t("documentation.femaleManager") },
+                    ]}
+                />
 
                 {/* Manager Name */}
-                <div className="flex flex-col">
-                    <label className="mb-1 text-sm font-medium text-form-label">
-                        {t("documentation.managerName")}
-                    </label>
-                    <input
-                        type="text"
-                        name="managerName"
-                        placeholder={t("documentation.managerName")}
-                        className="rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text placeholder:text-form-placeholder focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition"
-                    />
-                </div>
+                <Input
+                    name="managerName"
+                    label={t("documentation.managerName")}
+                    defaultValue={initialData?.managerName || ""}
+                />
 
                 {/* Target Group */}
-                <div className="flex flex-col">
-                    <label className="mb-1 text-sm font-medium text-form-label">
-                        {t("documentation.targetGroup")}
-                    </label>
-                    <input
-                        type="text"
-                        name="targetGroup"
-                        placeholder={t("documentation.targetGroup")}
-                        className="rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text placeholder:text-form-placeholder focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition"
-                    />
-                </div>
+                <Input
+                    name="targetGroup"
+                    label={t("documentation.targetGroup")}
+                    defaultValue={initialData?.targetGroup || ""}
+                />
 
                 {/* Event Type */}
-                <div className="flex flex-col">
-                    <label className="mb-1 text-sm font-medium text-form-label">
-                        {t("documentation.event type")}
-                    </label>
-                    <input
-                        type="text"
-                        name="eventType"
-                        placeholder={t("documentation.event type")}
-                        className="rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text placeholder:text-form-placeholder focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition"
-                    />
-                </div>
+                <Input
+                    name="eventType"
+                    label={t("documentation.event type")}
+                    defaultValue={initialData?.eventType || ""}
+                />
             </div>
 
             {/* Description */}
@@ -220,6 +178,7 @@ function ProjectDocumentation1Form({ onSubmit }: { onSubmit?: (data: Documentati
                 </label>
                 <textarea
                     name="description"
+                    defaultValue={initialData?.description || ""}
                     placeholder={t("documentation.description")}
                     className="rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text placeholder:text-form-placeholder focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition h-28 resize-none"
                 />
@@ -236,7 +195,6 @@ function ProjectDocumentation1Form({ onSubmit }: { onSubmit?: (data: Documentati
                     onChange={handleLogoChange}
                     className="rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text file:mr-4 file:rounded-md file:border-0 file:bg-primary file:px-3 file:py-1 file:text-sm file:font-medium file:text-primary-foreground hover:file:bg-primary-hover transition"
                 />
-
                 {logoPicture && (
                     <div className="relative w-32 h-32 border border-form-border rounded-lg overflow-hidden">
                         <img
@@ -267,7 +225,6 @@ function ProjectDocumentation1Form({ onSubmit }: { onSubmit?: (data: Documentati
                     className="rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text file:mr-4 file:rounded-md file:border-0 file:bg-primary file:px-3 file:py-1 file:text-sm file:font-medium file:text-primary-foreground hover:file:bg-primary-hover transition"
                 />
 
-                {/* Preview */}
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                     {images.map((file, idx) => (
                         <div
@@ -302,6 +259,61 @@ function ProjectDocumentation1Form({ onSubmit }: { onSubmit?: (data: Documentati
                 </button>
             </div>
         </form>
+    );
+}
+
+// ✅ Helper components for readability
+function Input({
+    name,
+    label,
+    defaultValue,
+    placeholder,
+}: {
+    name: string;
+    label: string;
+    defaultValue?: string;
+    placeholder?: string;
+}) {
+    return (
+        <div className="flex flex-col">
+            <label className="mb-1 text-sm font-medium text-form-label">{label}</label>
+            <input
+                type="text"
+                name={name}
+                defaultValue={defaultValue}
+                placeholder={placeholder || label}
+                className="rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text placeholder:text-form-placeholder focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition"
+            />
+        </div>
+    );
+}
+
+function Select({
+    name,
+    label,
+    options,
+    defaultValue,
+}: {
+    name: string;
+    label: string;
+    options: { value: string; label: string }[];
+    defaultValue?: string;
+}) {
+    return (
+        <div className="flex flex-col">
+            <label className="mb-1 text-sm font-medium text-form-label">{label}</label>
+            <select
+                name={name}
+                defaultValue={defaultValue}
+                className="rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition"
+            >
+                {options.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                        {opt.label}
+                    </option>
+                ))}
+            </select>
+        </div>
     );
 }
 

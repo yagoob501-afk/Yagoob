@@ -1,7 +1,7 @@
 import { useMemo, useRef, useState, useEffect } from "react";
 import html2canvas from "html2canvas-pro";
 import jsPDF from "jspdf";
-import { Download, FileDown, Eye } from "lucide-react";
+import { Download, FileDown, Eye, Edit } from "lucide-react";
 import Lightbox from "yet-another-react-lightbox";
 import EducationMinistryLogo from "@/assets/شعار_وزارة_التعليم_العالي__الكويت_.png";
 
@@ -25,7 +25,7 @@ export interface DocumentationData {
 
 const A4_WIDTH_PX = 1240;
 
-export default function ProjectDocumentationPreview({ data }: { data: DocumentationData }) {
+export default function ProjectDocumentationPreview({ data, onRequestChange }: { data: DocumentationData, onRequestChange: () => void }) {
     const documentRef = useRef<HTMLDivElement>(null);
     const [isDownloading, setIsDownloading] = useState(false);
     const [previewImage, setPreviewImage] = useState<string>("");
@@ -142,11 +142,12 @@ export default function ProjectDocumentationPreview({ data }: { data: Documentat
         <div className="min-h-screen">
             <div className="max-w-6xl mx-auto">
                 {/* Action Buttons */}
-                <div className="flex gap-3 justify-end mb-6">
+
+                <div className="flex flex-col md:flex-row gap-3 justify-end mb-6 px-4">
                     <button
                         onClick={generatePreview}
                         disabled={isGenerating}
-                        className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 flex items-center gap-2"
+                        className="text-center px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 flex items-center gap-2"
                     >
                         <Eye className="w-5 h-5" />
                         <span>تحديث المعاينة</span>
@@ -154,7 +155,7 @@ export default function ProjectDocumentationPreview({ data }: { data: Documentat
                     <button
                         onClick={downloadAsImage}
                         disabled={isDownloading}
-                        className="px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 flex items-center gap-2"
+                        className="text-center px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 flex items-center gap-2"
                     >
                         <Download className="w-5 h-5" />
                         <span>تحميل صورة</span>
@@ -162,10 +163,30 @@ export default function ProjectDocumentationPreview({ data }: { data: Documentat
                     <button
                         onClick={downloadAsPDF}
                         disabled={isDownloading}
-                        className="px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-xl font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 flex items-center gap-2"
+                        className="text-center px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-xl font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 flex items-center gap-2"
                     >
                         <FileDown className="w-5 h-5" />
                         <span>تحميل PDF</span>
+                    </button>
+                </div>
+
+
+                <div className="px-4 mb-6" >
+                    <button
+                        className="
+    w-full px-6 py-4
+    flex items-center justify-center gap-2 
+    rounded-xl font-medium
+    bg-gradient-to-br from-[var(--color-primary)] via-primary/70 to-[var(--color-primary)] text-primary-forground
+    shadow-sm hover:shadow-md 
+    transition-all duration-200 ease-out
+    hover:-translate-y-[2px] active:translate-y-0
+    disabled:opacity-50 disabled:cursor-not-allowed
+    cursor-pointer
+  "
+                        onClick={onRequestChange}
+                    >
+                        تعديل <Edit className="w-4 h-4" />
                     </button>
                 </div>
 
