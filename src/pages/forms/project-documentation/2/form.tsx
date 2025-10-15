@@ -327,8 +327,8 @@ function ProjectDocumentation1Form({ onSubmit, initialData }: Props) {
                     label={t("documentation.departmentManagerGender")}
                     defaultValue={initialData?.departmentManagerGender || "male"}
                     options={[
-                        { value: "male", label: t("documentation.maleManager") },
-                        { value: "female", label: t("documentation.femaleManager") },
+                        { value: "male", label: t("documentation.maleDepartmentManager") },
+                        { value: "female", label: t("documentation.femaleDepartmentManager") },
                     ]}
                 />
 

@@ -474,7 +474,7 @@ export default function ProjectDocumentationPreview({
 
                                             >
                                                 <span style={{ color: colors.departmentManagerGender }}>
-                                                    {data.departmentManagerGender === "male" ? "مدير القسم" : "مديرة القسم"}
+                                                    {data.departmentManagerGender === "male" ? "رئيس القسم" : "رئيسة القسم"}
                                                 </span>
                                                 <span className="font-bold" style={{ color: colors.departmentManager }}>  {data.departmentManager}</span>
                                             </div>
