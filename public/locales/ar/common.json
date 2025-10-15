@@ -39,7 +39,8 @@
         "description": "الشرح",
         "images": "الصور",
         "logoPicture": "الشعار",
-        "event type": "نوع الفعالية"
+        "eventType": "نوع الفعالية",
+        "colorsSettings": "تعديل الالوان"
     },
     "certificate": {
         "title": "العنوان",

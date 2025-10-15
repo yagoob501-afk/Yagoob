@@ -1,96 +1,163 @@
-import { useTranslation } from "react-i18next";
-import { useState, useEffect } from "react";
-import DatePicker from "react-datepicker";
-import type { DocumentationData } from "./documentation";
-import "react-datepicker/dist/react-datepicker.css";
+"use client"
+
+import type React from "react"
+
+import { useTranslation } from "react-i18next"
+import { useState, useEffect } from "react"
+import DatePicker from "react-datepicker"
+import type { DocumentationData } from "./documentation"
+import "react-datepicker/dist/react-datepicker.css"
+import { ChevronDown } from "lucide-react"
+import "./datepicker-style.css";
 
 interface Props {
-    onSubmit?: (data: DocumentationData) => void;
-    initialData?: Partial<DocumentationData>; // ✅ Optional initial data
+    onSubmit?: (data: DocumentationData) => void
+    initialData?: Partial<DocumentationData>
 }
 
 function ProjectDocumentation1Form({ onSubmit, initialData }: Props) {
-    const { t } = useTranslation();
-    const [loading, setLoading] = useState(false);
-    const [date, setDate] = useState<Date | null>(null);
-    const [images, setImages] = useState<File[]>([]);
-    const [logoPicture, setLogoPicture] = useState<File | null>(null);
+    const { t } = useTranslation()
+    const [loading, setLoading] = useState(false)
+    const [date, setDate] = useState<Date | null>(null)
+    const [images, setImages] = useState<File[]>([])
+    const [logoPicture, setLogoPicture] = useState<File | null>(null)
+    const [showColorSettings, setShowColorSettings] = useState(false)
 
-    // ✅ Set initial data when component mounts
+    const [colors, setColors] = useState({
+        headerBg: "#FFFFFF",
+        headerText: "#8B4513",
+        headerBorder: "#8B4513",
+        containerBg: "#F5F1E8",
+        containerText: "#000000",
+        containerBorder: "#8B4513",
+        inputBg: "#FFFFFF",
+        inputText: "#000000",
+        inputBorder: "#8B4513",
+    })
+
     useEffect(() => {
         if (initialData?.date) {
-            setDate(new Date(initialData.date));
+            setDate(new Date(initialData.date))
         }
         if (initialData?.images && Array.isArray(initialData.images)) {
-            // ignore strings since they're URLs, not files
-            setImages(initialData.images.filter((i): i is File => i instanceof File));
+            setImages(initialData.images.filter((i): i is File => i instanceof File))
         }
         if (initialData?.logoPicture && initialData.logoPicture instanceof File) {
-            setLogoPicture(initialData.logoPicture);
+            setLogoPicture(initialData.logoPicture)
         }
-    }, [initialData]);
+    }, [initialData])
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        setLoading(true);
+    const handleColorChange = (key: string, value: string) => {
+        setColors((prev) => ({ ...prev, [key]: value }))
+    }
 
-        const formData = new FormData(e.currentTarget);
-        formData.set("date", date?.toISOString() || "");
-        images.forEach((img) => formData.append("images[]", img));
-        if (logoPicture) formData.append("logoPicture", logoPicture);
+    const handleSubmit = (e: any) => {
+        e.preventDefault()
+        setLoading(true)
 
-        const data: any = Object.fromEntries(formData.entries());
-        data.images = images;
-        data.date = date;
-        data.logoPicture = logoPicture;
+        const formData = new FormData(e.target)
+        formData.set("date", date?.toISOString() || "")
+        images.forEach((img) => formData.append("images[]", img))
+        if (logoPicture) formData.append("logoPicture", logoPicture)
 
-        onSubmit?.(data);
-        setLoading(false);
-    };
+        const data: any = Object.fromEntries(formData.entries())
+        data.images = images
+        data.date = date
+        data.logoPicture = logoPicture
+        data.colors = colors
+
+        onSubmit?.(data)
+        setLoading(false)
+    }
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const files = Array.from(e.target.files || []);
-        setImages((prev) => [...prev, ...files]);
-    };
+        const files = Array.from(e.target.files || [])
+        setImages((prev) => [...prev, ...files])
+    }
 
     const removeImage = (index: number) => {
-        setImages((prev) => prev.filter((_, i) => i !== index));
-    };
+        setImages((prev) => prev.filter((_, i) => i !== index))
+    }
 
     const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) setLogoPicture(file);
-    };
+        const file = e.target.files?.[0]
+        if (file) setLogoPicture(file)
+    }
 
     return (
-        <form
-            onSubmit={handleSubmit}
-            className="bg-form-bg shadow-md rounded-2xl p-7 w-full max-w-4xl space-y-6"
-        >
-            {/* Grid for inputs */}
+        <form onSubmit={handleSubmit} className="bg-form-bg shadow-md rounded-2xl p-7 w-full max-w-4xl space-y-6">
+            <div className="border border-form-border rounded-xl overflow-hidden bg-gradient-to-br from-white to-gray-50">
+                <button
+                    type="button"
+                    onClick={() => setShowColorSettings(!showColorSettings)}
+                    className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
+                >
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+                            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"
+                                />
+                            </svg>
+                        </div>
+                        <h3 className="font-semibold text-lg text-gray-800">{t("documentation.colorsSettings")} </h3>
+                    </div>
+                    <ChevronDown
+                        className={`w-5 h-5 text-gray-500 transition-transform duration-300 ${showColorSettings ? "rotate-180" : ""}`}
+                    />
+                </button>
+
+                <div
+                    className={`transition-all duration-300 ease-in-out ${showColorSettings ? "max-h-[800px] opacity-100" : "max-h-0 opacity-0"
+                        } overflow-hidden`}
+                >
+                    <div className="p-6 pt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                        {Object.entries({
+                            headerBg: "لون خلفية الجزء العلوي",
+                            headerText: "لون نص الجزء العلوي",
+                            headerBorder: "لون اطار الجزء العلوي",
+                            containerBg: "لون خلفية حاوية المعلومات",
+                            containerText: "لون نصوص حاوية المعلومات",
+                            containerBorder: "لون اطار حاوية المعلومات",
+                            inputBg: "لون خلفية حقل المعلومة",
+                            inputText: "لون نص حقل المعلومة",
+                            inputBorder: "لون اطار حقل المعلومة",
+                        }).map(([key, label]) => (
+                            <div key={key} className="flex flex-col gap-2">
+                                <label className="text-sm font-medium text-gray-700">{label}</label>
+                                <div className="relative group">
+                                    <input
+                                        type="color"
+                                        value={colors[key as keyof typeof colors]}
+                                        onChange={(e) => handleColorChange(key, e.target.value)}
+                                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                    />
+                                    <div className="h-12 rounded-lg border-2 border-gray-200 group-hover:border-purple-400 transition-all duration-200 flex items-center gap-3 px-3 bg-white shadow-sm group-hover:shadow-md">
+                                        <div
+                                            className="w-8 h-8 rounded-md border-2 border-white shadow-inner ring-1 ring-gray-200"
+                                            style={{ backgroundColor: colors[key as keyof typeof colors] }}
+                                        />
+                                        <span className="text-sm font-mono text-gray-600 select-none">
+                                            {colors[key as keyof typeof colors]}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                {/* Title */}
-                <Input
-                    name="title"
-                    label={t("documentation.title")}
-                    defaultValue={initialData?.title || ""}
-                />
+                <Input name="title" label={t("documentation.title")} defaultValue={initialData?.title || ""} />
 
-                {/* Educational Area */}
-                <Input
-                    name="area"
-                    label={t("documentation.educationalArea")}
-                    defaultValue={initialData?.area || ""}
-                />
+                <Input name="area" label={t("documentation.educationalArea")} defaultValue={initialData?.area || ""} />
 
-                {/* School Name */}
-                <Input
-                    name="school"
-                    label={t("documentation.schoolName")}
-                    defaultValue={initialData?.school || ""}
-                />
+                <Input name="school" label={t("documentation.schoolName")} defaultValue={initialData?.school || ""} />
 
-                {/* Teacher Gender */}
                 <Select
                     name="teacherGender"
                     label={t("documentation.teacherGender")}
@@ -103,42 +170,41 @@ function ProjectDocumentation1Form({ onSubmit, initialData }: Props) {
                     ]}
                 />
 
-                {/* Teacher Name */}
                 <Input
                     name="teacherName"
                     label={t("documentation.teacherName")}
                     defaultValue={initialData?.teacherName || ""}
                 />
 
-                {/* Department */}
-                <Input
-                    name="department"
-                    label={t("documentation.department")}
-                    defaultValue={initialData?.department || ""}
-                />
+                <Input name="department" label={t("documentation.department")} defaultValue={initialData?.department || ""} />
 
-                {/* Place */}
-                <Input
-                    name="place"
-                    label={t("documentation.place")}
-                    defaultValue={initialData?.place || ""}
-                />
+                <Input name="place" label={t("documentation.place")} defaultValue={initialData?.place || ""} />
 
-                {/* Date Picker */}
                 <div className="flex flex-col">
-                    <label className="mb-1 text-sm font-medium text-form-label">
-                        {t("documentation.date")}
-                    </label>
-                    <DatePicker
-                        selected={date}
-                        onChange={(d) => setDate(d)}
-                        dateFormat="yyyy-MM-dd"
-                        className="w-full rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition"
-                        placeholderText={t("documentation.date")}
-                    />
+                    <label className="mb-1 text-sm font-medium text-form-label">{t("documentation.date")}</label>
+                    <div className="relative">
+                        <DatePicker
+                            selected={date}
+                            onChange={(d) => setDate(d)}
+                            dateFormat="yyyy-MM-dd"
+                            className="w-full rounded-lg border-2 border-form-border bg-white px-4 py-2.5 text-form-text focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all shadow-sm hover:shadow-md"
+                            placeholderText={t("documentation.date")}
+                            calendarClassName="modern-calendar"
+                            wrapperClassName="w-full"
+                        />
+                        <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                            <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                />
+                            </svg>
+                        </div>
+                    </div>
                 </div>
 
-                {/* Manager Gender */}
                 <Select
                     name="managerGender"
                     label={t("documentation.managerGender")}
@@ -149,33 +215,23 @@ function ProjectDocumentation1Form({ onSubmit, initialData }: Props) {
                     ]}
                 />
 
-                {/* Manager Name */}
                 <Input
                     name="managerName"
                     label={t("documentation.managerName")}
                     defaultValue={initialData?.managerName || ""}
                 />
 
-                {/* Target Group */}
                 <Input
                     name="targetGroup"
                     label={t("documentation.targetGroup")}
                     defaultValue={initialData?.targetGroup || ""}
                 />
 
-                {/* Event Type */}
-                <Input
-                    name="eventType"
-                    label={t("documentation.event type")}
-                    defaultValue={initialData?.eventType || ""}
-                />
+                <Input name="eventType" label={t("documentation.eventType")} defaultValue={initialData?.eventType || ""} />
             </div>
 
-            {/* Description */}
             <div className="flex flex-col">
-                <label className="mb-1 text-sm font-medium text-form-label">
-                    {t("documentation.description")}
-                </label>
+                <label className="mb-1 text-sm font-medium text-form-label">{t("documentation.description")}</label>
                 <textarea
                     name="description"
                     defaultValue={initialData?.description || ""}
@@ -184,11 +240,8 @@ function ProjectDocumentation1Form({ onSubmit, initialData }: Props) {
                 />
             </div>
 
-            {/* Logo Picture */}
             <div className="flex flex-col space-y-3">
-                <label className="mb-1 text-sm font-medium text-form-label">
-                    {t("documentation.logoPicture")}
-                </label>
+                <label className="mb-1 text-sm font-medium text-form-label">{t("documentation.logoPicture")}</label>
                 <input
                     type="file"
                     accept="image/*"
@@ -198,7 +251,7 @@ function ProjectDocumentation1Form({ onSubmit, initialData }: Props) {
                 {logoPicture && (
                     <div className="relative w-32 h-32 border border-form-border rounded-lg overflow-hidden">
                         <img
-                            src={URL.createObjectURL(logoPicture)}
+                            src={URL.createObjectURL(logoPicture) || "/placeholder.svg"}
                             alt="Logo Preview"
                             className="w-full h-full object-cover"
                         />
@@ -213,11 +266,8 @@ function ProjectDocumentation1Form({ onSubmit, initialData }: Props) {
                 )}
             </div>
 
-            {/* Files with preview */}
             <div className="flex flex-col space-y-3">
-                <label className="mb-1 text-sm font-medium text-form-label">
-                    {t("documentation.images")}
-                </label>
+                <label className="mb-1 text-sm font-medium text-form-label">{t("documentation.images")}</label>
                 <input
                     type="file"
                     multiple
@@ -227,12 +277,9 @@ function ProjectDocumentation1Form({ onSubmit, initialData }: Props) {
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                     {images.map((file, idx) => (
-                        <div
-                            key={idx}
-                            className="relative rounded-lg overflow-hidden border border-form-border"
-                        >
+                        <div key={idx} className="relative rounded-lg overflow-hidden border border-form-border">
                             <img
-                                src={URL.createObjectURL(file)}
+                                src={URL.createObjectURL(file) || "/placeholder.svg"}
                                 alt="preview"
                                 className="w-full h-32 object-cover"
                             />
@@ -248,7 +295,6 @@ function ProjectDocumentation1Form({ onSubmit, initialData }: Props) {
                 </div>
             </div>
 
-            {/* Submit */}
             <div className="flex justify-end">
                 <button
                     type="submit"
@@ -259,20 +305,19 @@ function ProjectDocumentation1Form({ onSubmit, initialData }: Props) {
                 </button>
             </div>
         </form>
-    );
+    )
 }
 
-// ✅ Helper components for readability
 function Input({
     name,
     label,
     defaultValue,
     placeholder,
 }: {
-    name: string;
-    label: string;
-    defaultValue?: string;
-    placeholder?: string;
+    name: string
+    label: string
+    defaultValue?: string
+    placeholder?: string
 }) {
     return (
         <div className="flex flex-col">
@@ -285,7 +330,7 @@ function Input({
                 className="rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text placeholder:text-form-placeholder focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition"
             />
         </div>
-    );
+    )
 }
 
 function Select({
@@ -294,10 +339,10 @@ function Select({
     options,
     defaultValue,
 }: {
-    name: string;
-    label: string;
-    options: { value: string; label: string }[];
-    defaultValue?: string;
+    name: string
+    label: string
+    options: { value: string; label: string }[]
+    defaultValue?: string
 }) {
     return (
         <div className="flex flex-col">
@@ -314,7 +359,7 @@ function Select({
                 ))}
             </select>
         </div>
-    );
+    )
 }
 
-export default ProjectDocumentation1Form;
+export default ProjectDocumentation1Form
