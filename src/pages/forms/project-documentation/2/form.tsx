@@ -138,7 +138,7 @@ function ProjectDocumentation1Form({ onSubmit, initialData }: Props) {
                 </button>
 
                 <div
-                    className={`transition-all duration-300 ease-in-out ${showColorSettings ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+                    className={`transition-all duration-300 ease-in-out ${showColorSettings ? "opacity-100" : "max-h-0 opacity-0"
                         } overflow-hidden`}
                 >
                     <div className="p-6 pt-2 flex flex-col gap-6">
