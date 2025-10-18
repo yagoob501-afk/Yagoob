@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import PrimaryToolCard from "@/components/cards/ToolCard/PrimaryToolCard";
 import DocForm1 from "@/assets/cards_thumbnails/doc_form_1.jpeg";
+import DocForm2 from "@/assets/cards_thumbnails/doc_form_2.jpeg";
 import Template1background from "@/assets/cards_thumbnails/certificate-1.png";
 import Template2background from "@/assets/cards_thumbnails/certificate-2.png";
 // import Template3background from "@/assets/cards_thumbnails/certificate-3.png";
@@ -50,10 +51,27 @@ function PrimaryToolsSection() {
                             className="max-w-xs mx-auto min-w-xs"
                         >
                             <PrimaryToolCard
-                                title="نموذج توثيق"
+                                title="نموذج توثيق 1"
                                 description="نموذج انشاء تقرير"
                                 link="/forms/project-documentation/1"
                                 img={DocForm1}
+                            />
+                        </motion.div>
+
+                        <motion.div
+                            // key={i}
+                            // variants={{
+                            //     hidden: { opacity: 0, y: 30 },
+                            //     show: { opacity: 1, y: 0 },
+                            // }}
+                            // transition={{ duration: 0.6, ease: "easeOut" }}
+                            className="max-w-xs mx-auto min-w-xs"
+                        >
+                            <PrimaryToolCard
+                                title="نموذج توثيق 2"
+                                description="نموذج انشاء تقرير و التحكم في الالوان"
+                                link="/forms/project-documentation/2"
+                                img={DocForm2}
                             />
                         </motion.div>
 
