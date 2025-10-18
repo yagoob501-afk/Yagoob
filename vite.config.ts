@@ -27,6 +27,12 @@ export default defineConfig(({ mode }) => {
                             "sizes": "533x350",
                             "type": "image/png"
                         }
+                    ],
+                    screenshots: [
+                        {
+                            "src": "/Yagoob/manifest/1.jpeg",
+                            sizes: '1788x1444'
+                        }
                     ]
                 }
             }),
