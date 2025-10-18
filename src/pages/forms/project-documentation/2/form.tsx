@@ -223,8 +223,8 @@ function ProjectDocumentation1Form({ onSubmit, initialData }: Props) {
 
                                 manager: "لون اسم مدير المدرسة",
                                 managerGender: "لون صفة مدير المدرسة",
-                                departmentManager: "لون اسم مدير القسم",
-                                departmentManagerGender: "لون صفة مدير القسم",
+                                departmentManager: "لون اسم رئيس القسم",
+                                departmentManagerGender: "لون صفة رئيس القسم",
                             }).map(([key, label]) => (
                                 <div key={key} className="flex flex-col gap-2">
                                     <label className="text-sm font-medium text-gray-700">{label}</label>

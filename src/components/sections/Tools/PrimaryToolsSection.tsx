@@ -82,8 +82,8 @@ function PrimaryToolsSection({ hideNewestItems }: { hideNewestItems?: boolean })
                         >
                             <motion.div className="w-[320px] h-[320px]">
                                 <PrimaryToolCard
-                                    title="نموذج توثيق 1"
-                                    description="نموذج انشاء تقرير"
+                                    title="نموذج توثيق فعالية 1"
+                                    description=""
                                     link="/forms/project-documentation/1"
                                     img={DocForm1}
                                 />
@@ -91,8 +91,8 @@ function PrimaryToolsSection({ hideNewestItems }: { hideNewestItems?: boolean })
 
                             <motion.div className="w-[320px] h-[320px]">
                                 <PrimaryToolCard
-                                    title="نموذج توثيق 2"
-                                    description="نموذج انشاء تقرير و التحكم في الالوان"
+                                    title="نموذج توثيق فعالية 2"
+                                    description=""
                                     link="/forms/project-documentation/2"
                                     img={DocForm2}
                                 />
@@ -101,8 +101,8 @@ function PrimaryToolsSection({ hideNewestItems }: { hideNewestItems?: boolean })
 
                             <motion.div className="w-[320px] h-[320px]">
                                 <PrimaryToolCard
-                                    title="نموذج شهادة تقدير"
-                                    description="نماذج شهادات التقدير ( اكثر من نموذج )"
+                                    title="مجموعة شهادات تقدير ( أكثر من نموذج )"
+                                    description=""
                                     link="/forms/certificate-of-appreciation"
                                     img={Template8background}
                                 />
@@ -133,7 +133,7 @@ function PrimaryToolsSection({ hideNewestItems }: { hideNewestItems?: boolean })
                                     className="flex-1 max-w-xs"
                                 >
                                     <PrimaryToolCard
-                                        title="نموذج شهادة تقدير"
+                                        title="مجموعة شهادات تقدير ( اكثر من نموذج )"
                                         description={
                                             index === 0
                                                 ? "نموذج انشاء شهادة تقدير للطالبات"
