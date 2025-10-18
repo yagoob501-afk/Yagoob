@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { HashLink } from "react-router-hash-link";
 import { useTranslation } from "react-i18next";
-import Logo from "@/assets/logo-main.jpeg";
+import Logo from "@/assets/logo-main.png";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 

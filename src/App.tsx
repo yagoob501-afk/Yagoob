@@ -4,7 +4,7 @@ import './App.css'
 import ThemeProvider from './providers/ThemeProvider'
 import ProjectDocumentation1 from './pages/forms/project-documentation/1/page';
 import ProjectDocumentation2 from '@/pages/forms/project-documentation/2/page'
-import HomePage from '@/pages/page'
+// import HomePage from '@/pages/page'
 import TextToQRcodePage from './pages/additional-tools/TextToQRcode';
 import CertificateOfAppreciationTemplate_2_Page from './pages/forms/certificate-of-appreciation/2/page';
 import CertificateOfAppreciationTemplate_1_Page from './pages/forms/certificate-of-appreciation/1/page';
@@ -18,6 +18,7 @@ import CertificateOfAppreciationTemplate_9_Page from './pages/forms/certificate-
 import AboutPage from './pages/about/page';
 import DocumentationFormsPage from './pages/forms/project-documentation/page';
 import CertificatesFormsPage from './pages/forms/certificate-of-appreciation/page';
+import ToolsPage from './pages/tools/page';
 
 function App() {
     return (
@@ -26,7 +27,9 @@ function App() {
                 <BrowserRouter basename={import.meta.env.VITE_PUBLIC_APP_BASE}>
                     <Routes>
                         {/* root paths */}
-                        <Route path='/' element={<HomePage />} />
+                        {/* <Route path='/' element={<HomePage />} /> */}
+                        <Route path='/' element={<ToolsPage />} />
+                        <Route path='/tools' element={<ToolsPage />} />
                         <Route path='/about' element={<AboutPage />} />
 
 

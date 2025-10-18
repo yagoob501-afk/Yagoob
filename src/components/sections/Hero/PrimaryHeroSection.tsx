@@ -4,6 +4,8 @@ import { useTranslation } from "react-i18next"
 import { useState } from "react"
 import { Loader2 } from "lucide-react"
 import Video from "@/assets/home-hero-video.mp4"
+import { Link } from "react-router"
+import { HashLink } from "react-router-hash-link"
 
 function PrimaryHeroSection() {
     const { t } = useTranslation()
@@ -39,6 +41,40 @@ function PrimaryHeroSection() {
                 <motion.h2 className="text-lg leading-relaxed text-text-muted">
                     {t("sections.primary hero.subtitle")}
                 </motion.h2>
+
+
+                {/* CTA Buttons */}
+                <motion.div
+                    className="flex flex-col sm:flex-row gap-4 justify-center xl:justify-start mt-8 z-20"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3, duration: 0.6, ease: "easeOut" }}
+                >
+                    {/* Primary Button */}
+                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}>
+                        <Link
+                            to="/tools"
+                            className="block px-8 py-3 rounded-xl font-semibold text-on-primary bg-primary 
+                       shadow-lg shadow-primary/30 hover:shadow-primary/40 
+                       hover:bg-primary/90 transition-all duration-300"
+                        >
+                            {t("sections.primary hero.tools cta")}
+                        </Link>
+                    </motion.div>
+
+                    {/* Secondary Button */}
+                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}>
+                        <HashLink
+                            to="/#join-us"
+                            className="block px-8 py-3 rounded-xl font-semibold border-2 border-primary text-primary 
+                       hover:bg-primary/10 hover:border-primary/80 transition-all duration-300"
+                        >
+                            {t("sections.primary hero.join us cta")}
+                        </HashLink>
+                    </motion.div>
+                </motion.div>
+
+
             </div>
 
             {/* video container */}

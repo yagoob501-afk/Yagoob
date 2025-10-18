@@ -13,7 +13,7 @@ import Template8background from "@/assets/cards_thumbnails/certificate-8.jpeg";
 import Template9background from "@/assets/cards_thumbnails/certificate-9.jpeg";
 import PrimarySectionTitle from "@/components/ui/SectionTitle/PrimarySectionTitle";
 
-function PrimaryToolsSection() {
+function PrimaryToolsSection({ hideNewestItems }: { hideNewestItems?: boolean }) {
     return (
         <>
             <motion.section
@@ -178,57 +178,90 @@ function PrimaryToolsSection() {
                                 img={Template6background}
                             />
                         </motion.div>
+
+                        {[Template7background, Template8background, Template9background].map(
+                            (img, index) => (
+                                <motion.div
+                                    key={index}
+                                    // variants={{
+                                    //     hidden: { opacity: 0, y: 30 },
+                                    //     show: { opacity: 1, y: 0 },
+                                    // }}
+                                    // transition={{ duration: 0.6, ease: "easeOut" }}
+                                    className="flex-1 max-w-xs"
+                                >
+                                    <PrimaryToolCard
+                                        title="نموذج شهادة تقدير"
+                                        description={
+                                            index === 0
+                                                ? "نموذج انشاء شهادة تقدير للطالبات"
+                                                : index === 1
+                                                    ? "نموذج انشاء للمعلمين و الطلاب"
+                                                    : "نموذج انشاء شهادة تقدير للطالبات و المعلمات"
+                                        }
+                                        link={`/forms/certificate-of-appreciation/${7 + index}`}
+                                        img={img}
+                                    />
+                                </motion.div>
+                            )
+                        )}
                     </motion.div>
                 </div>
             </motion.section>
 
 
 
-            {/* section 2 */}
-            <motion.section
-                className="bg-cta-bg text-cta-foreground py-16 px-6 rounded-2xl shadow-lg container mx-auto text-center flex flex-col gap-14"
-                // initial={{ opacity: 0, y: 50 }}
-                // animate={{ opacity: 1, y: 0 }}
-                // transition={{ duration: 0.8, ease: "easeInOut" }}
-                id="tools"
-            >
-                {/* CTA Section Header */}
-                <div className="text-center mb-10">
-                    <h2 className="text-4xl font-bold mb-4">أحدث العناصر</h2>
-                    <p className="text-lg">
-                        اكتشف أحدث القوالب والنماذج الجاهزة للطباعة والمشاركة.
-                    </p>
-                </div>
+            {
+                !hideNewestItems && (
+                    <>
+                        {/* section 2 */}
+                        <motion.section
+                            className="bg-cta-bg text-cta-foreground py-16 px-6 rounded-2xl shadow-lg container mx-auto text-center flex flex-col gap-14"
+                            // initial={{ opacity: 0, y: 50 }}
+                            // animate={{ opacity: 1, y: 0 }}
+                            // transition={{ duration: 0.8, ease: "easeInOut" }}
+                            id="tools"
+                        >
+                            {/* CTA Section Header */}
+                            <div className="text-center mb-10">
+                                <h2 className="text-4xl font-bold mb-4">أحدث العناصر</h2>
+                                <p className="text-lg">
+                                    اكتشف أحدث القوالب والنماذج الجاهزة للطباعة والمشاركة.
+                                </p>
+                            </div>
 
-                <motion.div className="flex flex-col md:flex-row gap-10 md:gap-14 justify-center items-center">
-                    {[Template7background, Template8background, Template9background].map(
-                        (img, index) => (
-                            <motion.div
-                                key={index}
-                                // variants={{
-                                //     hidden: { opacity: 0, y: 30 },
-                                //     show: { opacity: 1, y: 0 },
-                                // }}
-                                // transition={{ duration: 0.6, ease: "easeOut" }}
-                                className="flex-1 max-w-xs"
-                            >
-                                <PrimaryToolCard
-                                    title="نموذج شهادة تقدير"
-                                    description={
-                                        index === 0
-                                            ? "نموذج انشاء شهادة تقدير للطالبات"
-                                            : index === 1
-                                                ? "نموذج انشاء للمعلمين و الطلاب"
-                                                : "نموذج انشاء شهادة تقدير للطالبات و المعلمات"
-                                    }
-                                    link={`/forms/certificate-of-appreciation/${7 + index}`}
-                                    img={img}
-                                />
+                            <motion.div className="flex flex-col md:flex-row gap-10 md:gap-14 justify-center items-center">
+                                {[Template7background, Template8background, Template9background].map(
+                                    (img, index) => (
+                                        <motion.div
+                                            key={index}
+                                            // variants={{
+                                            //     hidden: { opacity: 0, y: 30 },
+                                            //     show: { opacity: 1, y: 0 },
+                                            // }}
+                                            // transition={{ duration: 0.6, ease: "easeOut" }}
+                                            className="flex-1 max-w-xs"
+                                        >
+                                            <PrimaryToolCard
+                                                title="نموذج شهادة تقدير"
+                                                description={
+                                                    index === 0
+                                                        ? "نموذج انشاء شهادة تقدير للطالبات"
+                                                        : index === 1
+                                                            ? "نموذج انشاء للمعلمين و الطلاب"
+                                                            : "نموذج انشاء شهادة تقدير للطالبات و المعلمات"
+                                                }
+                                                link={`/forms/certificate-of-appreciation/${7 + index}`}
+                                                img={img}
+                                            />
+                                        </motion.div>
+                                    )
+                                )}
                             </motion.div>
-                        )
-                    )}
-                </motion.div>
-            </motion.section>
+                        </motion.section>
+                    </>
+                )
+            }
 
 
         </>
