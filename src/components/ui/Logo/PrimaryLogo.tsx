@@ -17,7 +17,7 @@ function PrimaryLogo() {
                 <img
                     src={Logo}
                     alt="Logo"
-                    className="max-w-14 cursor-pointer"
+                    className="max-w-14 cursor-pointer bg-[#f5f3da]"
                     onClick={() => setIsOpen(true)}
                 />
                 <p className="text-lg cursor-pointer">
