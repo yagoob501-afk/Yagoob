@@ -11,20 +11,20 @@ function PrimaryToolCard({ title, description, link, img }: Props) {
     return (
         <Link
             to={link || "#"}
-            className="bg-primary hover:bg-primary-hover text-primary-foreground rounded-2xl p-6 flex flex-col gap-4 aspect-square shadow-md hover:shadow-lg transition-all w-full"
+            className="h-full bg-primary hover:bg-primary-hover text-primary-foreground rounded-2xl p-6 flex flex-col gap-4  shadow-md hover:shadow-lg transition-all w-full overflow-hidden"
         >
             {/* Title */}
             <h5 className="text-2xl font-semibold leading-snug text-center font-cairo">
                 {title}
             </h5>
 
-            {/* Image (takes full width, fixed height) */}
+            {/* Image (contained properly) */}
             {img && (
                 <div className="flex-1 flex items-center justify-center">
                     <img
                         src={img}
                         alt=""
-                        className="w-full max-h-40"
+                        className="max-h-full max-w-full object-contain rounded-lg"
                     />
                 </div>
             )}

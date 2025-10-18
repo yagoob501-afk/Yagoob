@@ -72,7 +72,7 @@ function PrimaryToolsSection({ hideNewestItems }: { hideNewestItems?: boolean })
                     >
                         <motion.div
                             id="scaled-grid"
-                            className="grid grid-cols-3 w-[1140px] gap-2"
+                            className="grid grid-cols-3 w-[1140px] gap-2 h-full"
                             variants={{
                                 hidden: {},
                                 show: {
@@ -80,7 +80,7 @@ function PrimaryToolsSection({ hideNewestItems }: { hideNewestItems?: boolean })
                                 },
                             }}
                         >
-                            <motion.div className="w-[370px] h-96">
+                            <motion.div className="w-[370px] h-full">
                                 <PrimaryToolCard
                                     title="نموذج توثيق فعالية 1"
                                     description=""
@@ -89,7 +89,7 @@ function PrimaryToolsSection({ hideNewestItems }: { hideNewestItems?: boolean })
                                 />
                             </motion.div>
 
-                            <motion.div className="w-[370px] h-96">
+                            <motion.div className="w-[370px] h-full">
                                 <PrimaryToolCard
                                     title="نموذج توثيق فعالية 2"
                                     description=""
@@ -99,7 +99,7 @@ function PrimaryToolsSection({ hideNewestItems }: { hideNewestItems?: boolean })
                             </motion.div>
 
 
-                            <motion.div className="w-[370px] h-96">
+                            <motion.div className="w-[370px] h-full">
                                 <PrimaryToolCard
                                     title="مجموعة شهادات تقدير"
                                     description="يوجد اكثر من نموذج"

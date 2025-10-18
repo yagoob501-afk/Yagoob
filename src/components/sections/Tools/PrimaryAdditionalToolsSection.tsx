@@ -91,8 +91,8 @@ function PrimaryAdditionalToolsSection() {
                             transition={{ duration: 0.6, ease: "easeOut" }}
                         >
                             <PrimaryToolCard
-                                title="تحويل النصوص الى qrcode"
-                                description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat, autem adipisci! Earum doloremque libero exercitationem debitis sed aut vero pariatur ratione eius, magni ullam, maxime aliquid aperiam voluptas beatae eaque."
+                                title="تحويل الروابط الى qrcode"
+                                description=""
                                 link="/additional-tools/text-to-qrcode"
                                 img={QrThumbnail}
                             />
