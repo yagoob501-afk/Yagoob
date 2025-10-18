@@ -3,10 +3,6 @@ import { useState, useEffect } from "react";
 import PrimaryToolCard from "@/components/cards/ToolCard/PrimaryToolCard";
 import DocForm1 from "@/assets/cards_thumbnails/doc_form_1.jpeg";
 import DocForm2 from "@/assets/cards_thumbnails/doc_form_2.jpeg";
-import Template1background from "@/assets/cards_thumbnails/certificate-1.png";
-import Template2background from "@/assets/cards_thumbnails/certificate-2.png";
-import Template5background from "@/assets/cards_thumbnails/certificate-5.png";
-import Template6background from "@/assets/cards_thumbnails/certificate-6.jpeg";
 import Template7background from "@/assets/cards_thumbnails/certificate-7.png";
 import Template8background from "@/assets/cards_thumbnails/certificate-8.jpeg";
 import Template9background from "@/assets/cards_thumbnails/certificate-9.jpeg";
@@ -102,63 +98,16 @@ function PrimaryToolsSection({ hideNewestItems }: { hideNewestItems?: boolean })
                                 />
                             </motion.div>
 
-                            <motion.div className="w-[320px] h-[320px]">
-                                <PrimaryToolCard
-                                    title="نموذج شهادة تقدير"
-                                    description="نموذج انشاء شهادة تقدير للمعلمين و الطلاب"
-                                    link="/forms/certificate-of-appreciation/1"
-                                    img={Template1background}
-                                />
-                            </motion.div>
 
                             <motion.div className="w-[320px] h-[320px]">
                                 <PrimaryToolCard
                                     title="نموذج شهادة تقدير"
-                                    description="نموذج انشاء شهادة تقدير للطلاب و المعلمين"
-                                    link="/forms/certificate-of-appreciation/2"
-                                    img={Template2background}
+                                    description="نماذج شهادات التقدير ( اكثر من نموذج )"
+                                    link="/forms/certificate-of-appreciation"
+                                    img={Template8background}
                                 />
                             </motion.div>
 
-                            <motion.div className="w-[320px] h-[320px]">
-                                <PrimaryToolCard
-                                    title="نموذج شهادة تقدير"
-                                    description="نموذج انشاء شهادة تقدير للطلاب و المعلمين"
-                                    link="/forms/certificate-of-appreciation/5"
-                                    img={Template5background}
-                                />
-                            </motion.div>
-
-                            <motion.div className="w-[320px] h-[320px]">
-                                <PrimaryToolCard
-                                    title="نموذج شهادة تقدير"
-                                    description="نموذج انشاء شهادة تقدير للطلاب"
-                                    link="/forms/certificate-of-appreciation/6"
-                                    img={Template6background}
-                                />
-                            </motion.div>
-
-                            {[Template7background, Template8background, Template9background].map(
-                                (img, index) => (
-                                    <motion.div
-                                        key={index}
-                                        className="flex-1 max-w-xs"
-                                    >
-                                        <PrimaryToolCard
-                                            title="نموذج شهادة تقدير"
-                                            description={
-                                                index === 0
-                                                    ? "نموذج انشاء شهادة تقدير للطالبات"
-                                                    : index === 1
-                                                        ? "نموذج انشاء للمعلمين و الطلاب"
-                                                        : "نموذج انشاء شهادة تقدير للطالبات و المعلمات"
-                                            }
-                                            link={`/forms/certificate-of-appreciation/${7 + index}`}
-                                            img={img}
-                                        />
-                                    </motion.div>
-                                )
-                            )}
                         </motion.div>
                     </div>
                 </div>
