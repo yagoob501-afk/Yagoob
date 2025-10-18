@@ -23,9 +23,9 @@ function PrimaryAdditionalToolsSection() {
         };
 
         calculateScale();
-        window.addEventListener('resize', calculateScale);
+        // window.addEventListener('resize', calculateScale);
 
-        return () => window.removeEventListener('resize', calculateScale);
+        // return () => window.removeEventListener('resize', calculateScale);
     }, []);
 
     // حساب الارتفاع الفعلي بعد التصغير
@@ -40,11 +40,11 @@ function PrimaryAdditionalToolsSection() {
 
         // انتظار تحميل الصور قبل حساب الارتفاع
         const timer = setTimeout(updateHeight, 100);
-        window.addEventListener('resize', updateHeight);
+        // window.addEventListener('resize', updateHeight);
 
         return () => {
             clearTimeout(timer);
-            window.removeEventListener('resize', updateHeight);
+            // window.removeEventListener('resize', updateHeight);
         };
     }, [scale]);
 

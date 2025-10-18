@@ -25,9 +25,9 @@ function PrimaryToolsSection({ hideNewestItems }: { hideNewestItems?: boolean })
         };
 
         calculateScale();
-        window.addEventListener('resize', calculateScale);
+        // window.addEventListener('resize', calculateScale);
 
-        return () => window.removeEventListener('resize', calculateScale);
+        // return () => window.removeEventListener('resize', calculateScale);
     }, []);
 
     // حساب الارتفاع الفعلي بعد التصغير
@@ -42,11 +42,11 @@ function PrimaryToolsSection({ hideNewestItems }: { hideNewestItems?: boolean })
 
         // انتظار تحميل الصور قبل حساب الارتفاع
         const timer = setTimeout(updateHeight, 100);
-        window.addEventListener('resize', updateHeight);
+        // window.addEventListener('resize', updateHeight);
 
         return () => {
             clearTimeout(timer);
-            window.removeEventListener('resize', updateHeight);
+            // window.removeEventListener('resize', updateHeight);
         };
     }, [scale]);
 
@@ -72,7 +72,7 @@ function PrimaryToolsSection({ hideNewestItems }: { hideNewestItems?: boolean })
                     >
                         <motion.div
                             id="scaled-grid"
-                            className="grid grid-cols-3 w-[1140px] gap-14"
+                            className="grid grid-cols-3 w-[1140px] gap-2"
                             variants={{
                                 hidden: {},
                                 show: {
@@ -80,7 +80,7 @@ function PrimaryToolsSection({ hideNewestItems }: { hideNewestItems?: boolean })
                                 },
                             }}
                         >
-                            <motion.div className="w-[320px] h-[320px]">
+                            <motion.div className="w-[370px] h-96">
                                 <PrimaryToolCard
                                     title="نموذج توثيق فعالية 1"
                                     description=""
@@ -89,7 +89,7 @@ function PrimaryToolsSection({ hideNewestItems }: { hideNewestItems?: boolean })
                                 />
                             </motion.div>
 
-                            <motion.div className="w-[320px] h-[320px]">
+                            <motion.div className="w-[370px] h-96">
                                 <PrimaryToolCard
                                     title="نموذج توثيق فعالية 2"
                                     description=""
@@ -99,7 +99,7 @@ function PrimaryToolsSection({ hideNewestItems }: { hideNewestItems?: boolean })
                             </motion.div>
 
 
-                            <motion.div className="w-[320px] h-[320px]">
+                            <motion.div className="w-[370px] h-96">
                                 <PrimaryToolCard
                                     title="مجموعة شهادات تقدير ( أكثر من نموذج )"
                                     description=""

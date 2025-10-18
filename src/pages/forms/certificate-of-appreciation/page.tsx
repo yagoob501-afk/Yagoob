@@ -33,8 +33,9 @@ export default function CertificatesFormsPage() {
         };
 
         calculateScale();
-        window.addEventListener("resize", calculateScale);
-        return () => window.removeEventListener("resize", calculateScale);
+
+        // window.addEventListener("resize", calculateScale);
+        // return () => window.removeEventListener("resize", calculateScale);
     }, []);
 
     // تحديث الارتفاع بعد تطبيق التحجيم
@@ -48,11 +49,11 @@ export default function CertificatesFormsPage() {
         };
 
         const timer = setTimeout(updateHeight, 100);
-        window.addEventListener("resize", updateHeight);
+        // window.addEventListener("resize", updateHeight);
 
         return () => {
             clearTimeout(timer);
-            window.removeEventListener("resize", updateHeight);
+            // window.removeEventListener("resize", updateHeight);
         };
     }, [scale]);
 
@@ -78,7 +79,7 @@ export default function CertificatesFormsPage() {
                     >
                         <motion.div
                             id="scaled-grid"
-                            className="grid grid-cols-3 w-[1140px] gap-14"
+                            className="grid grid-cols-3 w-[1140px] gap-2"
                             variants={{
                                 hidden: {},
                                 show: {
@@ -86,7 +87,7 @@ export default function CertificatesFormsPage() {
                                 },
                             }}
                         >
-                            <motion.div className="w-[320px] h-[320px]">
+                            <motion.div className="w-[370px] h-96">
                                 <PrimaryToolCard
                                     title="نموذج شهادة تقدير"
                                     description="نموذج إنشاء شهادة تقدير للمعلمين والطلاب"
@@ -95,7 +96,7 @@ export default function CertificatesFormsPage() {
                                 />
                             </motion.div>
 
-                            <motion.div className="w-[320px] h-[320px]">
+                            <motion.div className="w-[370px] h-96">
                                 <PrimaryToolCard
                                     title="نموذج شهادة تقدير"
                                     description="نموذج إنشاء شهادة تقدير للطلاب والمعلمين"
@@ -104,7 +105,7 @@ export default function CertificatesFormsPage() {
                                 />
                             </motion.div>
 
-                            <motion.div className="w-[320px] h-[320px]">
+                            <motion.div className="w-[370px] h-96">
                                 <PrimaryToolCard
                                     title="نموذج شهادة تقدير"
                                     description="نموذج إنشاء شهادة تقدير للطلاب والمعلمين"
@@ -113,7 +114,7 @@ export default function CertificatesFormsPage() {
                                 />
                             </motion.div>
 
-                            <motion.div className="w-[320px] h-[320px]">
+                            <motion.div className="w-[370px] h-96">
                                 <PrimaryToolCard
                                     title="نموذج شهادة تقدير"
                                     description="نموذج إنشاء شهادة تقدير للطلاب"
@@ -124,7 +125,7 @@ export default function CertificatesFormsPage() {
 
                             {[Template7background, Template8background, Template9background].map(
                                 (img, index) => (
-                                    <motion.div key={index} className="w-[320px] h-[320px]">
+                                    <motion.div key={index} className="w-[370px] h-96">
                                         <PrimaryToolCard
                                             title="نموذج شهادة تقدير"
                                             description={
