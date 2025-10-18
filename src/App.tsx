@@ -16,6 +16,8 @@ import CertificateOfAppreciationTemplate_7_Page from './pages/forms/certificate-
 import CertificateOfAppreciationTemplate_8_Page from './pages/forms/certificate-of-appreciation/8/page';
 import CertificateOfAppreciationTemplate_9_Page from './pages/forms/certificate-of-appreciation/9/page';
 import AboutPage from './pages/about/page';
+import DocumentationFormsPage from './pages/forms/project-documentation/page';
+import CertificatesFormsPage from './pages/forms/certificate-of-appreciation/page';
 
 function App() {
     return (
@@ -26,6 +28,11 @@ function App() {
                         {/* root paths */}
                         <Route path='/' element={<HomePage />} />
                         <Route path='/about' element={<AboutPage />} />
+
+
+                        {/* forms roots */}
+                        <Route path='/forms/project-documentation' element={<DocumentationFormsPage />} />
+                        <Route path='/forms/certificate-of-appreciation' element={<CertificatesFormsPage />} />
 
                         {/* forms */}
                         <Route path='/forms/project-documentation/1' element={<ProjectDocumentation1 />} />
