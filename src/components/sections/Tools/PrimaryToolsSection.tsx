@@ -101,8 +101,8 @@ function PrimaryToolsSection({ hideNewestItems }: { hideNewestItems?: boolean })
 
                             <motion.div className="w-[370px] h-96">
                                 <PrimaryToolCard
-                                    title="مجموعة شهادات تقدير ( أكثر من نموذج )"
-                                    description=""
+                                    title="مجموعة شهادات تقدير"
+                                    description="يوجد اكثر من نموذج"
                                     link="/forms/certificate-of-appreciation"
                                     img={Template8background}
                                 />

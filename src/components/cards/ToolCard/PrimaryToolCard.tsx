@@ -14,7 +14,7 @@ function PrimaryToolCard({ title, description, link, img }: Props) {
             className="bg-primary hover:bg-primary-hover text-primary-foreground rounded-2xl p-6 flex flex-col gap-4 aspect-square shadow-md hover:shadow-lg transition-all w-full"
         >
             {/* Title */}
-            <h5 className="text-lg font-semibold leading-snug text-center">
+            <h5 className="text-2xl font-semibold leading-snug text-center font-cairo">
                 {title}
             </h5>
 
@@ -30,7 +30,7 @@ function PrimaryToolCard({ title, description, link, img }: Props) {
             )}
 
             {/* Description */}
-            <p className="text-sm opacity-90 line-clamp-3 text-center">
+            <p className="opacity-90 line-clamp-3 text-center text-xl font-almaria font-bold">
                 {description}
             </p>
         </Link>
