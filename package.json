@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "postbuild": "node ./scripts/rename404.js",
+    "postbuild": "node ./scripts/rename404.js && node scripts/copyCNAME.js",
     "lint": "eslint .",
     "preview": "vite preview",
     "deploy": "gh-pages -d dist",
