@@ -24,7 +24,7 @@ function PrimaryToolCard({ title, description, link, img }: Props) {
                     <img
                         src={img}
                         alt=""
-                        className="max-h-full max-w-full object-contain rounded-lg"
+                        className="max-h-[90%] max-w-full object-contain rounded-lg"
                     />
                 </div>
             )}
