@@ -19,10 +19,12 @@ import AboutPage from './pages/about/page';
 import DocumentationFormsPage from './pages/forms/project-documentation/page';
 import CertificatesFormsPage from './pages/forms/certificate-of-appreciation/page';
 import ToolsPage from './pages/tools/page';
+import AddToHomePrompt from './components/ui/AddToHomePrompt';
 
 function App() {
     return (
         <div className='flex flex-col min-h-screen bg-bg-base text-text-base' dir='rtl'>
+            <AddToHomePrompt />
             <ThemeProvider>
                 <BrowserRouter basename={import.meta.env.VITE_PUBLIC_APP_BASE}>
                     <Routes>
