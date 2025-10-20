@@ -79,14 +79,15 @@ export default function AddToHomePrompt() {
                         </h3>
 
                         <p className="font-almaria text-muted-foreground">
-                            أضف تطبيق "yaqoubalenezi" إلى شاشتك الرئيسية لسهولة الوصول وتجربة أفضل.
+                            لسهولة الوصول وتجربة أفضل.
                         </p>
                         <hr />
 
                         <p className="font-cairo text-muted-foreground flex items-center justify-center gap-1 flex-wrap text-center leading-relaxed">
                             اضغط على الأيقونة
                             <Share size={20} className="inline-block mx-1 text-muted-foreground" />
-                            في الأعلى ثم اختر <strong>"إضافة إلى الشاشة الرئيسية"</strong>.
+                            ( مشاركة )
+                            ثم إختر <strong>"إضافة إلى الشاشة الرئيسية"</strong>.
                         </p>
                     </div>
                 ) : (
