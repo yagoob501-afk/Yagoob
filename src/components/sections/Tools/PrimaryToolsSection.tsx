@@ -6,6 +6,7 @@ import DocForm2 from "@/assets/cards_thumbnails/doc_form_2.jpeg";
 import Template7background from "@/assets/cards_thumbnails/certificate-7.png";
 import Template8background from "@/assets/cards_thumbnails/certificate-8.jpeg";
 import Template9background from "@/assets/cards_thumbnails/certificate-9.jpeg";
+import MultiCertificate from "@/assets/cards_thumbnails/multi-cetrificate.png";
 import PrimarySectionTitle from "@/components/ui/SectionTitle/PrimarySectionTitle";
 
 function PrimaryToolsSection({ hideNewestItems }: { hideNewestItems?: boolean }) {
@@ -104,7 +105,7 @@ function PrimaryToolsSection({ hideNewestItems }: { hideNewestItems?: boolean })
                                     title="مجموعة شهادات تقدير"
                                     description="يوجد اكثر من نموذج"
                                     link="/forms/certificate-of-appreciation"
-                                    img={Template8background}
+                                    img={MultiCertificate}
                                 />
                             </motion.div>
 
