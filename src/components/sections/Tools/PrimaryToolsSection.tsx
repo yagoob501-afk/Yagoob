@@ -56,7 +56,7 @@ function PrimaryToolsSection({ hideNewestItems }: { hideNewestItems?: boolean })
                 className="py-14 px-3 overflow-x-hidden"
                 id="tools"
             >
-                <div className="flex flex-col gap-20 w-full items-center">
+                <div className="flex flex-col gap-7 w-full items-center">
                     <PrimarySectionTitle
                         title="نماذج جاهزة للطباعة"
                         h4Props={{ className: "text-center text-3xl" }}

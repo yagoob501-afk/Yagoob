@@ -5,12 +5,14 @@ interface Props {
     description: string;
     link: string | null;
     img: any;
+    blank?: boolean;
 }
 
-function PrimaryToolCard({ title, description, link, img }: Props) {
+function PrimaryToolCard({ title, description, link, img, blank }: Props) {
     return (
         <Link
             to={link || "#"}
+            target={blank ? "_blank" : undefined}
             className="h-full bg-primary hover:bg-primary-hover text-primary-foreground rounded-2xl p-6 flex flex-col gap-4  shadow-md hover:shadow-lg transition-all w-full overflow-hidden"
         >
             {/* Title */}

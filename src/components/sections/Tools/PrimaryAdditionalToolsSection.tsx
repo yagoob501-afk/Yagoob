@@ -5,6 +5,7 @@ import { useState, useEffect } from "react"
 import PrimaryToolCard from "@/components/cards/ToolCard/PrimaryToolCard"
 import PrimarySectionTitle from "@/components/ui/SectionTitle/PrimarySectionTitle"
 import QrThumbnail from "@/assets/Using-a-QR-Code-Generator-with-text-below.png"
+import _3_Books from "@/assets/3 books.jpg";
 
 function PrimaryAdditionalToolsSection() {
     const [scale, setScale] = useState(1)
@@ -47,10 +48,10 @@ function PrimaryAdditionalToolsSection() {
 
     return (
         <motion.section
-            className="py-14 px-3 overflow-x-hidden"
+            className="px-3 overflow-x-hidden"
             id="additional-tools"
         >
-            <div className="flex flex-col gap-20 w-full items-center">
+            <div className="flex flex-col gap-7 w-full items-center">
                 <PrimarySectionTitle
                     title="أدوات إضافية"
                     h4Props={{ className: "text-center text-3xl" }}
@@ -87,6 +88,23 @@ function PrimaryAdditionalToolsSection() {
                                 description="قم بتحويل أي رابط إلى رمز QR قابل للمشاركة بسهولة."
                                 link="/additional-tools/text-to-qrcode"
                                 img={QrThumbnail}
+                            />
+                        </motion.div>
+
+                        <motion.div
+                            className="w-[370px] h-full"
+                            variants={{
+                                hidden: { opacity: 0, y: 30 },
+                                show: { opacity: 1, y: 0 },
+                            }}
+                            transition={{ duration: 0.6, ease: "easeOut" }}
+                        >
+                            <PrimaryToolCard
+                                title="مكتبة الطالب"
+                                description="جميع حقوق الطبع محفوظة لدى وزارة التربية - دولة الكويت ©2025"
+                                link="https://elibrary.moe.edu.kw/StudentsLibrary"
+                                blank
+                                img={_3_Books}
                             />
                         </motion.div>
                     </motion.div>
