@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
 
 interface Props {
@@ -6,9 +7,10 @@ interface Props {
     link: string | null;
     img: any;
     blank?: boolean;
+    imageClassName?: string;
 }
 
-function PrimaryToolCard({ title, description, link, img, blank }: Props) {
+function PrimaryToolCard({ title, description, link, img, blank, imageClassName }: Props) {
     return (
         <Link
             to={link || "#"}
@@ -26,7 +28,7 @@ function PrimaryToolCard({ title, description, link, img, blank }: Props) {
                     <img
                         src={img}
                         alt=""
-                        className="w-full h-full rounded-lg"
+                        className={cn("w-full h-full rounded-lg", imageClassName)}
                     />
                 </div>
             )}

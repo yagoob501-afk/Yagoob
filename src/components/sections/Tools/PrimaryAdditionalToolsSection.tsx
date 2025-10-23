@@ -4,8 +4,8 @@ import { motion } from "framer-motion"
 import { useState, useEffect } from "react"
 import PrimaryToolCard from "@/components/cards/ToolCard/PrimaryToolCard"
 import PrimarySectionTitle from "@/components/ui/SectionTitle/PrimarySectionTitle"
-import QrThumbnail from "@/assets/Using-a-QR-Code-Generator-with-text-below.png"
-import _3_Books from "@/assets/3 books.jpg";
+import QrThumbnail from "@/assets/qrcode.png"
+import _3_Books from "@/assets/3_books.png";
 
 function PrimaryAdditionalToolsSection() {
     const [scale, setScale] = useState(1)

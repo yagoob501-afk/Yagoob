@@ -106,6 +106,7 @@ function PrimaryToolsSection({ hideNewestItems }: { hideNewestItems?: boolean })
                                     description="يوجد اكثر من نموذج"
                                     link="/forms/certificate-of-appreciation"
                                     img={MultiCertificate}
+                                    imageClassName="object-cover"
                                 />
                             </motion.div>
 
