@@ -21,7 +21,7 @@ export default function CTASection() {
                     transition={{ duration: 0.6 }}
                     className="bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-primary-active)] rounded-3xl p-8 sm:p-12 lg:p-16 shadow-2xl text-center"
                 >
-                    <motion.h2
+                    {/* <motion.h2
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
@@ -29,7 +29,7 @@ export default function CTASection() {
                         className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[var(--color-text-light-solid)] mb-6 font-alhoda"
                     >
                         هل تبحث عن التميز التعليمي؟
-                    </motion.h2>
+                    </motion.h2> */}
 
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
@@ -41,7 +41,7 @@ export default function CTASection() {
                         دعنا نعمل معًا لتطوير العملية التعليمية وبناء جيل متميز من المتعلمين
                     </motion.p>
 
-                    <motion.div
+                    {/* <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
@@ -67,7 +67,7 @@ export default function CTASection() {
                         >
                             تصفح الادوات
                         </motion.button>
-                    </motion.div>
+                    </motion.div> */}
 
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
