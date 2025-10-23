@@ -1,10 +1,11 @@
-import { links } from "@/config/links";
 import { motion } from "framer-motion";
-import { ArrowLeft, Send, Instagram, Youtube } from "lucide-react";
-import { useNavigate } from "react-router";
+import {
+    Send,
+    Instagram,
+    Youtube
+} from "lucide-react";
 
 export default function CTASection() {
-    const navigate = useNavigate();
 
     return (
         <section id="join-us" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[var(--color-bg-layout)] via-[var(--color-bg-base)] to-[var(--color-bg-layout)] relative overflow-hidden">
