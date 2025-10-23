@@ -12,7 +12,7 @@ const stats = [
   },
   {
     icon: Award,
-    number: "50+",
+    number: "10+",
     label: "ورشة تدريبية",
     description: "للمعلمين والمربين",
   },
