@@ -32,14 +32,9 @@ function PrimaryFooter() {
                     >
                         {t("about")}
                     </HashLink>
+
                     <HashLink
-                        to="/#tools"
-                        className="hover:underline hover:text-primary-foreground"
-                    >
-                        {t("tools")}
-                    </HashLink>
-                    <HashLink
-                        to="/#join-us"
+                        to="/about#join-us"
                         className="hover:underline hover:text-primary-foreground"
                     >
                         {t("join us")}

@@ -7,7 +7,7 @@ export default function CTASection() {
     const navigate = useNavigate();
 
     return (
-        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[var(--color-bg-layout)] via-[var(--color-bg-base)] to-[var(--color-bg-layout)] relative overflow-hidden">
+        <section id="join-us" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[var(--color-bg-layout)] via-[var(--color-bg-base)] to-[var(--color-bg-layout)] relative overflow-hidden">
             {/* Background Decoration */}
             <div className="absolute inset-0 opacity-5">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[var(--color-primary)] rounded-full blur-3xl" />
@@ -26,7 +26,7 @@ export default function CTASection() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.6, delay: 0.2 }}
-                        className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[var(--color-text-light-solid)] mb-6 font-[var(--font-alhoda)]"
+                        className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[var(--color-text-light-solid)] mb-6 font-alhoda"
                     >
                         هل تبحث عن التميز التعليمي؟
                     </motion.h2>
