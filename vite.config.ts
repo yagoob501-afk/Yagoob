@@ -11,7 +11,7 @@ export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, process.cwd(), '')
 
     // Base path
-    const base = (env.VITE_PUBLIC_APP_BASE).replace(/\/$/, '')
+    const base = (env.VITE_PUBLIC_APP_BASE || '/').replace(/\/$/, '')
 
     // 🧩 Load icons JSON from public/icons/icons.json
     const iconsPath = path.resolve(__dirname, 'public/icons/icons.json')
@@ -25,7 +25,6 @@ export default defineConfig(({ mode }) => {
     }))
 
     return {
-        base,
         plugins: [
             react(),
             VitePWA({
