@@ -26,8 +26,11 @@ function PrimaryToolsSection({ hideNewestItems }: { hideNewestItems?: boolean })
         };
 
         calculateScale();
-        // window.addEventListener('resize', calculateScale);
 
+        window.addEventListener('focus', calculateScale);
+        return () => window.removeEventListener('focus', calculateScale);
+
+        // window.addEventListener('resize', calculateScale);
         // return () => window.removeEventListener('resize', calculateScale);
     }, []);
 
@@ -83,9 +86,9 @@ function PrimaryToolsSection({ hideNewestItems }: { hideNewestItems?: boolean })
                         >
                             <motion.div className="w-[370px] h-full">
                                 <PrimaryToolCard
-                                    title="نموذج توثيق فعالية 1"
-                                    description=""
-                                    link="/forms/project-documentation/1"
+                                    title="نماذج و تقارير"
+                                    description="مجموعة شاملة من النماذج و التقارير الجاهزة لتوثيق فعالية أو الحصص التبادلية أو اجتماع القسم"
+                                    link="https://teacher-yagoub.netlify.app"
                                     img={DocForm1}
                                 />
                             </motion.div>

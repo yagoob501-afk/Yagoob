@@ -24,6 +24,9 @@ function PrimaryAdditionalToolsSection() {
         }
 
         calculateScale()
+        window.addEventListener('focus', calculateScale);
+        return () => window.removeEventListener('focus', calculateScale);
+
         // window.addEventListener('resize', calculateScale)
         // return () => window.removeEventListener('resize', calculateScale)
     }, [])
