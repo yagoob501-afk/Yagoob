@@ -1,13 +1,14 @@
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import PrimaryToolCard from "@/components/cards/ToolCard/PrimaryToolCard";
-import DocForm1 from "@/assets/cards_thumbnails/doc_form_1.jpeg";
+// import DocForm1 from "@/assets/cards_thumbnails/doc_form_1.jpeg";
 import DocForm2 from "@/assets/cards_thumbnails/doc_form_2.jpeg";
 import Template7background from "@/assets/cards_thumbnails/certificate-7.png";
 import Template8background from "@/assets/cards_thumbnails/certificate-8.jpeg";
 import Template9background from "@/assets/cards_thumbnails/certificate-9.jpeg";
 import MultiCertificate from "@/assets/cards_thumbnails/multi-cetrificate.png";
 import PrimarySectionTitle from "@/components/ui/SectionTitle/PrimarySectionTitle";
+import { Layers } from "lucide-react";
 
 function PrimaryToolsSection({ hideNewestItems }: { hideNewestItems?: boolean }) {
     const [scale, setScale] = useState(1);
@@ -86,10 +87,17 @@ function PrimaryToolsSection({ hideNewestItems }: { hideNewestItems?: boolean })
                         >
                             <motion.div className="w-[370px] h-full">
                                 <PrimaryToolCard
-                                    title="نماذج و تقارير"
+                                    title={(
+                                        <div className="flex items-center justify-center gap-4">
+                                            <Layers />
+                                            نماذج و تقارير
+                                            <Layers />
+                                        </div>
+                                    ) as any}
                                     description="مجموعة شاملة من النماذج و التقارير الجاهزة لتوثيق فعالية أو الحصص التبادلية أو اجتماع القسم"
                                     link="https://teacher-yagoub.netlify.app"
-                                    img={DocForm1}
+                                    className="justify-center gap-14"
+                                // img={DocForm1}
                                 />
                             </motion.div>
 
