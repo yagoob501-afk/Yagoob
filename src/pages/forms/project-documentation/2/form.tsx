@@ -352,7 +352,7 @@ function ProjectDocumentation1Form({ onSubmit, initialData }: Props) {
                 <textarea
                     name="description"
                     defaultValue={initialData?.description || ""}
-                    placeholder={t("documentation.description")}
+                    placeholder={t("documentation.descriptionPlaceholder")}
                     className="rounded-lg border border-form-border bg-form-bg px-3 py-2 text-form-text placeholder:text-form-placeholder focus:outline-none focus:ring-2 focus:ring-form-focus-ring transition h-28 resize-none"
                 />
             </div>
@@ -412,7 +412,16 @@ function ProjectDocumentation1Form({ onSubmit, initialData }: Props) {
                 </div>
             </div>
 
-            <div className="flex justify-end">
+            <div className="flex justify-between">
+                <div className="font-semibold">
+                    لحصول على نموذج مثالي
+                    <br />
+                    * إضافة الصور بالوضع الأفقي (عرض)،
+                    لضمان وضوح الصورة وجمال تنسيق النموذج.
+
+                    <br />
+                    * العدد  2 أو 4 صور
+                </div>
                 <button
                     type="submit"
                     disabled={loading}

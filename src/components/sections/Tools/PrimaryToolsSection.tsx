@@ -62,6 +62,10 @@ function PrimaryToolsSection({ hideNewestItems }: { hideNewestItems?: boolean })
                 id="tools"
             >
                 <div className="flex flex-col gap-7 w-full items-center">
+                    <h3 className="font-semibold mb-7 text-center text-xl">
+                        اختر التصميم المناسب لك و قم بتعبئة البيانات<br />
+                        تستطيع عمل كل شيء بواسطة هاتفك دون الحاجة لجهاز كمبيوتر
+                    </h3>
                     <PrimarySectionTitle
                         title="نماذج جاهزة للطباعة"
                         h4Props={{ className: "text-center text-3xl" }}
