@@ -38,6 +38,7 @@
         "managerName": "اسم المدير / مديرة",
         "targetGroup": "الفئة المستهدفة",
         "description": "الشرح",
+        "descriptionPlaceholder": "الشرح ( (ختياري )",
         "images": "الصور",
         "logoPicture": "الشعار",
         "eventType": "نوع الفعالية",
