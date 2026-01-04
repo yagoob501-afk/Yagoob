@@ -20,45 +20,47 @@ import DocumentationFormsPage from './pages/forms/project-documentation/page';
 import CertificatesFormsPage from './pages/forms/certificate-of-appreciation/page';
 import ToolsPage from './pages/tools/page';
 import AddToHomePrompt from './components/ui/AddToHomePrompt';
+import ClassroomToolsPage from './pages/additional-tools/ClassroomTools';
 
 function App() {
-    return (
-        <div className='flex flex-col min-h-screen bg-bg-base text-text-base' dir='rtl'>
-            <AddToHomePrompt />
-            <ThemeProvider>
-                <BrowserRouter basename={import.meta.env.VITE_PUBLIC_APP_BASE}>
-                    <Routes>
-                        {/* root paths */}
-                        {/* <Route path='/' element={<HomePage />} /> */}
-                        <Route path='/' element={<ToolsPage />} />
-                        <Route path='/tools' element={<ToolsPage />} />
-                        <Route path='/about' element={<AboutPage />} />
+  return (
+    <div className='flex flex-col min-h-screen bg-bg-base text-text-base' dir='rtl'>
+      <AddToHomePrompt />
+      <ThemeProvider>
+        <BrowserRouter basename={import.meta.env.VITE_PUBLIC_APP_BASE}>
+          <Routes>
+            {/* root paths */}
+            {/* <Route path='/' element={<HomePage />} /> */}
+            <Route path='/' element={<ToolsPage />} />
+            <Route path='/tools' element={<ToolsPage />} />
+            <Route path='/about' element={<AboutPage />} />
 
 
-                        {/* forms roots */}
-                        <Route path='/forms/project-documentation' element={<DocumentationFormsPage />} />
-                        <Route path='/forms/certificate-of-appreciation' element={<CertificatesFormsPage />} />
+            {/* forms roots */}
+            <Route path='/forms/project-documentation' element={<DocumentationFormsPage />} />
+            <Route path='/forms/certificate-of-appreciation' element={<CertificatesFormsPage />} />
 
-                        {/* forms */}
-                        <Route path='/forms/project-documentation/1' element={<ProjectDocumentation1 />} />
-                        <Route path='/forms/project-documentation/2' element={<ProjectDocumentation2 />} />
-                        <Route path='/forms/certificate-of-appreciation/1' element={<CertificateOfAppreciationTemplate_1_Page />} />
-                        <Route path='/forms/certificate-of-appreciation/2' element={<CertificateOfAppreciationTemplate_2_Page />} />
-                        {/* <Route path='/forms/certificate-of-appreciation/3' element={<CertificateOfAppreciationTemplate_3_Page />} /> */}
-                        {/* <Route path='/forms/certificate-of-appreciation/4' element={<CertificateOfAppreciationTemplate_4_Page />} /> */}
-                        <Route path='/forms/certificate-of-appreciation/5' element={<CertificateOfAppreciationTemplate_5_Page />} />
-                        <Route path='/forms/certificate-of-appreciation/6' element={<CertificateOfAppreciationTemplate_6_Page />} />
-                        <Route path='/forms/certificate-of-appreciation/7' element={<CertificateOfAppreciationTemplate_7_Page />} />
-                        <Route path='/forms/certificate-of-appreciation/8' element={<CertificateOfAppreciationTemplate_8_Page />} />
-                        <Route path='/forms/certificate-of-appreciation/9' element={<CertificateOfAppreciationTemplate_9_Page />} />
+            {/* forms */}
+            <Route path='/forms/project-documentation/1' element={<ProjectDocumentation1 />} />
+            <Route path='/forms/project-documentation/2' element={<ProjectDocumentation2 />} />
+            <Route path='/forms/certificate-of-appreciation/1' element={<CertificateOfAppreciationTemplate_1_Page />} />
+            <Route path='/forms/certificate-of-appreciation/2' element={<CertificateOfAppreciationTemplate_2_Page />} />
+            {/* <Route path='/forms/certificate-of-appreciation/3' element={<CertificateOfAppreciationTemplate_3_Page />} /> */}
+            {/* <Route path='/forms/certificate-of-appreciation/4' element={<CertificateOfAppreciationTemplate_4_Page />} /> */}
+            <Route path='/forms/certificate-of-appreciation/5' element={<CertificateOfAppreciationTemplate_5_Page />} />
+            <Route path='/forms/certificate-of-appreciation/6' element={<CertificateOfAppreciationTemplate_6_Page />} />
+            <Route path='/forms/certificate-of-appreciation/7' element={<CertificateOfAppreciationTemplate_7_Page />} />
+            <Route path='/forms/certificate-of-appreciation/8' element={<CertificateOfAppreciationTemplate_8_Page />} />
+            <Route path='/forms/certificate-of-appreciation/9' element={<CertificateOfAppreciationTemplate_9_Page />} />
 
-                        {/* additional tools */}
-                        <Route path='/additional-tools/text-to-qrcode' element={<TextToQRcodePage />} />
-                    </Routes>
-                </BrowserRouter>
-            </ThemeProvider>
-        </div>
-    )
+            {/* additional tools */}
+            <Route path='/additional-tools/text-to-qrcode' element={<TextToQRcodePage />} />
+            <Route path='/additional-tools/classroom-tools' element={<ClassroomToolsPage />} />
+          </Routes>
+        </BrowserRouter>
+      </ThemeProvider>
+    </div>
+  )
 }
 
 
