@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { Dices, RotateCcw, Trash2, Maximize2, Minimize2, Edit2, HelpCircle } from "lucide-react"
+import { Dices, RotateCcw, HelpCircle } from "lucide-react"
 
 export interface QuestionToolState {
   questions: string; currentQuestion: string | null; isAnimating: boolean
@@ -9,7 +9,7 @@ export interface QuestionToolState {
 
 export default function QuestionTool({ state, setState }: { state: QuestionToolState, setState: (u: Partial<QuestionToolState>) => void }) {
   const { questions, currentQuestion, isAnimating } = state
-  const [isFullscreen, setIsFullscreen] = useState(false)
+  const [isFullscreen] = useState(false)
   const [scale, setScale] = useState(1)
   const [contentHeight, setContentHeight] = useState<number | string>('auto')
   const textareaRef = useRef<HTMLTextAreaElement>(null)
