@@ -41,7 +41,7 @@ export default function ClassroomToolsPage() {
     spinning: false,
     rotation: 0,
     winner: null
-  })
+  } as any)
 
   const audioRef = useRef<HTMLAudioElement | null>(null)
 
