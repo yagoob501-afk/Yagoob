@@ -25,6 +25,7 @@ export default function ClassroomToolsPage() {
   const [questionState, setQuestionState] = useState<QuestionToolState>({
     questions: "",
     currentQuestion: null,
+    excludedQuestions: [],
     isAnimating: false
   })
 
@@ -60,6 +61,8 @@ export default function ClassroomToolsPage() {
     return () => clearInterval(interval)
   }, [timerState.isRunning, timerState.timeLeft])
 
+
+
   // Alarm Sound Manager
   useEffect(() => {
     if (timerState.isFinished && !audioRef.current) {
@@ -70,6 +73,8 @@ export default function ClassroomToolsPage() {
     }
   }, [timerState.isFinished])
 
+
+
   const stopAlarm = () => {
     if (audioRef.current) {
       audioRef.current.pause()
@@ -78,6 +83,8 @@ export default function ClassroomToolsPage() {
     }
     setTimerState(prev => ({ ...prev, isFinished: false }))
   }
+
+
 
   // --- Navigation ---
   const tabs = [
