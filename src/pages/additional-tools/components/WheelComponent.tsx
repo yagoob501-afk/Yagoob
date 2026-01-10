@@ -253,7 +253,7 @@ const WheelComponent = ({
     ctx.fillStyle = primaryColor
     ctx.font = 'bold 1.5em ' + fontFamily
     currentSegmentRef.current = currentSegments[i]
-    isStartedRef.current && ctx.fillText(currentSegmentRef.current, centerX + 10, centerY + size + 50)
+    isStartedRef.current && ctx.fillText(currentSegmentRef.current, centerX, centerY + size + 20)
   }
 
   const clear = () => {
@@ -269,7 +269,10 @@ const WheelComponent = ({
         width={dimension}
         height={dimension}
         style={{
-          pointerEvents: isFinished && isOnlyOnce ? 'none' : 'auto'
+          pointerEvents: isFinished && isOnlyOnce ? 'none' : 'auto',
+          width: '100%',
+          height: 'auto',
+          maxWidth: dimension
         }}
       />
     </div>

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Play, Pause, RotateCcw, Maximize2, Clock, Bell } from "lucide-react"
+import { Play, Pause, RotateCcw, Maximize2, Minimize2, Clock, Bell } from "lucide-react"
 
 export interface TimerState {
   minutes: number
@@ -168,14 +168,12 @@ export default function TimerTool({ state, setState, stopAlarm }: TimerToolProps
           </button>
         </div>
       )}
-      {!isFullscreen && (
-        <button
-          onClick={toggleFullscreen}
-          className="absolute top-4 right-4 p-2 bg-white/50 rounded-lg hover:bg-white transition-colors"
-        >
-          <Maximize2 size={20} />
-        </button>
-      )}
+      <button
+        onClick={toggleFullscreen}
+        className="absolute top-4 right-4 p-2 bg-white/50 rounded-lg hover:bg-white transition-colors"
+      >
+        {isFullscreen ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
+      </button>
     </div>
   )
 }

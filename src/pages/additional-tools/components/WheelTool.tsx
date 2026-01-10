@@ -128,7 +128,7 @@ export default function WheelTool({ state, setState }: WheelToolProps) {
             )}
 
             {/* The Wheel Library Integration */}
-            <div className="relative wheel-container overflow-visible scale-[0.7] sm:scale-100 origin-center flex items-center justify-center">
+            <div className="relative wheel-container overflow-visible flex items-center justify-center w-full max-w-[500px] mx-auto">
               {hasEnoughItems ? (
                 <WheelComponent
                   segments={itemList}
@@ -138,7 +138,7 @@ export default function WheelTool({ state, setState }: WheelToolProps) {
                   contrastColor="white"
                   buttonText="ابدأ"
                   isOnlyOnce={false}
-                  size={window.innerWidth < 640 ? 200 : 250}
+                  size={250}
                   upDuration={1000}
                   downDuration={2000}
                   fontFamily="Cairo"
