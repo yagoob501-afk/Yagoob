@@ -105,7 +105,7 @@ export default function WheelTool({ state, setState }: WheelToolProps) {
               <p className="font-bold mb-1">تعليمات:</p>
               <ul className="list-disc list-inside space-y-1">
                 <li>يجب إضافة عنصرين على الأقل.</li>
-                <li>اضغط على زر المسح في منتصف العجلة للبدء.</li>
+                <li>اضغط على زر البدأ في منتصف العجلة للبدء.</li>
                 <li>العجلة تتجاوب مع تغيير الخيارات فوراً.</li>
               </ul>
             </div>
