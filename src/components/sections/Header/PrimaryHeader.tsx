@@ -11,8 +11,9 @@ function PrimaryHeader() {
       {/* Mobile Header */}
       <div className="lg:hidden">
         {/* Top Section - Logo and Title */}
-        <div className="flex items-center justify-center px-4 py-4 border-b border-primary-foreground/10 bg-accent-foreground">
+        <div className="flex items-center justify-center px-4 py-4 border-b border-primary-foreground/10 bg-primary-foreground/10">
           {/* Logo */}
+
           <div className="shrink-0 ml-4">
             <PrimaryLogo imgOnly />
           </div>
@@ -87,7 +88,7 @@ function PrimaryHeader() {
       {/* Desktop/Tablet Header */}
       <div className="hidden lg:block">
         {/* Top Section - Logo and Title */}
-        <div className="border-b border-primary-foreground/10 bg-accent-foreground">
+        <div className="border-b border-primary-foreground/10 bg-primary-foreground/10">
           <div className="container mx-auto px-6 py-5">
             <div className="flex items-center justify-center gap-6">
               {/* Logo */}
