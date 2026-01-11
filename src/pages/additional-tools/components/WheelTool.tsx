@@ -140,7 +140,7 @@ export default function WheelTool({ state, setState }: WheelToolProps) {
                   isOnlyOnce={false}
                   size={250}
                   upDuration={1000}
-                  downDuration={2000}
+                  downDuration={1000}
                   fontFamily="Cairo"
                 />
               ) : (

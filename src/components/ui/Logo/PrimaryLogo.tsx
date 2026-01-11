@@ -7,7 +7,7 @@ import Logo from "@/assets/logo-main.png";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 
-function PrimaryLogo() {
+function PrimaryLogo({ imgOnly }: { imgOnly?: boolean }) {
     const { t } = useTranslation();
     const [isOpen, setIsOpen] = useState(false);
 
@@ -20,9 +20,13 @@ function PrimaryLogo() {
                     className="max-w-14 cursor-pointer bg-[#f5f3da]"
                     onClick={() => setIsOpen(true)}
                 />
-                <p className="text-lg cursor-pointer">
-                    {t("logo_text")}
-                </p>
+                {
+                    imgOnly !== true && (
+                        <p className="text-lg cursor-pointer">
+                            {t("logo_text")}
+                        </p>
+                    )
+                }
             </HashLink>
 
             {/* Lightbox */}

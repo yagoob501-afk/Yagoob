@@ -120,7 +120,7 @@ function PrimaryAdditionalToolsSection() {
               transition={{ duration: 0.6, ease: "easeOut" }}
             >
               <PrimaryToolCard
-                title="مكتبة الطالب"
+                title="مكتبة الطالب التابعة لوزارة التربية"
                 description="جميع حقوق الطبع محفوظة لدى وزارة التربية - دولة الكويت ©2025"
                 link="https://elibrary.moe.edu.kw/StudentsLibrary"
                 blank

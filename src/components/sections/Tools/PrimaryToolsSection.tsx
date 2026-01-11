@@ -63,8 +63,15 @@ function PrimaryToolsSection({ hideNewestItems }: { hideNewestItems?: boolean })
             >
                 <div className="flex flex-col gap-7 w-full items-center">
                     <h3 className="font-semibold mb-7 text-center text-xl">
-                        اختر التصميم المناسب لك و قم بتعبئة البيانات<br />
-                        تستطيع عمل كل شيء بواسطة هاتفك دون الحاجة لجهاز كمبيوتر
+                        <h3 className="font-semibold mb-7 text-center text-lg xl:text-2xl whitespace-nowrap">
+                            منصة أدوات تعليمية تهدف إلى تسهيل عمل المعلم
+                            <br />
+                            و الإدارة المدرسية عبر نماذج جاهزة للطباعة
+                            <br />
+                            و أدوات رقمية ذكية، يمكن استخدامها مباشرة من الهاتف
+                            <br />
+                            دون الحاجة لجهاز كمبيوتر
+                        </h3>
                     </h3>
                     <PrimarySectionTitle
                         title="نماذج جاهزة للطباعة"
@@ -107,7 +114,7 @@ function PrimaryToolsSection({ hideNewestItems }: { hideNewestItems?: boolean })
 
                             <motion.div className="w-[370px] h-full">
                                 <PrimaryToolCard
-                                    title="نموذج توثيق فعالية 2"
+                                    title="نموذج توثيق نشاط مطور"
                                     description=""
                                     link="/forms/project-documentation/2"
                                     img={DocForm2}

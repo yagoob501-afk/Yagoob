@@ -49,7 +49,7 @@ function PrimaryFooter() {
                             <Send size={20} />
                         </a>
 
-                        <a href="https://www.instagram.com/yagoob_0?igsh=MWVlcGt0aGM3bWo0MA%3D%3D&utm_source=qr" target="_blank" className="hover:text-primary-foreground transition-colors">
+                        <a href="https://www.instagram.com/yaqoub.alanazi/?igsh=MWVlcGt0aGM3bWo0MA%3D%3D" target="_blank" className="hover:text-primary-foreground transition-colors">
                             <Instagram size={20} />
                         </a>
 
