@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Play, Pause, RotateCcw, Maximize2, Minimize2, Clock, Bell } from "lucide-react"
+import { Play, Pause, RotateCcw, Maximize2, Minimize2, Clock, Bell, Trash2 } from "lucide-react"
 
 export interface TimerState {
   minutes: number
@@ -10,6 +10,8 @@ export interface TimerState {
   totalTime: number
   isRunning: boolean
   isFinished: boolean
+  soundUrl?: string
+  tickSoundUrl?: string
 }
 
 interface TimerToolProps {
@@ -160,6 +162,55 @@ export default function TimerTool({ state, setState, stopAlarm }: TimerToolProps
               />
             </div>
           </div>
+
+          <div className="w-full space-y-4">
+            <div className="flex flex-col gap-2">
+              <label className="block text-sm font-bold text-center text-muted-foreground">صوت انتهاء الوقت (المنبه)</label>
+              <div className="flex gap-2 items-center">
+                <input
+                  type="file"
+                  accept="audio/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0]
+                    if (file) {
+                      const url = URL.createObjectURL(file)
+                      setState({ soundUrl: url })
+                    }
+                  }}
+                  className="flex-1 text-sm text-center bg-white file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
+                />
+                {state.soundUrl && (
+                  <button onClick={() => setState({ soundUrl: undefined })} className="p-2 text-destructive hover:bg-destructive/10 rounded-full" title="إزالة الصوت">
+                    <Trash2 size={18} />
+                  </button>
+                )}
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label className="block text-sm font-bold text-center text-muted-foreground">صوت الثواني (العقارب)</label>
+              <div className="flex gap-2 items-center">
+                <input
+                  type="file"
+                  accept="audio/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0]
+                    if (file) {
+                      const url = URL.createObjectURL(file)
+                      setState({ tickSoundUrl: url })
+                    }
+                  }}
+                  className="flex-1 text-sm text-center bg-white file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
+                />
+                {state.tickSoundUrl && (
+                  <button onClick={() => setState({ tickSoundUrl: undefined })} className="p-2 text-destructive hover:bg-destructive/10 rounded-full" title="إزالة الصوت">
+                    <Trash2 size={18} />
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+
           <button
             onClick={toggleTimer}
             className="btn-primary w-full py-4 text-lg sm:text-xl rounded-2xl shadow-lg"

@@ -1,17 +1,24 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { Clock, Dices, Users, Fan, Bell } from "lucide-react"
+import { RotateCcw } from "lucide-react"
 
-import TimerTool, { type TimerState } from "./components/TimerTool"
-import QuestionTool, { type QuestionToolState } from "./components/QuestionTool"
-import RandomStudentTool, { type RandomStudentState } from "./components/RandomStudentTool"
-import WheelTool, { type WheelState } from "./components/WheelTool"
+// Type imports for state
+import type { TimerState } from "./components/TimerTool"
+import type { QuestionToolState } from "./components/QuestionTool"
+import type { RandomStudentState } from "./components/RandomStudentTool"
+import type { RewardToolState } from "./components/RewardTool"
+
+// New view components
+import SetupView from "./components/SetupView"
+import RoundView from "./components/RoundView"
+
 import PrimaryHeader from "@/components/sections/Header/PrimaryHeader"
 import PrimaryFooter from "@/components/sections/Footer/PrimaryFooter"
 
 export default function ClassroomToolsPage() {
+  const [view, setView] = useState<'setup' | 'round'>('setup')
+
   // --- Master States ---
   const [timerState, setTimerState] = useState<TimerState>({
     minutes: 0,
@@ -19,7 +26,9 @@ export default function ClassroomToolsPage() {
     timeLeft: 0,
     totalTime: 0,
     isRunning: false,
-    isFinished: false
+    isFinished: false,
+    soundUrl: undefined,
+    tickSoundUrl: undefined
   })
 
   const [questionState, setQuestionState] = useState<QuestionToolState>({
@@ -36,16 +45,69 @@ export default function ClassroomToolsPage() {
     isAnimating: false
   })
 
-  const [wheelState, setWheelState] = useState<WheelState>({
-    itemsText: "",
-    spinning: false,
-    rotation: 0,
-    winner: null
-  } as any)
+  const [rewardState, setRewardState] = useState<RewardToolState>({
+    rewardsText: "",
+    excludedRewards: [],
+    currentReward: null,
+    isAnimating: false
+  })
 
   const audioRef = useRef<HTMLAudioElement | null>(null)
+  const tickAudioRef = useRef<HTMLAudioElement | null>(null)
 
-  // Global Timer Logic (Persistent)
+  // Load from local storage
+  useEffect(() => {
+    const savedTimer = localStorage.getItem('timerState')
+    const savedQuestion = localStorage.getItem('questionState')
+    const savedStudent = localStorage.getItem('studentState')
+    const savedReward = localStorage.getItem('rewardState')
+
+    if (savedTimer) {
+      // Only load settings (minutes/seconds/sounds), not running state
+      const parsed = JSON.parse(savedTimer)
+      // Ensure UI stays consistent
+      setTimerState(prev => ({
+        ...prev,
+        minutes: parsed.minutes,
+        seconds: parsed.seconds,
+        totalTime: parsed.minutes * 60 + parsed.seconds,
+        timeLeft: parsed.minutes * 60 + parsed.seconds,
+        soundUrl: parsed.soundUrl,
+        tickSoundUrl: parsed.tickSoundUrl
+      }))
+    }
+    if (savedQuestion) setQuestionState(JSON.parse(savedQuestion))
+    if (savedStudent) setStudentState(JSON.parse(savedStudent))
+    if (savedReward) setRewardState(JSON.parse(savedReward))
+  }, [])
+
+  // Save to local storage
+  useEffect(() => {
+    localStorage.setItem('timerState', JSON.stringify({ minutes: timerState.minutes, seconds: timerState.seconds, soundUrl: timerState.soundUrl, tickSoundUrl: timerState.tickSoundUrl }))
+  }, [timerState.minutes, timerState.seconds, timerState.soundUrl, timerState.tickSoundUrl])
+
+  useEffect(() => {
+    localStorage.setItem('questionState', JSON.stringify(questionState))
+  }, [questionState])
+
+  useEffect(() => {
+    localStorage.setItem('studentState', JSON.stringify(studentState))
+  }, [studentState])
+
+  useEffect(() => {
+    localStorage.setItem('rewardState', JSON.stringify(rewardState))
+  }, [rewardState])
+
+  // Reset All Data
+  const resetAllData = () => {
+    localStorage.removeItem('timerState')
+    localStorage.removeItem('questionState')
+    localStorage.removeItem('studentState')
+    localStorage.removeItem('rewardState')
+    window.location.reload()
+  }
+
+  // Global Timer Execution
   useEffect(() => {
     let interval: any
     if (timerState.isRunning && timerState.timeLeft > 0) {
@@ -56,52 +118,38 @@ export default function ClassroomToolsPage() {
           }
           return { ...prev, timeLeft: prev.timeLeft - 1 }
         })
+
+        // Play tick sound (throttled/managed by browser mostly, but logic is here)
+        if (timerState.tickSoundUrl) {
+          if (tickAudioRef.current) {
+            tickAudioRef.current.currentTime = 0
+            tickAudioRef.current.play().catch(() => { })
+          } else {
+            const audio = new Audio(timerState.tickSoundUrl)
+            audio.volume = 0.5
+            audio.play().catch(() => { })
+            tickAudioRef.current = audio
+          }
+        }
       }, 1000)
     }
     return () => clearInterval(interval)
-  }, [timerState.isRunning, timerState.timeLeft])
+  }, [timerState.isRunning, timerState.timeLeft, timerState.tickSoundUrl])
 
-
-
-  // Alarm Sound Manager
+  // Alarm Sound Logic
   useEffect(() => {
     if (timerState.isFinished && !audioRef.current) {
-      const audio = new Audio('/sounds/alarm.mp3')
+      const audio = new Audio(timerState.soundUrl || '/sounds/alarm.mp3')
       audio.loop = true
       audio.play().catch(err => console.log('Audio wait interaction:', err))
       audioRef.current = audio
-    }
-  }, [timerState.isFinished])
-
-
-
-  const stopAlarm = () => {
-    if (audioRef.current) {
+    } else if (!timerState.isFinished && audioRef.current) {
+      // Stop alarm if isFinished becomes false
       audioRef.current.pause()
       audioRef.current.currentTime = 0
       audioRef.current = null
     }
-    setTimerState(prev => ({ ...prev, isFinished: false }))
-  }
-
-
-
-  // --- Navigation ---
-  const tabs = [
-    { id: "timer", label: "المؤقّت", icon: Clock },
-    { id: "question", label: "سؤال عشوائي", icon: Dices },
-    { id: "student", label: "طالب عشوائي", icon: Users },
-    { id: "wheel", label: "العجلة", icon: Fan },
-  ]
-  const [activeTab, setActiveTab] = useState(tabs[0].id)
-
-  const getGradientColors = () => {
-    if (timerState.isFinished) return ['#EF4444', '#DC2626', '#B91C1C']
-    const percentage = (timerState.timeLeft / timerState.totalTime) * 100
-    if (percentage > 66) return ['#10B981', '#059669', '#047857']
-    if (percentage > 33) return ['#F59E0B', '#D97706', '#B45309']
-    return ['#EF4444', '#DC2626', '#B91C1C']
-  }
+  }, [timerState.isFinished, timerState.soundUrl])
 
   return (
     <div className="min-h-screen flex flex-col bg-bg-layout rtl text-right">
@@ -110,95 +158,48 @@ export default function ClassroomToolsPage() {
       <main className="flex-1 container mx-auto px-4 py-8">
         <div className="max-w-7xl mx-auto flex flex-col items-center">
 
-          <div className="text-center mb-8">
+          <div className="text-center mb-8 relative w-full">
             <h1 className="text-4xl font-bold text-heading mb-3">أدوات الصف التفاعلية</h1>
-            <p className="text-lg text-muted-foreground">وسائل ذكية لتعزيز الحماس والتفاعل التعليمي</p>
-          </div>
+            <p className="text-lg text-muted-foreground">{view === 'setup' ? 'إعداد البيانات' : 'الجولة التفاعلية'}</p>
 
-          {/* Tabs */}
-          <div className="flex flex-wrap gap-2 justify-center mb-10 bg-white p-2 rounded-3xl shadow-sm border border-border">
-            {tabs.map((tab) => {
-              const Icon = tab.icon
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`px-5 py-3 rounded-2xl font-medium transition-all flex items-center gap-2 ${activeTab === tab.id
-                    ? 'bg-primary text-white shadow-md'
-                    : 'bg-transparent text-muted-foreground hover:bg-bg-layout'
-                    }`}
-                >
-                  <Icon size={18} />
-                  {tab.label}
-                </button>
-              )
-            })}
-          </div>
-
-          {/* Tool Container */}
-          <div className="w-full bg-white rounded-[2.5rem] shadow-xl border border-border overflow-hidden relative">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeTab}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.2 }}
-              >
-                {activeTab === "timer" && (
-                  <TimerTool
-                    state={timerState}
-                    setState={(u) => setTimerState(p => ({ ...p, ...u }))}
-                    stopAlarm={stopAlarm}
-                  />
-                )}
-                {activeTab === "question" && (
-                  <QuestionTool
-                    state={questionState}
-                    setState={(u) => setQuestionState(p => ({ ...p, ...u }))}
-                  />
-                )}
-                {activeTab === "student" && (
-                  <RandomStudentTool
-                    state={studentState}
-                    setState={(u) => setStudentState(p => ({ ...p, ...u }))}
-                  />
-                )}
-                {activeTab === "wheel" && (
-                  <WheelTool
-                    state={wheelState}
-                    setState={(u) => setWheelState(p => ({ ...p, ...u }))}
-                  />
-                )}
-              </motion.div>
-            </AnimatePresence>
-          </div>
-
-          {/* Mini Widget */}
-          {activeTab !== "timer" && (timerState.isRunning || timerState.isFinished || (timerState.timeLeft > 0 && timerState.timeLeft < timerState.totalTime)) && (
-            <motion.div
-              initial={{ scale: 0 }} animate={{ scale: 1 }}
-              className="fixed bottom-10 right-10 z-[100] cursor-pointer"
-              onClick={() => setActiveTab("timer")}
+            <button
+              onClick={() => {
+                if (confirm('هل أنت متأكد من رغبتك في حذف جميع البيانات وإعادة تعيين الأدوات؟')) {
+                  resetAllData()
+                }
+              }}
+              className="absolute top-0 left-0 text-xs text-destructive hover:bg-destructive/10 px-3 py-1 rounded-full transition-colors flex items-center gap-1"
             >
-              <div className={`p-4 bg-white rounded-3xl shadow-2xl border-2 flex items-center gap-4 ${timerState.isFinished ? 'border-destructive animate-pulse' : 'border-primary/20'}`}>
-                {timerState.isFinished ? (
-                  <>
-                    <Bell size={40} className="text-destructive animate-[swing_0.5s_infinite]" />
-                    <div className="flex flex-col"><span className="font-bold text-destructive">انتهى الوقت!</span><span className="text-xs">اضغط للإيقاف</span></div>
-                  </>
-                ) : (
-                  <>
-                    <div className="relative w-12 h-12">
-                      <svg className="w-full h-full -rotate-90"><circle cx="24" cy="24" r="20" stroke="#eee" strokeWidth="4" fill="none" /><circle cx="24" cy="24" r="20" stroke={getGradientColors()[0]} strokeWidth="4" fill="none" strokeDasharray={125.6} strokeDashoffset={125.6 - (125.6 * (timerState.timeLeft / timerState.totalTime))} strokeLinecap="round" /></svg>
-                      <Clock size={16} className="absolute inset-0 m-auto text-primary" />
-                    </div>
-                    <div className="flex flex-col"><span className="font-bold">المؤقت</span><span className="font-mono text-sm">{Math.floor(timerState.timeLeft / 60)}:{String(timerState.timeLeft % 60).padStart(2, '0')}</span></div>
-                  </>
-                )}
-              </div>
-            </motion.div>
+              <RotateCcw size={12} /> إعادة تعيين الكل
+            </button>
+          </div>
+
+          {view === 'setup' ? (
+            <SetupView
+              timerState={timerState}
+              setTimerState={(u) => setTimerState(p => ({ ...p, ...u }))}
+              studentState={studentState}
+              setStudentState={(u) => setStudentState(p => ({ ...p, ...u }))}
+              questionState={questionState}
+              setQuestionState={(u) => setQuestionState(p => ({ ...p, ...u }))}
+              rewardState={rewardState}
+              setRewardState={(u) => setRewardState(p => ({ ...p, ...u }))}
+              onStart={() => setView('round')}
+            />
+          ) : (
+            <RoundView
+              timerState={timerState}
+              setTimerState={(u) => setTimerState(p => ({ ...p, ...u }))}
+              studentState={studentState}
+              setStudentState={(u) => setStudentState(p => ({ ...p, ...u }))}
+              questionState={questionState}
+              setQuestionState={(u) => setQuestionState(p => ({ ...p, ...u }))}
+              rewardState={rewardState}
+              setRewardState={(u) => setRewardState(p => ({ ...p, ...u }))}
+              onBack={() => setView('setup')}
+            />
           )}
+
         </div>
       </main>
       <PrimaryFooter />
