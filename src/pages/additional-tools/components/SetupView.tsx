@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef, useEffect } from "react"
 import { Users, HelpCircle, Gift, Clock, Trash2, ArrowLeft } from "lucide-react"
 import type { TimerState } from "./TimerTool"
 import type { RandomStudentState } from "./RandomStudentTool"
@@ -34,6 +34,35 @@ export default function SetupView({
   const [activeTab, setActiveTab] = useState<'students' | 'questions' | 'rewards' | 'timer'>('students')
   const { isOpen: isTourActive } = useTour()
 
+  // Refs for each tab button
+  const studentsTabRef = useRef<HTMLButtonElement>(null)
+  const questionsTabRef = useRef<HTMLButtonElement>(null)
+  const rewardsTabRef = useRef<HTMLButtonElement>(null)
+  const timerTabRef = useRef<HTMLButtonElement>(null)
+
+  // Auto-scroll active tab into view
+  useEffect(() => {
+    const tabRefs = {
+      students: studentsTabRef,
+      questions: questionsTabRef,
+      rewards: rewardsTabRef,
+      timer: timerTabRef
+    }
+
+    const activeTabRef = tabRefs[activeTab]
+
+    // Scroll the active tab into view with a slight delay to ensure DOM is ready
+    if (activeTabRef.current) {
+      setTimeout(() => {
+        activeTabRef.current?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+          inline: 'center'
+        })
+      }, 100)
+    }
+  }, [activeTab])
+
   const handleTimeChange = (type: 'm' | 's', v: number) => {
     const m = type === 'm' ? v : timerState.minutes
     const s = type === 's' ? v : timerState.seconds
@@ -45,6 +74,7 @@ export default function SetupView({
     <div className="w-full bg-white rounded-[2.5rem] shadow-xl border border-border overflow-hidden min-h-[600px] flex flex-col">
       <div className="flex border-b border-gray-100 bg-gray-50/50 p-2 gap-2 overflow-x-auto" data-tour="setup-tabs">
         <button
+          ref={studentsTabRef}
           onClick={() => setActiveTab('students')}
           className={`flex-1 py-3 px-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${activeTab === 'students' ? 'bg-primary text-white shadow-md' : 'text-muted-foreground hover:bg-gray-100'}`}
           data-tour="tab-students"
@@ -52,6 +82,7 @@ export default function SetupView({
           <Users size={18} /> الطلاب
         </button>
         <button
+          ref={questionsTabRef}
           onClick={() => setActiveTab('questions')}
           className={`flex-1 py-3 px-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${activeTab === 'questions' ? 'bg-primary text-white shadow-md' : 'text-muted-foreground hover:bg-gray-100'}`}
           data-tour="tab-questions"
@@ -59,6 +90,7 @@ export default function SetupView({
           <HelpCircle size={18} /> الأسئلة
         </button>
         <button
+          ref={rewardsTabRef}
           onClick={() => setActiveTab('rewards')}
           className={`flex-1 py-3 px-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${activeTab === 'rewards' ? 'bg-primary text-white shadow-md' : 'text-muted-foreground hover:bg-gray-100'}`}
           data-tour="tab-rewards"
@@ -66,6 +98,7 @@ export default function SetupView({
           <Gift size={18} /> المكافآت
         </button>
         <button
+          ref={timerTabRef}
           onClick={() => setActiveTab('timer')}
           className={`flex-1 py-3 px-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${activeTab === 'timer' ? 'bg-primary text-white shadow-md' : 'text-muted-foreground hover:bg-gray-100'}`}
           data-tour="tab-timer"
