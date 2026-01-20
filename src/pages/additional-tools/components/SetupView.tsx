@@ -137,7 +137,7 @@ export default function SetupView({
               data-tour="setup-questions"
             />
             {questionState.excludedQuestions.length > 0 && (
-              <div className="bg-red-50 p-4 rounded-2xl border border-red-100">
+              <div className="bg-red-50 p-4 rounded-2xl border border-red-100" data-tour="demo-excluded-questions">
                 <h4 className="text-sm font-bold text-red-600 mb-2">الأسئلة المستبعدة ({questionState.excludedQuestions.length})</h4>
                 <div className="flex flex-wrap gap-2">
                   {questionState.excludedQuestions.map((q, i) => (

@@ -173,28 +173,39 @@ export default function ClassroomToolsPage() {
       <main className="flex-1 container mx-auto px-4 py-8">
         <div className="max-w-7xl mx-auto flex flex-col items-center">
 
-          <div className="text-center mb-8 relative w-full">
-            <h1 className="text-4xl font-bold text-heading mb-3">أدوات الصف التفاعلية</h1>
-            <p className="text-lg text-muted-foreground">{view === 'setup' ? 'إعداد البيانات' : 'الجولة التفاعلية'}</p>
+          <div className="mb-8 w-full">
+            {/* Buttons row - responsive layout */}
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+              {/* How to Use button - on the right (RTL) */}
+              <button
+                onClick={() => startTour(classroomToolsSteps)}
+                className="text-sm font-semibold text-white bg-primary hover:bg-primary/90 px-4 py-2.5 rounded-xl transition-all flex items-center justify-center gap-2 w-full sm:w-auto shadow-md hover:shadow-lg animate-pulse sm:order-first"
+              >
+                <HelpCircle size={18} /> شرح الاستخدام
+              </button>
 
-            <button
-              onClick={() => {
-                if (confirm('هل أنت متأكد من رغبتك في حذف جميع البيانات وإعادة تعيين الأدوات؟')) {
-                  resetAllData()
-                }
-              }}
-              className="absolute top-0 left-0 text-xs text-destructive hover:bg-destructive/10 px-3 py-1 rounded-full transition-colors flex items-center gap-1"
-              data-tour="reset-btn"
-            >
-              <RotateCcw size={12} /> إعادة تعيين الكل
-            </button>
+              {/* Spacer for center alignment on larger screens */}
+              <div className="hidden sm:block sm:flex-1" />
 
-            <button
-              onClick={() => startTour(classroomToolsSteps)}
-              className="absolute top-0 right-0 text-xs text-primary hover:bg-primary/10 px-3 py-1 rounded-full transition-colors flex items-center gap-1 animate-pulse"
-            >
-              <HelpCircle size={12} /> شرح الاستخدام
-            </button>
+              {/* Reset All button - on the left (RTL) */}
+              <button
+                onClick={() => {
+                  if (confirm('هل أنت متأكد من رغبتك في حذف جميع البيانات وإعادة تعيين الأدوات؟')) {
+                    resetAllData()
+                  }
+                }}
+                className="text-sm font-semibold text-destructive bg-destructive/10 hover:bg-destructive/20 border-2 border-destructive/30 px-4 py-2.5 rounded-xl transition-all flex items-center justify-center gap-2 w-full sm:w-auto shadow-sm hover:shadow-md sm:order-last"
+                data-tour="reset-btn"
+              >
+                <RotateCcw size={18} /> إعادة تعيين الكل
+              </button>
+            </div>
+
+            {/* Title and subtitle - centered */}
+            <div className="text-center">
+              <h1 className="text-4xl font-bold text-heading mb-3">أدوات الصف التفاعلية</h1>
+              <p className="text-lg text-muted-foreground">{view === 'setup' ? 'إعداد البيانات' : 'الجولة التفاعلية'}</p>
+            </div>
           </div>
 
           {view === 'setup' ? (
