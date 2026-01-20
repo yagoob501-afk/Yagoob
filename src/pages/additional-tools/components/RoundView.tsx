@@ -158,7 +158,10 @@ export default function RoundView({
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
         {/* Student Card */}
-        <div className={`relative bg-white rounded-3xl p-6 shadow-sm border-2 transition-all min-h-[250px] flex flex-col items-center justify-center gap-4 text-center overflow-hidden ${phase === 'selecting_student' ? 'border-primary shadow-xl scale-105 z-10' : 'border-border'} ${studentDisabled ? 'opacity-50 grayscale' : ''}`}>
+        <div
+          className={`relative bg-white rounded-3xl p-6 shadow-sm border-2 transition-all min-h-[250px] flex flex-col items-center justify-center gap-4 text-center overflow-hidden ${phase === 'selecting_student' ? 'border-primary shadow-xl scale-105 z-10' : 'border-border'} ${studentDisabled ? 'opacity-50 grayscale' : ''}`}
+          data-tour="round-student-card"
+        >
           <div className="absolute top-0 right-0 p-4 opacity-5">
             <Users size={120} />
           </div>
@@ -177,7 +180,10 @@ export default function RoundView({
         </div>
 
         {/* Question Card */}
-        <div className={`relative bg-white rounded-3xl p-6 shadow-sm border-2 transition-all min-h-[250px] flex flex-col items-center justify-center gap-4 text-center overflow-hidden ${phase === 'selecting_question' ? 'border-yellow-500 shadow-xl scale-105 z-10' : 'border-border'} ${questionDisabled ? 'opacity-50 grayscale' : ''}`}>
+        <div
+          className={`relative bg-white rounded-3xl p-6 shadow-sm border-2 transition-all min-h-[250px] flex flex-col items-center justify-center gap-4 text-center overflow-hidden ${phase === 'selecting_question' ? 'border-yellow-500 shadow-xl scale-105 z-10' : 'border-border'} ${questionDisabled ? 'opacity-50 grayscale' : ''}`}
+          data-tour="round-question-card"
+        >
           <div className="absolute top-0 right-0 p-4 opacity-5">
             <HelpCircle size={120} />
           </div>
@@ -196,7 +202,10 @@ export default function RoundView({
         </div>
 
         {/* Reward Card */}
-        <div className={`relative bg-white rounded-3xl p-6 shadow-sm border-2 transition-all min-h-[250px] flex flex-col items-center justify-center gap-4 text-center overflow-hidden ${phase === 'selecting_reward' ? 'border-pink-500 shadow-xl scale-105 z-10' : 'border-border'}`}>
+        <div
+          className={`relative bg-white rounded-3xl p-6 shadow-sm border-2 transition-all min-h-[250px] flex flex-col items-center justify-center gap-4 text-center overflow-hidden ${phase === 'selecting_reward' ? 'border-pink-500 shadow-xl scale-105 z-10' : 'border-border'}`}
+          data-tour="round-reward-card"
+        >
           <div className="absolute top-0 right-0 p-4 opacity-5">
             <Gift size={120} />
           </div>
@@ -232,6 +241,7 @@ export default function RoundView({
             }}
             disabled={timerState.isRunning || ['selecting_student', 'selecting_question', 'selecting_reward'].includes(phase)}
             className="px-6 py-4 rounded-2xl font-bold text-muted-foreground hover:bg-gray-100 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            data-tour="round-back-btn"
           >
             <RotateCcw size={20} /> تعديل البيانات
           </button>
@@ -240,6 +250,7 @@ export default function RoundView({
             onClick={handleSelectAll}
             disabled={['selecting_student', 'selecting_question', 'selecting_reward'].includes(phase) || timerState.isRunning}
             className="px-8 py-4 rounded-2xl font-bold bg-white border-2 border-primary text-primary hover:bg-primary/5 shadow-md flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            data-tour="round-start-selection"
           >
             <Dices size={24} /> {displayStudent ? 'اختيار جديد' : 'بدء الاختيار'}
           </button>
@@ -286,6 +297,7 @@ export default function RoundView({
                 ? 'bg-yellow-100 text-yellow-600 hover:bg-yellow-200'
                 : 'bg-primary text-white hover:bg-primary/90 hover:scale-105'
               } disabled:opacity-50 disabled:grayscale disabled:pointer-events-none`}
+            data-tour="round-start-timer"
           >
             {timerState.isFinished ? (
               <> <Bell size={32} fill="currentColor" /> إيقاف المنبه </>

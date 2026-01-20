@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { RotateCcw } from "lucide-react"
+import { RotateCcw, HelpCircle } from "lucide-react"
 
 // Type imports for state
 import type { TimerState } from "./components/TimerTool"
@@ -16,8 +16,23 @@ import RoundView from "./components/RoundView"
 import PrimaryHeader from "@/components/sections/Header/PrimaryHeader"
 import PrimaryFooter from "@/components/sections/Footer/PrimaryFooter"
 
+import { useTour } from "@/components/tour/TourProvider"
+import { classroomToolsSteps } from "@/components/tour/steps"
+
 export default function ClassroomToolsPage() {
   const [view, setView] = useState<'setup' | 'round'>('setup')
+  const { startTour } = useTour()
+
+  useEffect(() => {
+    const hasSeenTour = localStorage.getItem('tour_seen_classroom_tools')
+    if (!hasSeenTour) {
+      // Small delay to ensure render
+      setTimeout(() => {
+        startTour(classroomToolsSteps)
+        localStorage.setItem('tour_seen_classroom_tools', 'true')
+      }, 1000)
+    }
+  }, [startTour])
 
   // --- Master States ---
   const [timerState, setTimerState] = useState<TimerState>({
@@ -169,8 +184,16 @@ export default function ClassroomToolsPage() {
                 }
               }}
               className="absolute top-0 left-0 text-xs text-destructive hover:bg-destructive/10 px-3 py-1 rounded-full transition-colors flex items-center gap-1"
+              data-tour="reset-btn"
             >
               <RotateCcw size={12} /> إعادة تعيين الكل
+            </button>
+
+            <button
+              onClick={() => startTour(classroomToolsSteps)}
+              className="absolute top-0 right-0 text-xs text-primary hover:bg-primary/10 px-3 py-1 rounded-full transition-colors flex items-center gap-1 animate-pulse"
+            >
+              <HelpCircle size={12} /> شرح الاستخدام
             </button>
           </div>
 

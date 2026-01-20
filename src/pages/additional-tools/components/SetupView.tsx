@@ -41,28 +41,32 @@ export default function SetupView({
 
   return (
     <div className="w-full bg-white rounded-[2.5rem] shadow-xl border border-border overflow-hidden min-h-[600px] flex flex-col">
-      <div className="flex border-b border-gray-100 bg-gray-50/50 p-2 gap-2 overflow-x-auto">
+      <div className="flex border-b border-gray-100 bg-gray-50/50 p-2 gap-2 overflow-x-auto" data-tour="setup-tabs">
         <button
           onClick={() => setActiveTab('students')}
           className={`flex-1 py-3 px-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${activeTab === 'students' ? 'bg-primary text-white shadow-md' : 'text-muted-foreground hover:bg-gray-100'}`}
+          data-tour="tab-students"
         >
           <Users size={18} /> الطلاب
         </button>
         <button
           onClick={() => setActiveTab('questions')}
           className={`flex-1 py-3 px-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${activeTab === 'questions' ? 'bg-primary text-white shadow-md' : 'text-muted-foreground hover:bg-gray-100'}`}
+          data-tour="tab-questions"
         >
           <HelpCircle size={18} /> الأسئلة
         </button>
         <button
           onClick={() => setActiveTab('rewards')}
           className={`flex-1 py-3 px-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${activeTab === 'rewards' ? 'bg-primary text-white shadow-md' : 'text-muted-foreground hover:bg-gray-100'}`}
+          data-tour="tab-rewards"
         >
           <Gift size={18} /> المكافآت
         </button>
         <button
           onClick={() => setActiveTab('timer')}
           className={`flex-1 py-3 px-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${activeTab === 'timer' ? 'bg-primary text-white shadow-md' : 'text-muted-foreground hover:bg-gray-100'}`}
+          data-tour="tab-timer"
         >
           <Clock size={18} /> الوقت
         </button>
@@ -80,6 +84,7 @@ export default function SetupView({
               onChange={(e) => setStudentState({ studentsText: e.target.value })}
               placeholder="اكتب أسماء الطلاب هنا (كل اسم في سطر مستقل)..."
               className="flex-1 w-full p-4 rounded-2xl border-2 border-border focus:border-primary outline-none resize-none min-h-[300px]"
+              data-tour="setup-students"
             />
             {studentState.excludedStudents.length > 0 && (
               <div className="bg-red-50 p-4 rounded-2xl border border-red-100">
@@ -112,6 +117,7 @@ export default function SetupView({
               onChange={(e) => setQuestionState({ questions: e.target.value })}
               placeholder="اكتب الأسئلة هنا (كل سؤال في سطر مستقل)..."
               className="flex-1 w-full p-4 rounded-2xl border-2 border-border focus:border-primary outline-none resize-none min-h-[300px]"
+              data-tour="setup-questions"
             />
             {questionState.excludedQuestions.length > 0 && (
               <div className="bg-red-50 p-4 rounded-2xl border border-red-100">
@@ -144,13 +150,14 @@ export default function SetupView({
               onChange={(e) => setRewardState({ rewardsText: e.target.value })}
               placeholder="اكتب المكافآت هنا (كل مكافأة في سطر مستقل)..."
               className="flex-1 w-full p-4 rounded-2xl border-2 border-border focus:border-primary outline-none resize-none min-h-[300px]"
+              data-tour="setup-rewards"
             />
           </div>
         )}
 
         {activeTab === 'timer' && (
           <div className="flex-1 flex flex-col items-center justify-center gap-8 animate-in fade-in slide-in-from-bottom-4 duration-300">
-            <div className="flex gap-4 sm:gap-6 justify-center items-center bg-gray-50 p-8 rounded-[2rem] border border-border">
+            <div className="flex gap-4 sm:gap-6 justify-center items-center bg-gray-50 p-8 rounded-[2rem] border border-border" data-tour="setup-timer">
               <div className="text-center">
                 <label className="block text-sm font-bold mb-2">دقائق</label>
                 <input
@@ -229,7 +236,8 @@ export default function SetupView({
       <div className="p-6 bg-gray-50 border-t border-gray-100 flex justify-end">
         <button
           onClick={onStart}
-          className="bg-primary hover:bg-primary/90 text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transition-all flex items-center gap-3"
+          className="bg-primary hover:bg-primary/90 text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transition-all flex items-center gap-3 active:scale-95 duration-200"
+          data-tour="setup-start-btn"
         >
           ابدأ الجولة <ArrowLeft className="rtl:rotate-180" size={24} />
         </button>
