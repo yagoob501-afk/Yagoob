@@ -36,6 +36,11 @@ export const classroomToolsSteps: Step[] = [
     target: '[data-tour="setup-students"]',
     content: 'هنا يمكنك إضافة أسماء طلابك. اكتب كل اسم في سطر جديد، أو انسخ القائمة والصقها مباشرة.',
   },
+  // 3b. Demo Excluded Students (restoration explanation)
+  {
+    target: '[data-tour="demo-excluded-students"]',
+    content: 'عندما تستبعد طالباً أثناء الجولة، سيظهر هنا. يمكنك الضغط عليه لإعادته للقائمة النشطة.',
+  },
 
   // 4. Questions Tab (Force Click)
   {
@@ -50,6 +55,11 @@ export const classroomToolsSteps: Step[] = [
   {
     target: '[data-tour="setup-questions"]',
     content: 'أضف أسئلتك هنا، سؤال لكل سطر. سيتم اختيارها عشوائياً لاحقاً.',
+  },
+  // 5b. Demo Excluded Questions (restoration explanation)
+  {
+    target: '[data-tour="demo-excluded-questions"]',
+    content: 'وكذلك الأسئلة المستبعدة ستظهر هنا. اضغط على أي سؤال لإعادته للقائمة النشطة.',
   },
 
   // 6. Rewards Tab (Force Click)

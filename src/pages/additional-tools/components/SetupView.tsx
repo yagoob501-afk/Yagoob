@@ -6,6 +6,7 @@ import type { TimerState } from "./TimerTool"
 import type { RandomStudentState } from "./RandomStudentTool"
 import type { QuestionToolState } from "./QuestionTool"
 import type { RewardToolState } from "./RewardTool"
+import { useTour } from "@/components/tour/TourProvider"
 
 interface SetupViewProps {
   timerState: TimerState
@@ -31,6 +32,7 @@ export default function SetupView({
   onStart
 }: SetupViewProps) {
   const [activeTab, setActiveTab] = useState<'students' | 'questions' | 'rewards' | 'timer'>('students')
+  const { isOpen: isTourActive } = useTour()
 
   const handleTimeChange = (type: 'm' | 's', v: number) => {
     const m = type === 'm' ? v : timerState.minutes
@@ -103,6 +105,21 @@ export default function SetupView({
                 </div>
               </div>
             )}
+            {/* Demo excluded students - only shown during tour */}
+            {isTourActive && studentState.excludedStudents.length === 0 && (
+              <div className="bg-red-50 p-4 rounded-2xl border border-red-100" data-tour="demo-excluded-students">
+                <h4 className="text-sm font-bold text-red-600 mb-2">المستبعدون (0)</h4>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    className="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1 rounded-full text-xs flex items-center gap-1 transition-colors animate-pulse"
+                    title="مثال: اضغط لإعادة الطالب للقائمة"
+                  >
+                    محمد (مثال) <Trash2 size={10} className="rotate-45" />
+                  </button>
+                </div>
+                <p className="text-xs text-red-600 mt-2 opacity-70">💡 هنا ستظهر أسماء الطلاب المستبعدين. اضغط على الاسم لإعادته للقائمة.</p>
+              </div>
+            )}
           </div>
         )}
 
@@ -136,8 +153,24 @@ export default function SetupView({
                 </div>
               </div>
             )}
+            {/* Demo excluded questions - only shown during tour */}
+            {isTourActive && questionState.excludedQuestions.length === 0 && (
+              <div className="bg-red-50 p-4 rounded-2xl border border-red-100" data-tour="demo-excluded-questions">
+                <h4 className="text-sm font-bold text-red-600 mb-2">الأسئلة المستبعدة (0)</h4>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    className="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1 rounded-full text-xs flex items-center gap-1 transition-colors animate-pulse"
+                    title="مثال: اضغط لإعادة السؤال للقائمة"
+                  >
+                    ما هو العدد الأولي؟ (مثال) <Trash2 size={10} className="rotate-45" />
+                  </button>
+                </div>
+                <p className="text-xs text-red-600 mt-2 opacity-70">💡 هنا ستظهر الأسئلة المستبعدة. اضغط على السؤال لإعادته للقائمة.</p>
+              </div>
+            )}
           </div>
         )}
+
 
         {activeTab === 'rewards' && (
           <div className="flex-1 flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-4 duration-300">
