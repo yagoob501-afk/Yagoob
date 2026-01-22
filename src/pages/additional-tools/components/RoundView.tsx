@@ -143,10 +143,10 @@ export default function RoundView({
     setQuestionDisabled(false)
   }
 
-  const handleStartTimer = () => {
-    setTimerState({ isRunning: true })
-    setPhase('running')
-  }
+  // const handleStartTimer = () => {
+  //   setTimerState({ isRunning: true })
+  //   setPhase('running')
+  // }
 
   const handleReselectReward = async () => {
     setDisplayReward(null)

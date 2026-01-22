@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Play, Pause, RotateCcw, Maximize2, Minimize2, Clock, Bell, Trash2 } from "lucide-react"
+import { Play, Pause, RotateCcw, Maximize2, Minimize2, Clock, Bell } from "lucide-react"
 
 export interface TimerState {
   minutes: number
