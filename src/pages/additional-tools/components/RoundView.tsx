@@ -1,12 +1,13 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Users, HelpCircle, Gift, Play, RotateCcw, Ban, Pause, Dices, Bell } from "lucide-react"
+import { Users, HelpCircle, Gift, RotateCcw, Ban, Dices, Bell } from "lucide-react"
 import type { TimerState } from "./TimerTool"
 import type { RandomStudentState } from "./RandomStudentTool"
 import type { QuestionToolState } from "./QuestionTool"
 import type { RewardToolState } from "./RewardTool"
 import confetti from "canvas-confetti"
+import { classroomToolsSteps } from "@/components/tour/steps"
 
 interface RoundViewProps {
   timerState: TimerState
@@ -18,6 +19,7 @@ interface RoundViewProps {
   rewardState: RewardToolState
   setRewardState: (u: Partial<RewardToolState>) => void
   onBack: () => void
+  startTour: (steps: any) => void
 }
 
 type CardType = 'student' | 'question' | 'reward'
@@ -30,7 +32,8 @@ export default function RoundView({
   questionState,
   setQuestionState,
   rewardState,
-  onBack
+  onBack,
+  startTour
 }: RoundViewProps) {
 
   const [phase, setPhase] = useState<'idle' | 'selecting_student' | 'selecting_question' | 'selecting_reward' | 'ready' | 'running' | 'finished'>('idle')
@@ -105,7 +108,11 @@ export default function RoundView({
     setDisplayStudent(null)
     setDisplayQuestion(null)
     setDisplayReward(null)
-    setTimerState({ isRunning: false, isFinished: false, timeLeft: timerState.totalTime })
+    // 0. Only reset timer IF it's not already running and not finished?
+    // Actually, user wants it decoupled. So we don't touch timer here.
+    // If user wants to reset timer, they use the global reset button.
+    // setTimerState({ isRunning: false, isFinished: false, timeLeft: timerState.totalTime }) 
+
 
     // 1. Student
     setPhase('selecting_student')
@@ -120,6 +127,20 @@ export default function RoundView({
     await runSelectionAnimation('reward', rewardState.rewardsText, rewardState.excludedRewards, setDisplayReward)
 
     setPhase('ready')
+
+    // Automatically start timer and tour
+    setTimerState({ isRunning: true, isFinished: false })
+    startTour(classroomToolsSteps)
+  }
+
+  const handleEndRound = () => {
+    setTimerState({ isRunning: false, isFinished: false, timeLeft: timerState.totalTime })
+    setPhase('idle')
+    setDisplayStudent(null)
+    setDisplayQuestion(null)
+    setDisplayReward(null)
+    setStudentDisabled(false)
+    setQuestionDisabled(false)
   }
 
   const handleStartTimer = () => {
@@ -228,7 +249,7 @@ export default function RoundView({
       {/* Controls Area */}
       <div className="bg-white rounded-[2rem] p-6 shadow-lg border border-border flex flex-col md:flex-row items-center justify-between gap-6">
 
-        <div className="flex gap-4">
+        <div className="flex flex-wrap gap-4 items-center">
           <button
             onClick={() => {
               if (timerState.isFinished) {
@@ -239,7 +260,7 @@ export default function RoundView({
                 onBack()
               }
             }}
-            disabled={timerState.isRunning || ['selecting_student', 'selecting_question', 'selecting_reward'].includes(phase)}
+            disabled={['selecting_student', 'selecting_question', 'selecting_reward'].includes(phase)}
             className="px-6 py-4 rounded-2xl font-bold text-muted-foreground hover:bg-gray-100 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             data-tour="round-back-btn"
           >
@@ -247,18 +268,22 @@ export default function RoundView({
           </button>
 
           <button
-            onClick={handleSelectAll}
-            disabled={['selecting_student', 'selecting_question', 'selecting_reward'].includes(phase) || timerState.isRunning}
-            className="px-8 py-4 rounded-2xl font-bold bg-white border-2 border-primary text-primary hover:bg-primary/5 shadow-md flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={phase === 'idle' ? handleSelectAll : handleEndRound}
+            disabled={['selecting_student', 'selecting_question', 'selecting_reward'].includes(phase)}
+            className={`px-8 py-4 rounded-2xl font-bold border-2 shadow-md flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed ${phase === 'idle'
+              ? 'bg-white border-primary text-primary hover:bg-primary/5'
+              : 'bg-destructive/10 border-destructive text-destructive hover:bg-destructive/20'
+              }`}
             data-tour="round-start-selection"
           >
-            <Dices size={24} /> {displayStudent ? 'اختيار جديد' : 'بدء الاختيار'}
+            {phase === 'idle' ? <Dices size={24} /> : <Ban size={20} />}
+            {phase === 'idle' ? 'بدء الاختيار' : 'إنهاء الجولة'}
           </button>
         </div>
 
-        {/* Timer Display & Main Action */}
-        <div className="flex items-center gap-6">
-          <div className="relative w-20 h-20 flex items-center justify-center">
+        {/* Timer Display */}
+        <div className="flex items-center gap-4">
+          <div className="relative w-16 h-16 flex items-center justify-center">
             <svg className="w-full h-full -rotate-90 absolute">
               <circle cx="50%" cy="50%" r="45%" stroke="#eee" strokeWidth="4" fill="none" className="opacity-20" />
               <circle
@@ -274,39 +299,19 @@ export default function RoundView({
                 className="transition-all duration-1000"
               />
             </svg>
-            <span className={`font-mono font-bold text-lg ${timerState.timeLeft <= 5 && timerState.timeLeft > 0 ? 'text-red-500' : 'text-gray-800'}`}>
+            <span className={`font-mono font-bold text-base ${timerState.timeLeft <= 5 && timerState.timeLeft > 0 ? 'text-red-500' : 'text-gray-800'}`}>
               {Math.floor(timerState.timeLeft / 60)}:{String(timerState.timeLeft % 60).padStart(2, '0')}
             </span>
           </div>
-
-          <button
-            onClick={() => {
-              if (timerState.isFinished) {
-                // Stop Alarm & Reset Timer
-                setTimerState({ isFinished: false, isRunning: false, timeLeft: timerState.totalTime })
-              } else if (timerState.isRunning) {
-                setTimerState({ isRunning: false })
-              } else {
-                handleStartTimer()
-              }
-            }}
-            disabled={!timerState.isFinished && (!displayStudent || !displayQuestion || !displayReward || studentDisabled || questionDisabled)}
-            className={`h-20 px-10 rounded-2xl font-bold text-xl shadow-xl transition-all flex items-center gap-3 ${timerState.isFinished
-              ? 'bg-destructive text-white hover:bg-destructive/90 animate-pulse'
-              : timerState.isRunning
-                ? 'bg-yellow-100 text-yellow-600 hover:bg-yellow-200'
-                : 'bg-primary text-white hover:bg-primary/90 hover:scale-105'
-              } disabled:opacity-50 disabled:grayscale disabled:pointer-events-none`}
-            data-tour="round-start-timer"
-          >
-            {timerState.isFinished ? (
-              <> <Bell size={32} fill="currentColor" /> إيقاف المنبه </>
-            ) : timerState.isRunning ? (
-              <> <Pause size={32} fill="currentColor" /> إيقاف مؤقت </>
-            ) : (
-              <> <Play size={32} fill="currentColor" /> ابدأ الجولة </>
-            )}
-          </button>
+          {timerState.isFinished && (
+            <button
+              onClick={() => setTimerState({ isFinished: false, isRunning: false, timeLeft: timerState.totalTime })}
+              className="p-3 bg-destructive text-white rounded-xl shadow-lg animate-pulse"
+              title="إيقاف المنبه"
+            >
+              <Bell size={20} />
+            </button>
+          )}
         </div>
       </div>
     </div>

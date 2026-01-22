@@ -246,51 +246,37 @@ export default function SetupView({
             </div>
 
             <div className="w-full max-w-md space-y-4">
-              <div className="bg-gray-50 p-4 rounded-2xl border border-border">
-                <label className="block text-sm font-bold mb-2 text-center text-muted-foreground">صوت التنبيه (اختياري)</label>
-                <div className="flex gap-2 items-center">
+              <div className="bg-gray-50 p-6 rounded-3xl border-2 border-dashed border-border hover:border-primary/50 transition-colors">
+                <label className="block text-sm font-bold mb-3 text-center text-muted-foreground">صوت الخلفية (يعمل أثناء العد)</label>
+                <div className="flex flex-col gap-3 items-center">
                   <input
                     type="file"
-                    id="sound-alarm"
-                    accept="audio/*"
+                    id="background-sound"
+                    accept="audio/*,video/*"
                     onChange={(e) => {
                       const file = e.target.files?.[0]
                       if (file) {
                         const url = URL.createObjectURL(file)
-                        setTimerState({ soundUrl: url })
+                        setTimerState({ backgroundSoundUrl: url })
                       }
                     }}
-                    className="flex-1 text-sm text-center bg-white file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer"
+                    className="w-full text-sm text-center bg-white file:mr-4 file:py-2.5 file:px-6 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer shadow-sm"
                   />
-                  {timerState.soundUrl && (
-                    <button onClick={() => setTimerState({ soundUrl: undefined })} className="p-2 text-destructive hover:bg-destructive/10 rounded-full" title="إزالة الصوت">
-                      <Trash2 size={18} />
-                    </button>
+                  {timerState.backgroundSoundUrl && (
+                    <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-xl border border-border shadow-sm">
+                      <span className="text-xs font-semibold text-primary">تم اختيار الملف بنجاح</span>
+                      <button
+                        onClick={() => setTimerState({ backgroundSoundUrl: undefined })}
+                        className="p-1.5 text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
+                        title="إزالة الملف"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
                   )}
-                </div>
-              </div>
-
-              <div className="bg-gray-50 p-4 rounded-2xl border border-border">
-                <label className="block text-sm font-bold mb-2 text-center text-muted-foreground">صوت الثواني (العقارب)</label>
-                <div className="flex gap-2 items-center">
-                  <input
-                    type="file"
-                    id="sound-tick"
-                    accept="audio/*"
-                    onChange={(e) => {
-                      const file = e.target.files?.[0]
-                      if (file) {
-                        const url = URL.createObjectURL(file)
-                        setTimerState({ tickSoundUrl: url })
-                      }
-                    }}
-                    className="flex-1 text-sm text-center bg-white file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer"
-                  />
-                  {timerState.tickSoundUrl && (
-                    <button onClick={() => setTimerState({ tickSoundUrl: undefined })} className="p-2 text-destructive hover:bg-destructive/10 rounded-full" title="إزالة الصوت">
-                      <Trash2 size={18} />
-                    </button>
-                  )}
+                  <p className="text-[10px] text-center text-muted-foreground opacity-70">
+                    يمكنك رفع ملف صوتي أو فيديو، سيتم تشغيل الصوت تلقائياً عند بدء المؤقت.
+                  </p>
                 </div>
               </div>
             </div>

@@ -1,7 +1,8 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { RotateCcw, HelpCircle } from "lucide-react"
+import { Link } from "react-router-dom"
+import { RotateCcw, ArrowLeft, Pause } from "lucide-react"
 
 // Type imports for state
 import type { TimerState } from "./components/TimerTool"
@@ -13,8 +14,7 @@ import type { RewardToolState } from "./components/RewardTool"
 import SetupView from "./components/SetupView"
 import RoundView from "./components/RoundView"
 
-import PrimaryHeader from "@/components/sections/Header/PrimaryHeader"
-import PrimaryFooter from "@/components/sections/Footer/PrimaryFooter"
+// Removed Header/Footer imports
 
 import { useTour } from "@/components/tour/TourProvider"
 import { classroomToolsSteps } from "@/components/tour/steps"
@@ -42,8 +42,7 @@ export default function ClassroomToolsPage() {
     totalTime: 0,
     isRunning: false,
     isFinished: false,
-    soundUrl: undefined,
-    tickSoundUrl: undefined
+    backgroundSoundUrl: undefined
   })
 
   const [questionState, setQuestionState] = useState<QuestionToolState>({
@@ -67,7 +66,8 @@ export default function ClassroomToolsPage() {
     isAnimating: false
   })
 
-  const audioRef = useRef<HTMLAudioElement | null>(null)
+  const backgroundAudioRef = useRef<HTMLAudioElement | null>(null)
+  const alarmAudioRef = useRef<HTMLAudioElement | null>(null)
   const tickAudioRef = useRef<HTMLAudioElement | null>(null)
 
   // Load from local storage
@@ -78,17 +78,14 @@ export default function ClassroomToolsPage() {
     const savedReward = localStorage.getItem('rewardState')
 
     if (savedTimer) {
-      // Only load settings (minutes/seconds/sounds), not running state
       const parsed = JSON.parse(savedTimer)
-      // Ensure UI stays consistent
       setTimerState(prev => ({
         ...prev,
         minutes: parsed.minutes,
         seconds: parsed.seconds,
         totalTime: parsed.minutes * 60 + parsed.seconds,
         timeLeft: parsed.minutes * 60 + parsed.seconds,
-        soundUrl: parsed.soundUrl,
-        tickSoundUrl: parsed.tickSoundUrl
+        backgroundSoundUrl: parsed.backgroundSoundUrl
       }))
     }
     if (savedQuestion) setQuestionState(JSON.parse(savedQuestion))
@@ -98,8 +95,12 @@ export default function ClassroomToolsPage() {
 
   // Save to local storage
   useEffect(() => {
-    localStorage.setItem('timerState', JSON.stringify({ minutes: timerState.minutes, seconds: timerState.seconds, soundUrl: timerState.soundUrl, tickSoundUrl: timerState.tickSoundUrl }))
-  }, [timerState.minutes, timerState.seconds, timerState.soundUrl, timerState.tickSoundUrl])
+    localStorage.setItem('timerState', JSON.stringify({
+      minutes: timerState.minutes,
+      seconds: timerState.seconds,
+      backgroundSoundUrl: timerState.backgroundSoundUrl
+    }))
+  }, [timerState.minutes, timerState.seconds, timerState.backgroundSoundUrl])
 
   useEffect(() => {
     localStorage.setItem('questionState', JSON.stringify(questionState))
@@ -134,58 +135,103 @@ export default function ClassroomToolsPage() {
           return { ...prev, timeLeft: prev.timeLeft - 1 }
         })
 
-        // Play tick sound (throttled/managed by browser mostly, but logic is here)
-        if (timerState.tickSoundUrl) {
+        // Play tick sound every second
+        try {
           if (tickAudioRef.current) {
             tickAudioRef.current.currentTime = 0
             tickAudioRef.current.play().catch(() => { })
           } else {
-            const audio = new Audio(timerState.tickSoundUrl)
+            const audio = new Audio('/sounds/tick.mp3')
             audio.volume = 0.5
             audio.play().catch(() => { })
             tickAudioRef.current = audio
           }
+        } catch (e) {
+          console.error("Tick sound failed", e)
         }
       }, 1000)
     }
     return () => clearInterval(interval)
-  }, [timerState.isRunning, timerState.timeLeft, timerState.tickSoundUrl])
+  }, [timerState.isRunning, timerState.timeLeft])
+
+  // Background Sound Playback Logic
+  useEffect(() => {
+    if (timerState.isRunning && timerState.backgroundSoundUrl) {
+      if (!backgroundAudioRef.current) {
+        const audio = new Audio(timerState.backgroundSoundUrl)
+        audio.loop = false
+        audio.play().catch(err => console.log('Audio playback failed:', err))
+        backgroundAudioRef.current = audio
+      } else {
+        backgroundAudioRef.current.play().catch(() => { })
+      }
+    } else {
+      if (backgroundAudioRef.current) {
+        backgroundAudioRef.current.pause()
+      }
+    }
+  }, [timerState.isRunning, timerState.backgroundSoundUrl])
 
   // Alarm Sound Logic
   useEffect(() => {
-    if (timerState.isFinished && !audioRef.current) {
-      const audio = new Audio(timerState.soundUrl || '/sounds/alarm.mp3')
-      audio.loop = true
-      audio.play().catch(err => console.log('Audio wait interaction:', err))
-      audioRef.current = audio
-    } else if (!timerState.isFinished && audioRef.current) {
-      // Stop alarm if isFinished becomes false
-      audioRef.current.pause()
-      audioRef.current.currentTime = 0
-      audioRef.current = null
+    if (timerState.isFinished) {
+      if (!alarmAudioRef.current) {
+        const audio = new Audio('/sounds/alarm.mp3')
+        audio.loop = true
+        audio.play().catch(err => console.log('Alarm playback failed:', err))
+        alarmAudioRef.current = audio
+      } else {
+        alarmAudioRef.current.play().catch(() => { })
+      }
+    } else {
+      if (alarmAudioRef.current) {
+        alarmAudioRef.current.pause()
+        alarmAudioRef.current.currentTime = 0
+        alarmAudioRef.current = null
+      }
     }
-  }, [timerState.isFinished, timerState.soundUrl])
+  }, [timerState.isFinished])
 
   return (
     <div className="min-h-screen flex flex-col bg-bg-layout rtl text-right">
-      <PrimaryHeader />
-
       <main className="flex-1 container mx-auto px-4 py-8">
         <div className="max-w-7xl mx-auto flex flex-col items-center">
 
           <div className="mb-8 w-full">
             {/* Buttons row - responsive layout */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
-              {/* How to Use button - on the right (RTL) */}
-              <button
-                onClick={() => startTour(classroomToolsSteps)}
-                className="text-sm font-semibold text-white bg-primary hover:bg-primary/90 px-4 py-2.5 rounded-xl transition-all flex items-center justify-center gap-2 w-full sm:w-auto shadow-md hover:shadow-lg animate-pulse sm:order-first"
-              >
-                <HelpCircle size={18} /> شرح الاستخدام
-              </button>
 
-              {/* Spacer for center alignment on larger screens */}
-              <div className="hidden sm:block sm:flex-1" />
+              <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+                {/* Back to Home Button */}
+                <Link
+                  to="/"
+                  className="text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 border-2 border-border px-4 py-2.5 rounded-xl transition-all flex items-center justify-center gap-2 shadow-sm hover:shadow-md"
+                >
+                  <ArrowLeft size={18} className="rotate-180" /> العودة للرئيسية
+                </Link>
+
+                {/* Global Timer Controls */}
+                <div className="flex items-center gap-2 bg-white p-1 rounded-2xl border-2 border-border shadow-sm">
+                  {timerState.isRunning && (
+                    <button
+                      onClick={() => setTimerState(p => ({ ...p, isRunning: false }))}
+                      className="flex items-center gap-2 px-4 py-1.5 rounded-xl font-bold transition-all bg-yellow-100 text-yellow-600 hover:bg-yellow-200"
+                    >
+                      <Pause size={16} fill="currentColor" /> إيقاف
+                    </button>
+                  )}
+                  <button
+                    onClick={() => setTimerState(p => ({ ...p, isRunning: false, isFinished: false, timeLeft: p.totalTime }))}
+                    className="p-2 text-muted-foreground hover:text-primary transition-colors"
+                    title="إعادة ضبط"
+                  >
+                    <RotateCcw size={18} />
+                  </button>
+                  <div className="px-4 py-1.5 bg-gray-50 rounded-lg font-mono font-bold text-lg min-w-[80px] text-center border border-gray-100">
+                    {Math.floor(timerState.timeLeft / 60)}:{String(timerState.timeLeft % 60).padStart(2, '0')}
+                  </div>
+                </div>
+              </div>
 
               {/* Reset All button - on the left (RTL) */}
               <button
@@ -231,12 +277,11 @@ export default function ClassroomToolsPage() {
               rewardState={rewardState}
               setRewardState={(u) => setRewardState(p => ({ ...p, ...u }))}
               onBack={() => setView('setup')}
+              startTour={startTour}
             />
           )}
-
         </div>
       </main>
-      <PrimaryFooter />
     </div>
   )
 }
