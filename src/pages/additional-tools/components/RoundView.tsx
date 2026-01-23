@@ -32,7 +32,6 @@ export default function RoundView({
   setQuestionState,
   rewardState,
   onBack,
-  startTour
 }: RoundViewProps) {
 
   const [phase, setPhase] = useState<'idle' | 'selecting_student' | 'selecting_question' | 'selecting_reward' | 'ready' | 'running' | 'finished'>('idle')
