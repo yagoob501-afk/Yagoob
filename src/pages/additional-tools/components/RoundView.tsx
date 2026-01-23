@@ -1,13 +1,12 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Users, HelpCircle, Gift, RotateCcw, Ban, Dices, Bell } from "lucide-react"
+import { Users, HelpCircle, Gift, RotateCcw, Ban, Dices, Bell, Play, Pause } from "lucide-react"
 import type { TimerState } from "./TimerTool"
 import type { RandomStudentState } from "./RandomStudentTool"
 import type { QuestionToolState } from "./QuestionTool"
 import type { RewardToolState } from "./RewardTool"
 import confetti from "canvas-confetti"
-import { classroomToolsSteps } from "@/components/tour/steps"
 
 interface RoundViewProps {
   timerState: TimerState
@@ -102,17 +101,12 @@ export default function RoundView({
 
   // --- Main Action ---
   const handleSelectAll = async () => {
-    // Reset
+    // Reset Data State only (keep timer if running)
     setStudentDisabled(false)
     setQuestionDisabled(false)
     setDisplayStudent(null)
     setDisplayQuestion(null)
     setDisplayReward(null)
-    // 0. Only reset timer IF it's not already running and not finished?
-    // Actually, user wants it decoupled. So we don't touch timer here.
-    // If user wants to reset timer, they use the global reset button.
-    // setTimerState({ isRunning: false, isFinished: false, timeLeft: timerState.totalTime }) 
-
 
     // 1. Student
     setPhase('selecting_student')
@@ -128,9 +122,10 @@ export default function RoundView({
 
     setPhase('ready')
 
-    // Automatically start timer and tour
-    setTimerState({ isRunning: true, isFinished: false })
-    startTour(classroomToolsSteps)
+    // Start timer only if it's not running. Do not reset it if it is running.
+    if (!timerState.isRunning) {
+      setTimerState({ isRunning: true, isFinished: false })
+    }
   }
 
   const handleEndRound = () => {
@@ -267,23 +262,50 @@ export default function RoundView({
             <RotateCcw size={20} /> تعديل البيانات
           </button>
 
+
+          {/* Pick Data Button - Always visible now */}
           <button
-            onClick={phase === 'idle' ? handleSelectAll : handleEndRound}
+            onClick={handleSelectAll}
             disabled={['selecting_student', 'selecting_question', 'selecting_reward'].includes(phase)}
-            className={`px-8 py-4 rounded-2xl font-bold border-2 shadow-md flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed ${phase === 'idle'
-              ? 'bg-white border-primary text-primary hover:bg-primary/5'
-              : 'bg-destructive/10 border-destructive text-destructive hover:bg-destructive/20'
-              }`}
+            className="px-8 py-4 rounded-2xl font-bold border-2 shadow-md flex items-center gap-2 bg-white border-primary text-primary hover:bg-primary/5 disabled:opacity-50 disabled:cursor-not-allowed"
             data-tour="round-start-selection"
           >
-            {phase === 'idle' ? <Dices size={24} /> : <Ban size={20} />}
-            {phase === 'idle' ? 'بدء الاختيار' : 'إنهاء الجولة'}
+            <Dices size={24} /> {['selecting_student', 'selecting_question', 'selecting_reward'].includes(phase) ? 'جاري الاختيار...' : 'اختيار بيانات'}
           </button>
+
+          {/* End Round Button - Visible only when NOT idle */}
+          {phase !== 'idle' && (
+            <button
+              onClick={handleEndRound}
+              className="px-8 py-4 rounded-2xl font-bold border-2 shadow-md flex items-center gap-2 bg-destructive/10 border-destructive text-destructive hover:bg-destructive/20"
+              data-tour="round-end-btn"
+            >
+              <Ban size={20} /> إنهاء الجولة
+            </button>
+          )}
         </div>
 
         {/* Timer Display */}
-        <div className="flex items-center gap-4">
-          <div className="relative w-16 h-16 flex items-center justify-center">
+        <div className="flex items-center gap-6 bg-gray-50 px-6 py-3 rounded-2xl border border-gray-100">
+
+          {/* Timer Controls */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setTimerState({ isRunning: !timerState.isRunning })}
+              className={`w-12 h-12 rounded-full flex items-center justify-center transition-all ${timerState.isRunning ? 'bg-yellow-100 text-yellow-600 hover:bg-yellow-200' : 'bg-primary/10 text-primary hover:bg-primary/20'}`}
+            >
+              {timerState.isRunning ? <Pause size={20} fill="currentColor" /> : <Play size={20} fill="currentColor" className="mr-0.5" />}
+            </button>
+            <button
+              onClick={() => setTimerState({ isRunning: false, timeLeft: timerState.totalTime, isFinished: false })}
+              className="w-12 h-12 rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300 flex items-center justify-center transition-all"
+              title="إعادة المؤقت"
+            >
+              <RotateCcw size={20} />
+            </button>
+          </div>
+
+          <div className="relative w-20 h-20 flex items-center justify-center">
             <svg className="w-full h-full -rotate-90 absolute">
               <circle cx="50%" cy="50%" r="45%" stroke="#eee" strokeWidth="4" fill="none" className="opacity-20" />
               <circle

@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react"
 import { Link } from "react-router-dom"
-import { RotateCcw, ArrowLeft, Pause } from "lucide-react"
+import { RotateCcw, ArrowLeft, Pause, HelpCircle } from "lucide-react"
 
 // Type imports for state
 import type { TimerState } from "./components/TimerTool"
@@ -231,6 +231,14 @@ export default function ClassroomToolsPage() {
                     {Math.floor(timerState.timeLeft / 60)}:{String(timerState.timeLeft % 60).padStart(2, '0')}
                   </div>
                 </div>
+
+                {/* Usage Explanation Button */}
+                <button
+                  onClick={() => startTour(classroomToolsSteps)}
+                  className="text-sm font-semibold text-primary bg-primary/10 hover:bg-primary/20 border-2 border-primary/20 px-4 py-2.5 rounded-xl transition-all flex items-center justify-center gap-2 shadow-sm hover:shadow-md"
+                >
+                  <HelpCircle size={18} /> شرح الاستخدام
+                </button>
               </div>
 
               {/* Reset All button - on the left (RTL) */}
