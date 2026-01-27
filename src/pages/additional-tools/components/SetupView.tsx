@@ -256,6 +256,10 @@ export default function SetupView({
                     onChange={(e) => {
                       const file = e.target.files?.[0]
                       if (file) {
+                        // Revoke old URL if it exists
+                        if (timerState.backgroundSoundUrl) {
+                          URL.revokeObjectURL(timerState.backgroundSoundUrl)
+                        }
                         const url = URL.createObjectURL(file)
                         setTimerState({ backgroundSoundUrl: url })
                       }
@@ -266,7 +270,12 @@ export default function SetupView({
                     <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-xl border border-border shadow-sm">
                       <span className="text-xs font-semibold text-primary">تم اختيار الملف بنجاح</span>
                       <button
-                        onClick={() => setTimerState({ backgroundSoundUrl: undefined })}
+                        onClick={() => {
+                          if (timerState.backgroundSoundUrl) {
+                            URL.revokeObjectURL(timerState.backgroundSoundUrl)
+                          }
+                          setTimerState({ backgroundSoundUrl: undefined })
+                        }}
                         className="p-1.5 text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
                         title="إزالة الملف"
                       >

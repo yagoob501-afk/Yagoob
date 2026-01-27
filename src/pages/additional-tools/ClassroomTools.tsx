@@ -163,6 +163,11 @@ export default function ClassroomToolsPage() {
         audio.play().catch(err => console.log('Audio playback failed:', err))
         backgroundAudioRef.current = audio
       } else {
+        // If the URL has changed, update the source
+        if (backgroundAudioRef.current.src !== timerState.backgroundSoundUrl) {
+          backgroundAudioRef.current.src = timerState.backgroundSoundUrl
+          backgroundAudioRef.current.load()
+        }
         backgroundAudioRef.current.play().catch(() => { })
       }
     } else {
