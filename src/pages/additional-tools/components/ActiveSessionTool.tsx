@@ -1,9 +1,12 @@
 "use client"
 
-import { Play, Pause, SkipForward, RotateCcw, HelpCircle, Dices, Users } from "lucide-react"
 import type { TimerState } from "./TimerTool"
 import type { RandomStudentState } from "./RandomStudentTool"
-import type { QuestionToolState } from "./QuestionTool"
+import type { QuestionToolState, QuestionItem } from "./QuestionTool"
+import Lightbox from "yet-another-react-lightbox"
+import "yet-another-react-lightbox/styles.css"
+import { Image as ImageIcon, Play, Pause, SkipForward, RotateCcw, HelpCircle, Dices, Users } from "lucide-react"
+import { useState } from "react"
 
 interface ActiveSessionToolProps {
   timerState: TimerState
@@ -26,6 +29,7 @@ export default function ActiveSessionTool({
   onNext,
   onRestart
 }: ActiveSessionToolProps) {
+  const [lightboxOpen, setLightboxOpen] = useState(false)
 
   const pickAllAndStart = () => {
     // Pick Student if not already picked
@@ -40,11 +44,18 @@ export default function ActiveSessionTool({
 
     // Pick Question if not already picked
     if (!questionState.currentQuestion) {
-      const questionsList = questionState.questions.split("\n").map(q => q.trim()).filter(q => q !== "")
-      const availableQuestions = questionsList.filter(q => !questionState.excludedQuestions.includes(q))
-      if (availableQuestions.length > 0) {
-        const randomQuestion = availableQuestions[Math.floor(Math.random() * availableQuestions.length)]
-        setQuestionState({ currentQuestion: randomQuestion })
+      const mode = questionState.mode || 'text'
+      let available: any[] = []
+
+      if (mode === 'text') {
+        const list = questionState.questions.split("\n").map(q => q.trim()).filter(q => q !== "")
+        available = list.filter(q => !questionState.excludedQuestions.includes(q))
+      } else {
+        available = questionState.questionItems.filter(i => !questionState.excludedQuestionItems.includes(i.id))
+      }
+
+      if (available.length > 0) {
+        setQuestionState({ currentQuestion: available[Math.floor(Math.random() * available.length)] })
       }
     }
 
@@ -128,18 +139,46 @@ export default function ActiveSessionTool({
                 <HelpCircle size={100} />
               </div>
               <span className="text-sm font-bold text-muted-foreground uppercase tracking-wider">السؤال</span>
-              <h3 className="text-xl md:text-2xl font-bold text-gray-800 break-words max-w-full leading-relaxed">
-                {questionState.currentQuestion || "لم يتم الاختيار"}
-              </h3>
+              <div className="w-full flex-1 flex flex-col items-center justify-center min-h-[100px]">
+                {questionState.currentQuestion ? (
+                  typeof questionState.currentQuestion === 'string' ? (
+                    <h3 className="text-xl md:text-2xl font-bold text-gray-800 break-words max-w-full leading-relaxed">
+                      {questionState.currentQuestion}
+                    </h3>
+                  ) : (
+                    questionState.currentQuestion.type === 'text' ? (
+                      <h3 className="text-xl md:text-2xl font-bold text-gray-800 break-words max-w-full leading-relaxed">
+                        {questionState.currentQuestion.content}
+                      </h3>
+                    ) : (
+                      <div className="relative group cursor-pointer" onClick={() => setLightboxOpen(true)}>
+                        <img src={questionState.currentQuestion.content} className="max-h-[120px] w-auto rounded-xl border border-border shadow-sm group-hover:shadow-md transition-shadow" alt="Question" />
+                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 flex items-center justify-center transition-colors rounded-xl">
+                          <ImageIcon className="text-white opacity-0 group-hover:opacity-100 transition-opacity" size={24} />
+                        </div>
+                      </div>
+                    )
+                  )
+                ) : (
+                  <h3 className="text-xl md:text-2xl font-bold text-gray-300">لم يتم الاختيار</h3>
+                )}
+              </div>
 
               <div className="flex flex-wrap gap-2 justify-center">
                 {!timerState.isRunning && (
                   <button
                     onClick={() => {
-                      const questionsList = questionState.questions.split("\n").map(q => q.trim()).filter(q => q !== "")
-                      const availableQuestions = questionsList.filter(q => !questionState.excludedQuestions.includes(q))
-                      if (availableQuestions.length > 0) {
-                        setQuestionState({ currentQuestion: availableQuestions[Math.floor(Math.random() * availableQuestions.length)] })
+                      const mode = questionState.mode || 'text'
+                      let available: any[] = []
+                      if (mode === 'text') {
+                        const list = questionState.questions.split("\n").map(q => q.trim()).filter(q => q !== "")
+                        available = list.filter(q => !questionState.excludedQuestions.includes(q))
+                      } else {
+                        available = questionState.questionItems.filter(i => !questionState.excludedQuestionItems.includes(i.id))
+                      }
+
+                      if (available.length > 0) {
+                        setQuestionState({ currentQuestion: available[Math.floor(Math.random() * available.length)] })
                       }
                     }}
                     className="btn-outline text-xs px-3 py-1 rounded-full flex items-center gap-1"
@@ -150,9 +189,15 @@ export default function ActiveSessionTool({
                 {questionState.currentQuestion && (
                   <button
                     onClick={() => {
-                      setQuestionState({
-                        excludedQuestions: [...questionState.excludedQuestions, questionState.currentQuestion!]
-                      })
+                      if (typeof questionState.currentQuestion === 'string') {
+                        setQuestionState({
+                          excludedQuestions: [...questionState.excludedQuestions, questionState.currentQuestion]
+                        })
+                      } else {
+                        setQuestionState({
+                          excludedQuestionItems: [...questionState.excludedQuestionItems, (questionState.currentQuestion as QuestionItem).id]
+                        })
+                      }
                     }}
                     className="text-xs bg-red-50 text-red-500 hover:bg-red-100 px-3 py-1 rounded-full transition-colors flex items-center gap-1 border border-red-100"
                   >
@@ -216,6 +261,11 @@ export default function ActiveSessionTool({
 
         </div>
       )}
+      <Lightbox
+        open={lightboxOpen}
+        close={() => setLightboxOpen(false)}
+        slides={(questionState.currentQuestion && typeof questionState.currentQuestion !== 'string' && questionState.currentQuestion.type === 'image') ? [{ src: questionState.currentQuestion.content }] : []}
+      />
     </div>
   )
 }

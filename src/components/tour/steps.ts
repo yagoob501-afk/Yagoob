@@ -51,10 +51,14 @@ export const classroomToolsSteps: Step[] = [
     // @ts-ignore
     autoNextOnClick: true
   },
-  // 5. Questions Input
+  // 4b. Question Mode Selector (NEW)
+  {
+    target: '[data-tour="question-mode-selector"]',
+    content: 'يمكنك الآن الاختيار بين نوعين من الأسئلة: "نصوص" (تقليدي)، أو "صور و نصوص" (لتحميل صور مع إمكانية إضافة نصوص).',
+  },
   {
     target: '[data-tour="setup-questions"]',
-    content: 'أضف أسئلتك هنا، سؤال لكل سطر. سيتم اختيارها عشوائياً لاحقاً.',
+    content: 'حسب النوع المختار: اكتب الأسئلة هنا، أو أضف عناصر "صور و نصوص" (صور أو نصوص) واحدة تلو الأخرى.',
   },
   // 5b. Demo Excluded Questions (restoration explanation)
   {
@@ -111,7 +115,7 @@ export const classroomToolsSteps: Step[] = [
   },
   {
     target: '[data-tour="round-question-card"]',
-    content: 'وهنا السؤال الموجه له.',
+    content: 'وهنا السؤال الموجه له. إذا كان السؤال صورة، يمكنك الضغط عليها لتكبيرها وعرضها بشكل أوضح.',
   },
   {
     target: '[data-tour="round-reward-card"]',

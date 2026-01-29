@@ -1,10 +1,12 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Users, HelpCircle, Gift, RotateCcw, Ban, Dices, Bell, Play, Pause } from "lucide-react"
+import { Users, HelpCircle, Gift, RotateCcw, Ban, Dices, Bell, Play, Pause, Image as ImageIcon } from "lucide-react"
+import Lightbox from "yet-another-react-lightbox"
+import "yet-another-react-lightbox/styles.css"
 import type { TimerState } from "./TimerTool"
 import type { RandomStudentState } from "./RandomStudentTool"
-import type { QuestionToolState } from "./QuestionTool"
+import type { QuestionToolState, QuestionItem } from "./QuestionTool"
 import type { RewardToolState } from "./RewardTool"
 import confetti from "canvas-confetti"
 
@@ -38,8 +40,9 @@ export default function RoundView({
 
   // Local state for animations to avoid expensive global re-renders during high-speed rolling
   const [displayStudent, setDisplayStudent] = useState<string | null>(null)
-  const [displayQuestion, setDisplayQuestion] = useState<string | null>(null)
+  const [displayQuestion, setDisplayQuestion] = useState<QuestionItem | string | null>(null)
   const [displayReward, setDisplayReward] = useState<string | null>(null)
+  const [lightboxOpen, setLightboxOpen] = useState(false)
 
   // Exclusion States (Visual only until round finishes/resets, or immediate? User asked: disable button after click, show disabled effect)
   const [studentDisabled, setStudentDisabled] = useState(false)
@@ -58,14 +61,23 @@ export default function RoundView({
     type: CardType,
     sourceText: string,
     excluded: string[],
-    setter: (val: string) => void
+    setter: (val: any) => void,
+    items?: QuestionItem[],
+    excludedItems?: string[],
+    mode?: 'text' | 'image' | 'hybrid'
   ) => {
     return new Promise<void>((resolve) => {
       let duration = 1500; // ms
       let interval = 50; // ms
       let elapsed = 0;
 
-      const list = sourceText.split('\n').map(s => s.trim()).filter(s => s !== "" && !excluded.includes(s))
+      let list: any[] = []
+      if (type === 'question' && mode !== 'text' && items) {
+        list = items.filter(i => !excludedItems?.includes(i.id))
+      } else {
+        list = sourceText.split('\n').map(s => s.trim()).filter(s => s !== "" && !excluded.includes(s))
+      }
+
       if (list.length === 0) {
         resolve()
         return
@@ -113,7 +125,7 @@ export default function RoundView({
 
     // 2. Question
     setPhase('selecting_question')
-    await runSelectionAnimation('question', questionState.questions, questionState.excludedQuestions, setDisplayQuestion)
+    await runSelectionAnimation('question', questionState.questions, questionState.excludedQuestions, setDisplayQuestion, questionState.questionItems, questionState.excludedQuestionItems, questionState.mode)
 
     // 3. Reward
     setPhase('selecting_reward')
@@ -157,7 +169,11 @@ export default function RoundView({
 
   const handleExcludeQuestion = () => {
     if (displayQuestion) {
-      setQuestionState({ excludedQuestions: [...questionState.excludedQuestions, displayQuestion] })
+      if (typeof displayQuestion === 'string') {
+        setQuestionState({ excludedQuestions: [...questionState.excludedQuestions, displayQuestion] })
+      } else {
+        setQuestionState({ excludedQuestionItems: [...questionState.excludedQuestionItems, displayQuestion.id] })
+      }
       setQuestionDisabled(true)
     }
   }
@@ -203,17 +219,44 @@ export default function RoundView({
             <HelpCircle size={120} />
           </div>
           <span className="text-xs font-bold uppercase text-muted-foreground tracking-wider">السؤال</span>
-          <h3 className="text-2xl font-bold text-gray-800 break-words max-w-full leading-relaxed">
-            {displayQuestion || "---"}
-          </h3>
+          <div className="w-full flex-1 flex flex-col items-center justify-center min-h-[140px]">
+            {displayQuestion ? (
+              typeof displayQuestion === 'string' ? (
+                <h3 className="text-2xl font-bold text-gray-800 break-words max-w-full leading-relaxed">
+                  {displayQuestion}
+                </h3>
+              ) : (
+                displayQuestion.type === 'text' ? (
+                  <h3 className="text-2xl font-bold text-gray-800 break-words max-w-full leading-relaxed">
+                    {displayQuestion.content}
+                  </h3>
+                ) : (
+                  <div className="relative group cursor-pointer" onClick={() => setLightboxOpen(true)}>
+                    <img src={displayQuestion.content} className="max-h-[180px] w-auto rounded-xl border border-border shadow-sm group-hover:shadow-md transition-shadow" alt="Question" />
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 flex items-center justify-center transition-colors rounded-xl">
+                      <ImageIcon className="text-white opacity-0 group-hover:opacity-100 transition-opacity" size={24} />
+                    </div>
+                  </div>
+                )
+              )
+            ) : (
+              <h3 className="text-2xl font-bold text-gray-300">---</h3>
+            )}
+          </div>
           {phase === 'selecting_question' && <div className="absolute bottom-0 left-0 w-full h-1 bg-yellow-500 animate-pulse" />}
 
           {(phase === 'ready' || phase === 'finished') && !questionDisabled && displayQuestion && (
-            <button onClick={handleExcludeQuestion} className="btn-outline border-red-200 text-red-500 hover:bg-red-50 text-xs px-3 py-1 rounded-full flex items-center gap-1 absolute bottom-4">
+            <button onClick={handleExcludeQuestion} className="btn-outline bg-white cursor-pointer border-red-200 text-red-500 hover:bg-red-50 text-xs px-3 py-1 rounded-full flex items-center gap-1 absolute bottom-4">
               <Ban size={12} /> استبعاد
             </button>
           )}
           {questionDisabled && <span className="absolute bottom-4 text-xs font-bold text-red-500 bg-red-50 px-2 py-1 rounded">تم الاستبعاد</span>}
+
+          <Lightbox
+            open={lightboxOpen}
+            close={() => setLightboxOpen(false)}
+            slides={(displayQuestion && typeof displayQuestion !== 'string' && displayQuestion.type === 'image') ? [{ src: displayQuestion.content }] : []}
+          />
         </div>
 
         {/* Reward Card */}

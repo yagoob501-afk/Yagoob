@@ -1,7 +1,9 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { Users, HelpCircle, Gift, Clock, Trash2, ArrowLeft } from "lucide-react"
+import { Users, HelpCircle, Gift, Clock, Trash2, ArrowLeft, Image as ImageIcon, Type, LayoutGrid, Plus } from "lucide-react"
+import Lightbox from "yet-another-react-lightbox"
+import "yet-another-react-lightbox/styles.css"
 import type { TimerState } from "./TimerTool"
 import type { RandomStudentState } from "./RandomStudentTool"
 import type { QuestionToolState } from "./QuestionTool"
@@ -32,6 +34,7 @@ export default function SetupView({
   onStart
 }: SetupViewProps) {
   const [activeTab, setActiveTab] = useState<'students' | 'questions' | 'rewards' | 'timer'>('students')
+  const [lightboxIndex, setLightboxIndex] = useState(-1)
   const { isOpen: isTourActive } = useTour()
 
   // Refs for each tab button
@@ -157,50 +160,168 @@ export default function SetupView({
         )}
 
         {activeTab === 'questions' && (
-          <div className="flex-1 flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-4 duration-300">
-            <div className="flex justify-between items-center">
-              <h3 className="text-xl font-bold">قائمة الأسئلة</h3>
-              <span className="text-sm text-muted-foreground">{questionState.questions.split('\n').filter(s => s.trim()).length} سؤال</span>
+          <div className="flex-1 flex flex-col gap-6 animate-in fade-in slide-in-from-bottom-4 duration-300">
+            {/* Question Mode Selector */}
+            <div className="flex bg-white rounded-2xl p-1.5 border-2 border-border gap-2" data-tour="question-mode-selector">
+              {[
+                { id: 'text', label: 'نصوص', icon: Type },
+                { id: 'hybrid', label: 'صور و نصوص', icon: LayoutGrid }
+              ].map((m) => (
+                <button
+                  key={m.id}
+                  onClick={() => setQuestionState({ mode: m.id as any })}
+                  className={`flex-1 py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${questionState.mode === m.id ? 'bg-primary text-white shadow-md' : 'text-muted-foreground hover:bg-gray-50'}`}
+                >
+                  <m.icon size={18} /> {m.label}
+                </button>
+              ))}
             </div>
-            <textarea
-              value={questionState.questions}
-              onChange={(e) => setQuestionState({ questions: e.target.value })}
-              placeholder="اكتب الأسئلة هنا (كل سؤال في سطر مستقل)..."
-              className="flex-1 w-full p-4 rounded-2xl border-2 border-border focus:border-primary outline-none resize-none min-h-[300px]"
-              data-tour="setup-questions"
-            />
-            {questionState.excludedQuestions.length > 0 && (
-              <div className="bg-red-50 p-4 rounded-2xl border border-red-100" data-tour="demo-excluded-questions">
-                <h4 className="text-sm font-bold text-red-600 mb-2">الأسئلة المستبعدة ({questionState.excludedQuestions.length})</h4>
-                <div className="flex flex-wrap gap-2">
-                  {questionState.excludedQuestions.map((q, i) => (
+
+            <div className="flex justify-between items-center">
+              <h3 className="text-xl font-bold">إعداد الأسئلة</h3>
+              <span className="text-sm text-muted-foreground">
+                {questionState.mode === 'text'
+                  ? `${questionState.questions.split('\n').filter(s => s.trim()).length} سؤال`
+                  : `${questionState.questionItems.length} عنصر`}
+              </span>
+            </div>
+
+            {/* Content based on mode */}
+            <div className="flex-1 flex flex-col gap-4">
+              {questionState.mode === 'text' && (
+                <textarea
+                  value={questionState.questions}
+                  onChange={(e) => setQuestionState({ questions: e.target.value })}
+                  placeholder="اكتب الأسئلة هنا (كل سؤال في سطر مستقل)..."
+                  className="flex-1 w-full p-4 rounded-2xl border-2 border-border focus:border-primary outline-none resize-none min-h-[300px]"
+                  data-tour="setup-questions"
+                />
+              )}
+
+              {/* questionState.mode === 'image' section removed and merged into hybrid */}
+
+              {questionState.mode === 'hybrid' && (
+                <div className="flex-1 flex flex-col gap-4">
+                  <div className="flex gap-3">
                     <button
-                      key={i}
-                      onClick={() => setQuestionState({ excludedQuestions: questionState.excludedQuestions.filter(item => item !== q) })}
-                      className="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1 rounded-full text-xs flex items-center gap-1 transition-colors"
-                      title="إعادة للقائمة"
+                      onClick={() => {
+                        const content = prompt("اكتب السؤال النصي:")
+                        if (content) {
+                          setQuestionState({
+                            questionItems: [
+                              ...questionState.questionItems,
+                              { id: Math.random().toString(36).substr(2, 9), type: 'text', content }
+                            ]
+                          })
+                        }
+                      }}
+                      className="flex-1 py-3 px-4 bg-primary/10 text-primary border-2 border-primary/20 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-primary/20 transition-all"
                     >
-                      {q.substring(0, 30)}{q.length > 30 ? '...' : ''} <Trash2 size={10} className="rotate-45" />
+                      <Plus size={18} /> إضافة سؤال نصي
                     </button>
-                  ))}
+                    <div className="flex-1 relative">
+                      <input
+                        type="file"
+                        multiple
+                        accept="image/*"
+                        onChange={(e) => {
+                          const files = Array.from(e.target.files || [])
+                          const newItems = files.map(file => ({
+                            id: Math.random().toString(36).substr(2, 9),
+                            type: 'image' as const,
+                            content: URL.createObjectURL(file)
+                          }))
+                          setQuestionState({ questionItems: [...questionState.questionItems, ...newItems] })
+                        }}
+                        className="absolute inset-0 opacity-0 cursor-pointer"
+                      />
+                      <button className="w-full py-3 px-4 bg-primary/10 text-primary border-2 border-primary/20 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-primary/20 transition-all">
+                        <ImageIcon size={18} /> إضافة صور
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3 max-h-[400px] overflow-auto pr-2">
+                    {questionState.questionItems.map((item, idx) => (
+                      <div key={item.id} className="flex items-center gap-4 bg-white p-3 rounded-2xl border-2 border-border group">
+                        <div className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-muted-foreground font-mono font-bold shrink-0">
+                          {idx + 1}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          {item.type === 'text' ? (
+                            <p className="text-sm font-medium truncate">{item.content}</p>
+                          ) : (
+                            <div className="w-16 h-12 rounded-lg bg-gray-100 overflow-hidden border border-border">
+                              <img src={item.content} className="w-full h-full object-cover cursor-pointer" onClick={() => setLightboxIndex(idx)} alt="Preview" />
+                            </div>
+                          )}
+                        </div>
+                        <button
+                          onClick={() => setQuestionState({ questionItems: questionState.questionItems.filter(i => i.id !== item.id) })}
+                          className="bg-red-50 text-red-500 p-2 rounded-xl border border-red-100 opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
                 </div>
+              )}
+            </div>
+
+            {/* Excluded Questions logic based on mode */}
+            {questionState.mode === 'text' ? (
+              questionState.excludedQuestions.length > 0 && (
+                <div className="bg-red-50 p-4 rounded-2xl border border-red-100">
+                  <h4 className="text-sm font-bold text-red-600 mb-2">الأسئلة المستبعدة ({questionState.excludedQuestions.length})</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {questionState.excludedQuestions.map((q, i) => (
+                      <button
+                        key={i}
+                        onClick={() => setQuestionState({ excludedQuestions: questionState.excludedQuestions.filter(item => item !== q) })}
+                        className="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1 rounded-full text-xs flex items-center gap-1 transition-colors"
+                      >
+                        {q.substring(0, 30)}{q.length > 30 ? '...' : ''} <Trash2 size={10} className="rotate-45" />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )
+            ) : (
+              questionState.excludedQuestionItems.length > 0 && (
+                <div className="bg-red-50 p-4 rounded-2xl border border-red-100">
+                  <h4 className="text-sm font-bold text-red-600 mb-2">العناصر المستبعدة ({questionState.excludedQuestionItems.length})</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {questionState.excludedQuestionItems.map((id) => {
+                      const item = questionState.questionItems.find(i => i.id === id)
+                      if (!item) return null
+                      return (
+                        <button
+                          key={id}
+                          onClick={() => setQuestionState({ excludedQuestionItems: questionState.excludedQuestionItems.filter(x => x !== id) })}
+                          className="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1 rounded-full text-xs flex items-center gap-1 transition-colors capitalize"
+                        >
+                          {item.type === 'text' ? item.content.substring(0, 20) : "Image Question"} <Trash2 size={10} className="rotate-45" />
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+              )
+            )}
+
+            {isTourActive && questionState.questions.length === 0 && questionState.questionItems.length === 0 && (
+              <div className="bg-red-50 p-4 rounded-2xl border border-red-100">
+                <p className="text-sm text-red-600">💡 هنا ستظهر العناصر المستبعدة. اضغط لإعادتها للقائمة.</p>
               </div>
             )}
-            {/* Demo excluded questions - only shown during tour */}
-            {isTourActive && questionState.excludedQuestions.length === 0 && (
-              <div className="bg-red-50 p-4 rounded-2xl border border-red-100" data-tour="demo-excluded-questions">
-                <h4 className="text-sm font-bold text-red-600 mb-2">الأسئلة المستبعدة (0)</h4>
-                <div className="flex flex-wrap gap-2">
-                  <button
-                    className="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1 rounded-full text-xs flex items-center gap-1 transition-colors animate-pulse"
-                    title="مثال: اضغط لإعادة السؤال للقائمة"
-                  >
-                    ما هو العدد الأولي؟ (مثال) <Trash2 size={10} className="rotate-45" />
-                  </button>
-                </div>
-                <p className="text-xs text-red-600 mt-2 opacity-70">💡 هنا ستظهر الأسئلة المستبعدة. اضغط على السؤال لإعادته للقائمة.</p>
-              </div>
-            )}
+
+            <Lightbox
+              open={lightboxIndex >= 0}
+              index={lightboxIndex}
+              close={() => setLightboxIndex(-1)}
+              slides={questionState.questionItems.filter(i => i.type === 'image').map(i => ({ src: i.content }))}
+            />
           </div>
         )}
 

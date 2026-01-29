@@ -47,8 +47,11 @@ export default function ClassroomToolsPage() {
 
   const [questionState, setQuestionState] = useState<QuestionToolState>({
     questions: "",
+    mode: 'text',
+    questionItems: [],
     currentQuestion: null,
     excludedQuestions: [],
+    excludedQuestionItems: [],
     isAnimating: false
   })
 
