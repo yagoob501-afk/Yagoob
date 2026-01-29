@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { Dices, RotateCcw, HelpCircle, X, Image as ImageIcon, LayoutGrid, Type } from "lucide-react"
+import { Dices, RotateCcw, HelpCircle, X, Image as ImageIcon, Type } from "lucide-react"
 import Lightbox from "yet-another-react-lightbox"
 import "yet-another-react-lightbox/styles.css"
 
