@@ -1,16 +1,17 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { Dices, RotateCcw, HelpCircle, X, Image as ImageIcon, Type } from "lucide-react"
+import { Dices, RotateCcw, HelpCircle, X, Image as ImageIcon, Type, List, Edit3 } from "lucide-react"
 import Lightbox from "yet-another-react-lightbox"
 import "yet-another-react-lightbox/styles.css"
+import { motion, AnimatePresence } from "framer-motion"
 
 export type QuestionMode = 'text' | 'image' | 'hybrid'
 
 export interface QuestionItem {
   id: string
-  type: 'text' | 'image'
-  content: string // text content or image data URL
+  text?: string
+  image?: string
 }
 
 export interface QuestionToolState {
@@ -60,32 +61,44 @@ export default function QuestionTool({ state, setState }: { state: QuestionToolS
   return (
     <div className="flex flex-col items-center p-6 sm:p-8 md:p-12 min-h-[600px]">
       {!currentQuestion ? (
-        <div className="flex flex-col gap-6 w-full max-w-4xl">
-          <div className="text-center">
-            <HelpCircle className="w-12 h-12 text-primary mx-auto mb-4 animate-pulse" />
-            <h2 className="text-2xl sm:text-3xl font-bold">سؤال عشوائي</h2>
-          </div>
-          <div className="bg-white rounded-3xl border-2 border-border shadow-inner overflow-hidden flex flex-col">
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-3 p-4 border-b border-border bg-bg-layout/50">
-              <span className="font-bold text-muted-foreground text-sm sm:text-base">
-                {list.length} عنصر • {available.length} متاح • {mode === 'text' ? excludedQuestions.length : excludedQuestionItems.length} مستبعد
-              </span>
-              <div className="flex bg-bg-container rounded-xl p-1 border border-border">
+        <div className="flex flex-col gap-8 w-full max-w-4xl">
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center space-y-2"
+          >
+            <div className="w-16 h-16 bg-primary/10 rounded-3xl flex items-center justify-center mx-auto mb-4 border border-primary/20">
+              <HelpCircle className="w-8 h-8 text-primary animate-pulse" />
+            </div>
+            <h2 className="text-3xl font-bold text-gray-800">سؤال عشوائي</h2>
+            <p className="text-muted-foreground font-medium">اختر سؤالاً بشكل عشوائي من القائمة</p>
+          </motion.div>
+
+          <div className="bg-white/80 backdrop-blur-xl rounded-[2.5rem] border border-gray-100 shadow-2xl shadow-gray-200/50 overflow-hidden flex flex-col">
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 p-6 border-b border-gray-50 bg-gray-50/30">
+              <div className="flex flex-col">
+                <span className="font-bold text-gray-800">إدارة الأسئلة</span>
+                <span className="text-xs font-bold text-muted-foreground">
+                  {available.length} متاح من أصل {list.length}
+                </span>
+              </div>
+              <div className="flex bg-white rounded-2xl p-1 shadow-sm border border-gray-100">
                 <button
                   onClick={() => setViewMode('input')}
-                  className={`px-4 py-2 rounded-lg text-sm transition-all ${viewMode === 'input' ? 'bg-primary text-white' : 'text-muted-foreground'}`}
+                  className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center gap-2 ${viewMode === 'input' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-muted-foreground hover:bg-gray-50'}`}
                 >
-                  إدخال نصي
+                  <Edit3 size={16} /> إدخال
                 </button>
                 <button
                   onClick={() => setViewMode('list')}
-                  className={`px-4 py-2 rounded-lg text-sm transition-all ${viewMode === 'list' ? 'bg-primary text-white' : 'text-muted-foreground'}`}
+                  className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center gap-2 ${viewMode === 'list' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-muted-foreground hover:bg-gray-50'}`}
                 >
-                  القائمة
+                  <List size={16} /> القائمة
                 </button>
               </div>
             </div>
-            <div className="p-6 max-h-[400px] overflow-auto">
+
+            <div className="p-6 max-h-[450px] overflow-auto custom-scrollbar">
               {viewMode === 'input' ? (
                 mode === 'text' ? (
                   <textarea
@@ -103,50 +116,64 @@ export default function QuestionTool({ state, setState }: { state: QuestionToolS
                 )
               ) : (
                 <div className="grid grid-cols-1 gap-3">
-                  {mode === 'text' ? (
-                    (list as string[]).map((q, i) => (
-                      <button
-                        key={i}
-                        onClick={() => {
-                          setState({
-                            excludedQuestions: excludedQuestions.includes(q)
-                              ? excludedQuestions.filter(x => x !== q)
-                              : [...excludedQuestions, q]
-                          })
-                        }}
-                        className={`p-3 rounded-xl border-2 transition-all font-medium text-sm sm:text-base text-right ${excludedQuestions.includes(q)
-                          ? 'bg-red-50 border-red-200 text-red-500'
-                          : 'bg-white border-border hover:shadow-md'
-                          }`}
-                      >
-                        <span className={excludedQuestions.includes(q) ? 'line-through' : ''}>{q}</span>
-                      </button>
-                    ))
-                  ) : (
-                    (list as QuestionItem[]).map((item, i) => (
-                      <button
-                        key={item.id}
-                        onClick={() => {
-                          setState({
-                            excludedQuestionItems: excludedQuestionItems.includes(item.id)
-                              ? excludedQuestionItems.filter(x => x !== item.id)
-                              : [...excludedQuestionItems, item.id]
-                          })
-                        }}
-                        className={`p-3 rounded-xl border-2 transition-all font-medium text-sm sm:text-base text-right flex items-center gap-3 ${excludedQuestionItems.includes(item.id)
-                          ? 'bg-red-50 border-red-200 text-red-500'
-                          : 'bg-white border-border hover:shadow-md'
-                          }`}
-                      >
-                        <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center shrink-0">
-                          {item.type === 'image' ? <ImageIcon size={14} /> : <Type size={14} />}
-                        </div>
-                        <span className={`truncate flex-1 ${excludedQuestionItems.includes(item.id) ? 'line-through' : ''}`}>
-                          {item.type === 'text' ? item.content : `صورة ${i + 1}`}
-                        </span>
-                      </button>
-                    ))
-                  )}
+                  <AnimatePresence mode="popLayout">
+                    {mode === 'text' ? (
+                      (list as string[]).map((q, i) => (
+                        <motion.button
+                          layout
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: 10 }}
+                          key={`${q}-${i}`}
+                          onClick={() => {
+                            setState({
+                              excludedQuestions: excludedQuestions.includes(q)
+                                ? excludedQuestions.filter(x => x !== q)
+                                : [...excludedQuestions, q]
+                            })
+                          }}
+                          className={`p-4 rounded-2xl border-2 transition-all font-bold text-right flex items-center justify-between group ${excludedQuestions.includes(q)
+                            ? 'bg-red-50 border-red-100 text-red-400'
+                            : 'bg-white border-gray-50 hover:border-primary/20 hover:shadow-md'
+                            }`}
+                        >
+                          <span className={excludedQuestions.includes(q) ? 'line-through opacity-50' : 'text-gray-700'}>{q}</span>
+                          {excludedQuestions.includes(q) && <X size={16} className="text-red-400" />}
+                        </motion.button>
+                      ))
+                    ) : (
+                      (list as QuestionItem[]).reverse().map((item, i) => (
+                        <motion.button
+                          layout
+                          initial={{ opacity: 0, scale: 0.98 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 0.98 }}
+                          key={item.id}
+                          onClick={() => {
+                            setState({
+                              excludedQuestionItems: excludedQuestionItems.includes(item.id)
+                                ? excludedQuestionItems.filter(x => x !== item.id)
+                                : [...excludedQuestionItems, item.id]
+                            })
+                          }}
+                          className={`p-4 rounded-[2rem] border-2 transition-all font-bold text-right flex items-center gap-4 group ${excludedQuestionItems.includes(item.id)
+                            ? 'bg-red-50 border-red-100 text-red-400'
+                            : 'bg-white border-gray-50 hover:border-primary/20 hover:shadow-md hover:scale-[1.01]'
+                            }`}
+                        >
+                          <div className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 transition-colors ${excludedQuestionItems.includes(item.id) ? 'bg-red-100 text-red-400' : 'bg-gray-50 text-muted-foreground group-hover:bg-primary/5 group-hover:text-primary'}`}>
+                            {item.image ? <ImageIcon size={18} /> : <Type size={18} />}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className={`truncate text-base ${excludedQuestionItems.includes(item.id) ? 'line-through opacity-50' : 'text-gray-700'}`}>
+                              {item.text || (item.image ? `سؤال مصور` : "سؤال فارغ")}
+                            </p>
+                          </div>
+                          {excludedQuestionItems.includes(item.id) && <X size={18} className="text-red-400" />}
+                        </motion.button>
+                      ))
+                    )}
+                  </AnimatePresence>
                 </div>
               )}
             </div>
@@ -167,16 +194,19 @@ export default function QuestionTool({ state, setState }: { state: QuestionToolS
                 typeof currentQuestion === 'string' ? (
                   currentQuestion
                 ) : (
-                  currentQuestion.type === 'text' ? (
-                    currentQuestion.content
-                  ) : (
-                    <img
-                      src={currentQuestion.content}
-                      className="max-h-[250px] w-auto rounded-2xl cursor-pointer"
-                      onClick={() => setLightboxOpen(true)}
-                      alt="Question"
-                    />
-                  )
+                  <>
+                    {currentQuestion.text && (
+                      <p className="text-xl sm:text-2xl md:text-3xl font-bold mb-4">{currentQuestion.text}</p>
+                    )}
+                    {currentQuestion.image && (
+                      <img
+                        src={currentQuestion.image}
+                        className="max-h-[250px] w-auto rounded-2xl cursor-pointer mx-auto"
+                        onClick={() => setLightboxOpen(true)}
+                        alt="Question"
+                      />
+                    )}
+                  </>
                 )
               ) : null
             )}
@@ -217,7 +247,7 @@ export default function QuestionTool({ state, setState }: { state: QuestionToolS
       <Lightbox
         open={lightboxOpen}
         close={() => setLightboxOpen(false)}
-        slides={(currentQuestion && typeof currentQuestion !== 'string' && currentQuestion.type === 'image') ? [{ src: currentQuestion.content }] : []}
+        slides={(currentQuestion && typeof currentQuestion !== 'string' && currentQuestion.image) ? [{ src: currentQuestion.image }] : []}
       />
     </div>
   )

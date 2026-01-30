@@ -185,100 +185,120 @@ export default function RoundView({
   return (
     <div className="w-full flex flex-col gap-6">
 
-      {/* Cards Container */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* New Layout Container */}
+      <div className="flex flex-col gap-6">
 
-        {/* Student Card */}
+        {/* Question Card - TOP FULL WIDTH */}
         <div
-          className={`relative bg-white rounded-3xl p-6 shadow-sm border-2 transition-all min-h-[250px] flex flex-col items-center justify-center gap-4 text-center overflow-hidden ${phase === 'selecting_student' ? 'border-primary shadow-xl scale-105 z-10' : 'border-border'} ${studentDisabled ? 'opacity-50 grayscale' : ''}`}
-          data-tour="round-student-card"
-        >
-          <div className="absolute top-0 right-0 p-4 opacity-5">
-            <Users size={120} />
-          </div>
-          <span className="text-xs font-bold uppercase text-muted-foreground tracking-wider">الطالب</span>
-          <h3 className="text-3xl font-bold text-gray-800 break-words max-w-full">
-            {displayStudent || "---"}
-          </h3>
-          {phase === 'selecting_student' && <div className="absolute bottom-0 left-0 w-full h-1 bg-primary animate-pulse" />}
-
-          {(phase === 'ready' || phase === 'finished') && !studentDisabled && displayStudent && (
-            <button onClick={handleExcludeStudent} className="btn-outline border-red-200 text-red-500 hover:bg-red-50 text-xs px-3 py-1 rounded-full flex items-center gap-1 absolute bottom-4">
-              <Ban size={12} /> استبعاد
-            </button>
-          )}
-          {studentDisabled && <span className="absolute bottom-4 text-xs font-bold text-red-500 bg-red-50 px-2 py-1 rounded">تم الاستبعاد</span>}
-        </div>
-
-        {/* Question Card */}
-        <div
-          className={`relative bg-white rounded-3xl p-6 shadow-sm border-2 transition-all min-h-[250px] flex flex-col items-center justify-center gap-4 text-center overflow-hidden ${phase === 'selecting_question' ? 'border-yellow-500 shadow-xl scale-105 z-10' : 'border-border'} ${questionDisabled ? 'opacity-50 grayscale' : ''}`}
+          className={`relative bg-white rounded-3xl p-8 shadow-sm border-2 transition-all min-h-[300px] flex flex-col items-center justify-center gap-6 text-center overflow-hidden ${phase === 'selecting_question' ? 'border-yellow-500 shadow-xl scale-[1.02] z-10' : 'border-border'} ${questionDisabled ? 'opacity-50 grayscale' : ''}`}
           data-tour="round-question-card"
         >
-          <div className="absolute top-0 right-0 p-4 opacity-5">
-            <HelpCircle size={120} />
+          <div className="absolute top-0 right-0 p-6 opacity-5">
+            <HelpCircle size={150} />
           </div>
-          <span className="text-xs font-bold uppercase text-muted-foreground tracking-wider">السؤال</span>
-          <div className="w-full flex-1 flex flex-col items-center justify-center min-h-[140px]">
+          <span className="text-sm font-bold uppercase text-muted-foreground tracking-wider bg-gray-50 px-4 py-1 rounded-full border border-border">السؤال</span>
+
+          <div className="w-full flex-1 flex flex-col items-center justify-center gap-6">
             {displayQuestion ? (
               typeof displayQuestion === 'string' ? (
-                <h3 className="text-2xl font-bold text-gray-800 break-words max-w-full leading-relaxed">
+                <h3 className="text-3xl md:text-4xl font-bold text-gray-800 break-words max-w-4xl leading-relaxed">
                   {displayQuestion}
                 </h3>
               ) : (
-                displayQuestion.type === 'text' ? (
-                  <h3 className="text-2xl font-bold text-gray-800 break-words max-w-full leading-relaxed">
-                    {displayQuestion.content}
-                  </h3>
-                ) : (
-                  <div className="relative group cursor-pointer" onClick={() => setLightboxOpen(true)}>
-                    <img src={displayQuestion.content} className="max-h-[180px] w-auto rounded-xl border border-border shadow-sm group-hover:shadow-md transition-shadow" alt="Question" />
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 flex items-center justify-center transition-colors rounded-xl">
-                      <ImageIcon className="text-white opacity-0 group-hover:opacity-100 transition-opacity" size={24} />
+                <div className="flex flex-col items-center gap-6 w-full max-w-4xl">
+                  {displayQuestion.text && (
+                    <h3 className="text-3xl md:text-4xl font-bold text-gray-800 break-words leading-relaxed">
+                      {displayQuestion.text}
+                    </h3>
+                  )}
+                  {displayQuestion.image && (
+                    <div className="relative group cursor-pointer" onClick={() => setLightboxOpen(true)}>
+                      <img src={displayQuestion.image} className="max-h-[300px] w-auto rounded-2xl border-2 border-border shadow-md group-hover:shadow-lg transition-all" alt="Question" />
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 flex items-center justify-center transition-colors rounded-2xl">
+                        <ImageIcon className="text-white opacity-0 group-hover:opacity-100 transition-opacity" size={32} />
+                      </div>
                     </div>
-                  </div>
-                )
+                  )}
+                  {!displayQuestion.text && !displayQuestion.image && (
+                    <h3 className="text-3xl font-bold text-gray-300">سؤال فارغ</h3>
+                  )}
+                </div>
               )
             ) : (
-              <h3 className="text-2xl font-bold text-gray-300">---</h3>
+              <h3 className="text-3xl font-bold text-gray-300">---</h3>
             )}
           </div>
-          {phase === 'selecting_question' && <div className="absolute bottom-0 left-0 w-full h-1 bg-yellow-500 animate-pulse" />}
+
+          {phase === 'selecting_question' && <div className="absolute bottom-0 left-0 w-full h-1.5 bg-yellow-500 animate-pulse" />}
 
           {(phase === 'ready' || phase === 'finished') && !questionDisabled && displayQuestion && (
-            <button onClick={handleExcludeQuestion} className="btn-outline bg-white cursor-pointer border-red-200 text-red-500 hover:bg-red-50 text-xs px-3 py-1 rounded-full flex items-center gap-1 absolute bottom-4">
-              <Ban size={12} /> استبعاد
+            <button
+              onClick={handleExcludeQuestion}
+              className="absolute right-4 bottom-4 md:right-6 px-4 py-2 rounded-xl font-bold border-2 shadow-sm flex items-center gap-1.5 bg-white border-red-500 text-red-500 hover:bg-red-50 transition-all z-20 active:scale-95 group text-sm"
+            >
+              <Ban size={18} className="group-hover:rotate-12 transition-transform" />
+              <span className="hidden sm:inline">استبعاد السؤال</span>
             </button>
           )}
-          {questionDisabled && <span className="absolute bottom-4 text-xs font-bold text-red-500 bg-red-50 px-2 py-1 rounded">تم الاستبعاد</span>}
+          {questionDisabled && (
+            <div className="absolute right-4 bottom-4 md:right-6 flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gray-50 text-gray-400 font-bold border-2 border-gray-200 shadow-sm z-20 opacity-80 text-sm">
+              <Ban size={18} />
+              <span>تم الاستبعاد</span>
+            </div>
+          )}
 
           <Lightbox
             open={lightboxOpen}
             close={() => setLightboxOpen(false)}
-            slides={(displayQuestion && typeof displayQuestion !== 'string' && displayQuestion.type === 'image') ? [{ src: displayQuestion.content }] : []}
+            slides={(displayQuestion && typeof displayQuestion !== 'string' && displayQuestion.image) ? [{ src: displayQuestion.image }] : []}
           />
         </div>
 
-        {/* Reward Card */}
-        <div
-          className={`relative bg-white rounded-3xl p-6 shadow-sm border-2 transition-all min-h-[250px] flex flex-col items-center justify-center gap-4 text-center overflow-hidden ${phase === 'selecting_reward' ? 'border-pink-500 shadow-xl scale-105 z-10' : 'border-border'}`}
-          data-tour="round-reward-card"
-        >
-          <div className="absolute top-0 right-0 p-4 opacity-5">
-            <Gift size={120} />
-          </div>
-          <span className="text-xs font-bold uppercase text-muted-foreground tracking-wider">المكافأة</span>
-          <h3 className="text-2xl font-bold text-gray-800 break-words max-w-full">
-            {displayReward || "---"}
-          </h3>
-          {phase === 'selecting_reward' && <div className="absolute bottom-0 left-0 w-full h-1 bg-pink-500 animate-pulse" />}
+        {/* Bottom Row - Names & Rewards side by side */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-          {/* Controls for Reward (Reselect) */}
-          {(phase === 'ready' || phase === 'running' || phase === 'finished') && displayReward && (
-            <button onClick={handleReselectReward} className="btn-ghost text-muted-foreground hover:text-primary absolute top-2 left-2 p-2">
-              <RotateCcw size={16} />
-            </button>
-          )}
+          {/* Student/Name Card */}
+          <div
+            className={`relative bg-white rounded-3xl p-6 shadow-sm border-2 transition-all min-h-[220px] flex flex-col items-center justify-center gap-4 text-center overflow-hidden ${phase === 'selecting_student' ? 'border-primary shadow-xl scale-[1.02] z-10' : 'border-border'} ${studentDisabled ? 'opacity-50 grayscale' : ''}`}
+            data-tour="round-student-card"
+          >
+            <div className="absolute top-0 right-0 p-4 opacity-5">
+              <Users size={100} />
+            </div>
+            <span className="text-xs font-bold uppercase text-muted-foreground tracking-wider">الاسم</span>
+            <h3 className="text-2xl md:text-3xl font-bold text-gray-800 break-words max-w-full">
+              {displayStudent || "---"}
+            </h3>
+            {phase === 'selecting_student' && <div className="absolute bottom-0 left-0 w-full h-1 bg-primary animate-pulse" />}
+
+            {(phase === 'ready' || phase === 'finished') && !studentDisabled && displayStudent && (
+              <button onClick={handleExcludeStudent} className="btn-outline border-red-200 text-red-500 hover:bg-red-50 text-xs px-3 py-1.5 rounded-full flex items-center gap-1 absolute bottom-4">
+                <Ban size={14} /> استبعاد
+              </button>
+            )}
+            {studentDisabled && <span className="absolute bottom-4 text-xs font-bold text-red-500 bg-red-50 px-2 py-1 rounded">تم الاستبعاد</span>}
+          </div>
+
+          {/* Reward Card */}
+          <div
+            className={`relative bg-white rounded-3xl p-6 shadow-sm border-2 transition-all min-h-[220px] flex flex-col items-center justify-center gap-4 text-center overflow-hidden ${phase === 'selecting_reward' ? 'border-pink-500 shadow-xl scale-[1.02] z-10' : 'border-border'}`}
+            data-tour="round-reward-card"
+          >
+            <div className="absolute top-0 right-0 p-4 opacity-5">
+              <Gift size={100} />
+            </div>
+            <span className="text-xs font-bold uppercase text-muted-foreground tracking-wider">المكافأة</span>
+            <h3 className="text-2xl md:text-3xl font-bold text-gray-800 break-words max-w-full">
+              {displayReward || "---"}
+            </h3>
+            {phase === 'selecting_reward' && <div className="absolute bottom-0 left-0 w-full h-1 bg-pink-500 animate-pulse" />}
+
+            {(phase === 'ready' || phase === 'running' || phase === 'finished') && displayReward && (
+              <button onClick={handleReselectReward} className="btn-ghost text-muted-foreground hover:text-primary absolute top-3 right-3 p-2">
+                <RotateCcw size={18} />
+              </button>
+            )}
+          </div>
         </div>
 
       </div>
@@ -312,7 +332,7 @@ export default function RoundView({
             className="px-8 py-4 rounded-2xl font-bold border-2 shadow-md flex items-center gap-2 bg-white border-primary text-primary hover:bg-primary/5 disabled:opacity-50 disabled:cursor-not-allowed"
             data-tour="round-start-selection"
           >
-            <Dices size={24} /> {['selecting_student', 'selecting_question', 'selecting_reward'].includes(phase) ? 'جاري الاختيار...' : 'اختيار بيانات'}
+            <Dices size={24} /> {['selecting_student', 'selecting_question', 'selecting_reward'].includes(phase) ? 'جاري الاختيار...' : 'اختيار سؤال'}
           </button>
 
           {/* End Round Button - Visible only when NOT idle */}

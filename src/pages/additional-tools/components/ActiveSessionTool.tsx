@@ -92,79 +92,43 @@ export default function ActiveSessionTool({
       ) : (
         <div className="w-full flex flex-col gap-8 animate-in slide-in-from-bottom duration-500">
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
-            {/* Student Card */}
-            <div className="bg-white p-6 rounded-3xl shadow-sm border border-border flex flex-col items-center justify-center text-center gap-4 relative overflow-hidden group">
-              <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                <Users size={100} />
+          <div className="flex flex-col gap-6 w-full">
+            {/* Question Card - FULL WIDTH TOP */}
+            <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-border flex flex-col items-center justify-center text-center gap-6 relative overflow-hidden group min-h-[250px]">
+              <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
+                <HelpCircle size={150} />
               </div>
-              <span className="text-sm font-bold text-muted-foreground uppercase tracking-wider">الطالب المختار</span>
-              <h3 className="text-3xl md:text-4xl font-bold text-primary break-words max-w-full">
-                {studentState.currentStudent || "لم يتم الاختيار"}
-              </h3>
+              <span className="text-sm font-bold text-muted-foreground uppercase tracking-wider bg-gray-50 px-4 py-1 rounded-full border border-border">السؤال</span>
 
-              <div className="flex flex-wrap gap-2 justify-center">
-                {!timerState.isRunning && (
-                  <button
-                    onClick={() => {
-                      const studentsList = studentState.studentsText.split("\n").map(s => s.trim()).filter(s => s !== "")
-                      const availableStudents = studentsList.filter(s => !studentState.excludedStudents.includes(s))
-                      if (availableStudents.length > 0) {
-                        setStudentState({ currentStudent: availableStudents[Math.floor(Math.random() * availableStudents.length)] })
-                      }
-                    }}
-                    className="btn-outline text-xs px-3 py-1 rounded-full flex items-center gap-1"
-                  >
-                    <RotateCcw size={12} /> تغيير
-                  </button>
-                )}
-                {studentState.currentStudent && (
-                  <button
-                    onClick={() => {
-                      setStudentState({
-                        excludedStudents: [...studentState.excludedStudents, studentState.currentStudent!]
-                      })
-                    }}
-                    className="text-xs bg-red-50 text-red-500 hover:bg-red-100 px-3 py-1 rounded-full transition-colors flex items-center gap-1 border border-red-100"
-                  >
-                    استبعاد
-                  </button>
-                )}
-              </div>
-            </div>
-
-            {/* Question Card */}
-            <div className="bg-white p-6 rounded-3xl shadow-sm border border-border flex flex-col items-center justify-center text-center gap-4 relative overflow-hidden group">
-              <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                <HelpCircle size={100} />
-              </div>
-              <span className="text-sm font-bold text-muted-foreground uppercase tracking-wider">السؤال</span>
-              <div className="w-full flex-1 flex flex-col items-center justify-center min-h-[100px]">
+              <div className="w-full flex-1 flex flex-col items-center justify-center gap-6">
                 {questionState.currentQuestion ? (
                   typeof questionState.currentQuestion === 'string' ? (
-                    <h3 className="text-xl md:text-2xl font-bold text-gray-800 break-words max-w-full leading-relaxed">
+                    <h3 className="text-2xl md:text-4xl font-bold text-gray-800 break-words max-w-4xl leading-relaxed">
                       {questionState.currentQuestion}
                     </h3>
                   ) : (
-                    questionState.currentQuestion.type === 'text' ? (
-                      <h3 className="text-xl md:text-2xl font-bold text-gray-800 break-words max-w-full leading-relaxed">
-                        {questionState.currentQuestion.content}
-                      </h3>
-                    ) : (
-                      <div className="relative group cursor-pointer" onClick={() => setLightboxOpen(true)}>
-                        <img src={questionState.currentQuestion.content} className="max-h-[120px] w-auto rounded-xl border border-border shadow-sm group-hover:shadow-md transition-shadow" alt="Question" />
-                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 flex items-center justify-center transition-colors rounded-xl">
-                          <ImageIcon className="text-white opacity-0 group-hover:opacity-100 transition-opacity" size={24} />
+                    <div className="flex flex-col items-center gap-6 w-full max-w-4xl">
+                      {questionState.currentQuestion.text && (
+                        <h3 className="text-2xl md:text-3xl font-bold text-gray-800 break-words leading-relaxed">
+                          {questionState.currentQuestion.text}
+                        </h3>
+                      )}
+                      {questionState.currentQuestion.image && (
+                        <div className="relative group cursor-pointer" onClick={() => setLightboxOpen(true)}>
+                          <img src={questionState.currentQuestion.image} className="max-h-[200px] w-auto rounded-2xl border-2 border-border shadow-md transition-all" alt="Question" />
+                          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 flex items-center justify-center transition-colors rounded-2xl">
+                            <ImageIcon className="text-white opacity-0 group-hover:opacity-100 transition-opacity" size={32} />
+                          </div>
                         </div>
-                      </div>
-                    )
+                      )}
+                    </div>
                   )
                 ) : (
-                  <h3 className="text-xl md:text-2xl font-bold text-gray-300">لم يتم الاختيار</h3>
+                  <h3 className="text-2xl md:text-4xl font-bold text-gray-300">لم يتم اختيار سؤال</h3>
                 )}
               </div>
 
-              <div className="flex flex-wrap gap-2 justify-center">
+              <div className="flex flex-wrap gap-2 justify-center z-10">
                 {!timerState.isRunning && (
                   <button
                     onClick={() => {
@@ -181,9 +145,9 @@ export default function ActiveSessionTool({
                         setQuestionState({ currentQuestion: available[Math.floor(Math.random() * available.length)] })
                       }
                     }}
-                    className="btn-outline text-xs px-3 py-1 rounded-full flex items-center gap-1"
+                    className="btn-outline text-xs px-4 py-2 rounded-full flex items-center gap-2 bg-white"
                   >
-                    <Dices size={12} /> تغيير
+                    <Dices size={14} /> تغيير السؤال
                   </button>
                 )}
                 {questionState.currentQuestion && (
@@ -199,7 +163,47 @@ export default function ActiveSessionTool({
                         })
                       }
                     }}
-                    className="text-xs bg-red-50 text-red-500 hover:bg-red-100 px-3 py-1 rounded-full transition-colors flex items-center gap-1 border border-red-100"
+                    className="text-xs bg-red-50 text-red-500 hover:bg-red-100 px-4 py-2 rounded-full transition-colors flex items-center gap-2 border border-red-100"
+                  >
+                    استبعاد
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Student/Name Card - CENTERED BELOW */}
+            <div className="bg-white p-6 rounded-3xl shadow-sm border border-border flex flex-col items-center justify-center text-center gap-4 relative overflow-hidden group max-w-2xl mx-auto w-full">
+              <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                <Users size={100} />
+              </div>
+              <span className="text-sm font-bold text-muted-foreground uppercase tracking-wider">الاسم المختار</span>
+              <h3 className="text-3xl md:text-4xl font-bold text-primary break-words max-w-full">
+                {studentState.currentStudent || "لم يتم الاختيار"}
+              </h3>
+
+              <div className="flex flex-wrap gap-2 justify-center z-10">
+                {!timerState.isRunning && (
+                  <button
+                    onClick={() => {
+                      const studentsList = studentState.studentsText.split("\n").map(s => s.trim()).filter(s => s !== "")
+                      const availableStudents = studentsList.filter(s => !studentState.excludedStudents.includes(s))
+                      if (availableStudents.length > 0) {
+                        setStudentState({ currentStudent: availableStudents[Math.floor(Math.random() * availableStudents.length)] })
+                      }
+                    }}
+                    className="btn-outline text-xs px-4 py-2 rounded-full flex items-center gap-2 bg-white"
+                  >
+                    <RotateCcw size={14} /> تغيير الاسم
+                  </button>
+                )}
+                {studentState.currentStudent && (
+                  <button
+                    onClick={() => {
+                      setStudentState({
+                        excludedStudents: [...studentState.excludedStudents, studentState.currentStudent!]
+                      })
+                    }}
+                    className="text-xs bg-red-50 text-red-500 hover:bg-red-100 px-4 py-2 rounded-full transition-colors flex items-center gap-2 border border-red-100"
                   >
                     استبعاد
                   </button>
@@ -264,7 +268,7 @@ export default function ActiveSessionTool({
       <Lightbox
         open={lightboxOpen}
         close={() => setLightboxOpen(false)}
-        slides={(questionState.currentQuestion && typeof questionState.currentQuestion !== 'string' && questionState.currentQuestion.type === 'image') ? [{ src: questionState.currentQuestion.content }] : []}
+        slides={(questionState.currentQuestion && typeof questionState.currentQuestion !== 'string' && questionState.currentQuestion.image) ? [{ src: questionState.currentQuestion.image }] : []}
       />
     </div>
   )

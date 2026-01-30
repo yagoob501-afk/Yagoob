@@ -1,9 +1,10 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { Users, HelpCircle, Gift, Clock, Trash2, ArrowLeft, Image as ImageIcon, Type, LayoutGrid, Plus } from "lucide-react"
+import { Users, HelpCircle, Gift, Clock, Trash2, ArrowLeft, Image as ImageIcon, Type, LayoutGrid, Plus, X, Edit3 } from "lucide-react"
 import Lightbox from "yet-another-react-lightbox"
 import "yet-another-react-lightbox/styles.css"
+import { motion, AnimatePresence } from "framer-motion"
 import type { TimerState } from "./TimerTool"
 import type { RandomStudentState } from "./RandomStudentTool"
 import type { QuestionToolState } from "./QuestionTool"
@@ -36,6 +37,12 @@ export default function SetupView({
   const [activeTab, setActiveTab] = useState<'students' | 'questions' | 'rewards' | 'timer'>('students')
   const [lightboxIndex, setLightboxIndex] = useState(-1)
   const { isOpen: isTourActive } = useTour()
+
+  // Inline Question Form State
+  const [newQuestionText, setNewQuestionText] = useState("")
+  const [newQuestionImage, setNewQuestionImage] = useState<string | null>(null)
+  const [isAddingQuestion, setIsAddingQuestion] = useState(false)
+  const [editingQuestionId, setEditingQuestionId] = useState<string | null>(null)
 
   // Refs for each tab button
   const studentsTabRef = useRef<HTMLButtonElement>(null)
@@ -187,83 +194,267 @@ export default function SetupView({
             </div>
 
             {/* Content based on mode */}
-            <div className="flex-1 flex flex-col gap-4">
+            <div className="flex-1 flex flex-col gap-6">
               {questionState.mode === 'text' && (
-                <textarea
-                  value={questionState.questions}
-                  onChange={(e) => setQuestionState({ questions: e.target.value })}
-                  placeholder="اكتب الأسئلة هنا (كل سؤال في سطر مستقل)..."
-                  className="flex-1 w-full p-4 rounded-2xl border-2 border-border focus:border-primary outline-none resize-none min-h-[300px]"
-                  data-tour="setup-questions"
-                />
-              )}
-
-              {/* questionState.mode === 'image' section removed and merged into hybrid */}
-
-              {questionState.mode === 'hybrid' && (
-                <div className="flex-1 flex flex-col gap-4">
-                  <div className="flex gap-3">
-                    <button
-                      onClick={() => {
-                        const content = prompt("اكتب السؤال النصي:")
-                        if (content) {
-                          setQuestionState({
-                            questionItems: [
-                              ...questionState.questionItems,
-                              { id: Math.random().toString(36).substr(2, 9), type: 'text', content }
-                            ]
-                          })
-                        }
-                      }}
-                      className="flex-1 py-3 px-4 bg-primary/10 text-primary border-2 border-primary/20 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-primary/20 transition-all"
-                    >
-                      <Plus size={18} /> إضافة سؤال نصي
-                    </button>
-                    <div className="flex-1 relative">
-                      <input
-                        type="file"
-                        multiple
-                        accept="image/*"
-                        onChange={(e) => {
-                          const files = Array.from(e.target.files || [])
-                          const newItems = files.map(file => ({
-                            id: Math.random().toString(36).substr(2, 9),
-                            type: 'image' as const,
-                            content: URL.createObjectURL(file)
-                          }))
-                          setQuestionState({ questionItems: [...questionState.questionItems, ...newItems] })
-                        }}
-                        className="absolute inset-0 opacity-0 cursor-pointer"
-                      />
-                      <button className="w-full py-3 px-4 bg-primary/10 text-primary border-2 border-primary/20 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-primary/20 transition-all">
-                        <ImageIcon size={18} /> إضافة صور
-                      </button>
-                    </div>
+                <div className="flex-1 flex flex-col gap-6">
+                  <div className="bg-gray-50/50 p-6 rounded-[2rem] border-2 border-dashed border-gray-200 focus-within:border-primary/50 transition-colors">
+                    <textarea
+                      value={questionState.questions}
+                      onChange={(e) => setQuestionState({ questions: e.target.value })}
+                      placeholder="اكتب الأسئلة هنا (كل سؤال في سطر مستقل)..."
+                      className="w-full bg-transparent text-lg font-medium outline-none resize-none min-h-[120px] placeholder:text-muted-foreground/50"
+                      data-tour="setup-questions"
+                    />
                   </div>
 
-                  <div className="space-y-3 max-h-[400px] overflow-auto pr-2">
-                    {questionState.questionItems.map((item, idx) => (
-                      <div key={item.id} className="flex items-center gap-4 bg-white p-3 rounded-2xl border-2 border-border group">
-                        <div className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-muted-foreground font-mono font-bold shrink-0">
-                          {idx + 1}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          {item.type === 'text' ? (
-                            <p className="text-sm font-medium truncate">{item.content}</p>
-                          ) : (
-                            <div className="w-16 h-12 rounded-lg bg-gray-100 overflow-hidden border border-border">
-                              <img src={item.content} className="w-full h-full object-cover cursor-pointer" onClick={() => setLightboxIndex(idx)} alt="Preview" />
-                            </div>
-                          )}
-                        </div>
-                        <button
-                          onClick={() => setQuestionState({ questionItems: questionState.questionItems.filter(i => i.id !== item.id) })}
-                          className="bg-red-50 text-red-500 p-2 rounded-xl border border-red-100 opacity-0 group-hover:opacity-100 transition-opacity"
-                        >
-                          <Trash2 size={16} />
-                        </button>
+                  {questionState.questions.split('\n').filter(s => s.trim()).length > 0 && (
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between px-2">
+                        <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider">الأسئلة الحالية ({questionState.questions.split('\n').filter(s => s.trim()).length})</h4>
                       </div>
-                    ))}
+                      <div className="grid grid-cols-1 gap-2 max-h-[300px] overflow-auto pr-2 custom-scrollbar">
+                        <AnimatePresence mode="popLayout">
+                          {questionState.questions.split('\n').filter(s => s.trim()).map((q, idx) => (
+                            <motion.div
+                              layout
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, scale: 0.95 }}
+                              key={`${q}-${idx}`}
+                              className="group flex items-center gap-4 bg-white p-4 rounded-2xl border border-gray-100 hover:border-primary/20 hover:shadow-md transition-all"
+                            >
+                              <div className="w-8 h-8 rounded-xl bg-gray-50 flex items-center justify-center font-bold text-xs text-muted-foreground group-hover:bg-primary/5 group-hover:text-primary transition-colors shrink-0">
+                                {idx + 1}
+                              </div>
+                              <p className="flex-1 text-sm font-semibold text-gray-700 truncate">{q}</p>
+                              <button
+                                onClick={() => {
+                                  const lines = questionState.questions.split('\n')
+                                  const filtered = lines.filter((line, i) => {
+                                    let nonEmptyIdx = -1
+                                    for (let j = 0; j <= i; j++) {
+                                      if (lines[j].trim()) nonEmptyIdx++
+                                    }
+                                    return nonEmptyIdx !== idx || !line.trim()
+                                  })
+                                  setQuestionState({ questions: filtered.join('\n') })
+                                }}
+                                className="w-8 h-8 rounded-lg bg-red-50 text-red-500 flex items-center justify-center hover:bg-red-500 hover:text-white transition-all shadow-sm"
+                                title="حذف السؤال"
+                              >
+                                <Trash2 size={14} />
+                              </button>
+                            </motion.div>
+                          ))}
+                        </AnimatePresence>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {questionState.mode === 'hybrid' && (
+                <div className="flex-1 flex flex-col gap-6">
+                  {/* Premium Inline Form */}
+                  <div className={`bg-gray-50/50 rounded-[2.5rem] border-2 transition-all p-2 ${isAddingQuestion || editingQuestionId ? 'border-primary/30 ring-4 ring-primary/5' : 'border-gray-100'}`}>
+                    {(!isAddingQuestion && !editingQuestionId) ? (
+                      <button
+                        onClick={() => setIsAddingQuestion(true)}
+                        className="w-full py-6 flex flex-col items-center justify-center gap-3 text-muted-foreground hover:text-primary transition-colors group"
+                      >
+                        <div className="w-12 h-12 rounded-2xl bg-white shadow-sm border border-gray-100 flex items-center justify-center group-hover:scale-110 group-hover:border-primary/20 group-hover:shadow-md transition-all">
+                          <Plus size={24} className="text-primary" />
+                        </div>
+                        <span className="font-bold">إضافة سؤال جديد (نص أو صورة)</span>
+                      </button>
+                    ) : (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="p-4 space-y-4"
+                      >
+                        <div className="flex items-center justify-between mb-2">
+                          <h4 className="font-bold text-gray-700">{editingQuestionId ? 'تعديل السؤال' : 'إضافة سؤال جديد'}</h4>
+                        </div>
+                        <div className="flex gap-4">
+                          <div className="flex-1">
+                            <textarea
+                              autoFocus
+                              value={newQuestionText}
+                              onChange={(e) => setNewQuestionText(e.target.value)}
+                              placeholder="اكتب نص السؤال هنا..."
+                              className="w-full bg-white p-4 rounded-2xl border border-gray-100 outline-none focus:border-primary/50 focus:shadow-sm resize-none h-24 font-medium"
+                            />
+                          </div>
+                          <div className="w-24 h-24 shrink-0 relative">
+                            {newQuestionImage ? (
+                              <div className="w-full h-full rounded-2xl overflow-hidden border border-gray-100 shadow-sm group">
+                                <img src={newQuestionImage} className="w-full h-full object-cover" alt="Question preview" />
+                                <button
+                                  onClick={() => setNewQuestionImage(null)}
+                                  className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-red-500 text-white flex items-center justify-center border-2 border-white shadow-md hover:scale-110 transition-transform"
+                                >
+                                  <X size={14} />
+                                </button>
+                              </div>
+                            ) : (
+                              <div className="w-full h-full rounded-2xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center text-muted-foreground hover:border-primary/30 hover:bg-white transition-all cursor-pointer relative group">
+                                <ImageIcon size={20} className="mb-1 group-hover:scale-110 transition-transform" />
+                                <span className="text-[10px] font-bold">صورة</span>
+                                <input
+                                  type="file"
+                                  accept="image/*"
+                                  className="absolute inset-0 opacity-0 cursor-pointer"
+                                  onChange={(e) => {
+                                    const file = e.target.files?.[0]
+                                    if (file) setNewQuestionImage(URL.createObjectURL(file))
+                                  }}
+                                />
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-end gap-3">
+                          <button
+                            onClick={() => {
+                              setIsAddingQuestion(false)
+                              setEditingQuestionId(null)
+                              setNewQuestionText("")
+                              setNewQuestionImage(null)
+                            }}
+                            className="px-6 py-2.5 rounded-xl font-bold text-muted-foreground hover:bg-gray-100 transition-colors"
+                          >
+                            إلغاء
+                          </button>
+                          <button
+                            disabled={!newQuestionText && !newQuestionImage}
+                            onClick={() => {
+                              if (editingQuestionId) {
+                                setQuestionState({
+                                  questionItems: questionState.questionItems.map(item =>
+                                    item.id === editingQuestionId
+                                      ? { ...item, text: newQuestionText, image: newQuestionImage || undefined }
+                                      : item
+                                  )
+                                })
+                                setEditingQuestionId(null)
+                              } else {
+                                setQuestionState({
+                                  questionItems: [
+                                    ...questionState.questionItems,
+                                    { id: Math.random().toString(36).substr(2, 9), text: newQuestionText, image: newQuestionImage || undefined }
+                                  ]
+                                })
+                                setIsAddingQuestion(false)
+                              }
+                              setNewQuestionText("")
+                              setNewQuestionImage(null)
+                            }}
+                            className="px-8 py-2.5 rounded-xl bg-primary text-white font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:scale-100 transition-all flex items-center gap-2"
+                          >
+                            <Plus size={18} /> {editingQuestionId ? 'تحديث السؤال' : 'حفظ السؤال'}
+                          </button>
+                        </div>
+                      </motion.div>
+                    )}
+                  </div>
+
+                  {/* Enhanced Hybrid List */}
+                  <div className="space-y-3 pr-2 overflow-auto max-h-[400px] custom-scrollbar">
+                    <AnimatePresence mode="popLayout">
+                      {questionState.questionItems.length === 0 && !isAddingQuestion && (
+                        <div className="py-12 text-center text-muted-foreground opacity-50 space-y-2">
+                          <LayoutGrid size={40} className="mx-auto opacity-20" />
+                          <p className="font-medium">لا توجد أسئلة مضافة حالياً</p>
+                        </div>
+                      )}
+                      {[...questionState.questionItems].reverse().map((item, displayIdx) => {
+                        const imageSlides = questionState.questionItems.filter(i => i.image);
+                        const lightboxImageIndex = imageSlides.findIndex(i => i.id === item.id);
+
+                        return (
+                          <motion.div
+                            layout
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            key={item.id}
+                            className="group flex items-start gap-4 bg-white p-4 rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-md hover:border-primary/10 transition-all"
+                          >
+                            <div className="w-10 h-10 rounded-2xl bg-gray-50 flex items-center justify-center font-bold text-xs text-muted-foreground group-hover:bg-primary/5 group-hover:text-primary transition-colors shrink-0 mt-1">
+                              {questionState.questionItems.length - displayIdx}
+                            </div>
+
+                            <div className="flex-1 min-w-0 flex flex-col gap-3">
+                              {item.text && (
+                                <p className="text-base font-bold text-gray-800 leading-relaxed pr-2">{item.text}</p>
+                              )}
+                              {item.image && (
+                                <div className="relative w-32 h-24 rounded-2xl overflow-hidden border border-gray-100 bg-gray-50 flex items-center justify-center group/img">
+                                  <img src={item.image} className="w-full h-full object-cover cursor-pointer hover:scale-105 transition-transform" onClick={() => setLightboxIndex(lightboxImageIndex)} alt="Preview" />
+                                  <div className="absolute inset-0 bg-black/5 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
+                                    <ImageIcon size={20} className="text-white drop-shadow-md" />
+                                  </div>
+                                </div>
+                              )}
+
+                              <div className="flex items-center gap-4 mt-1">
+                                {!item.text && (
+                                  <button
+                                    onClick={() => {
+                                      const t = prompt("أضف نصاً لهذا السؤال:", "")
+                                      if (t) setQuestionState({ questionItems: questionState.questionItems.map(i => i.id === item.id ? { ...i, text: t } : i) })
+                                    }}
+                                    className="text-[10px] font-bold text-primary px-3 py-1 rounded-full bg-primary/5 hover:bg-primary/10 transition-colors flex items-center gap-1"
+                                  >
+                                    <Type size={10} /> إضافة نص
+                                  </button>
+                                )}
+                                {!item.image && (
+                                  <div className="relative overflow-hidden">
+                                    <button className="text-[10px] font-bold text-primary px-3 py-1 rounded-full bg-primary/5 hover:bg-primary/10 transition-colors flex items-center gap-1">
+                                      <ImageIcon size={10} /> إضافة صورة
+                                    </button>
+                                    <input
+                                      type="file"
+                                      accept="image/*"
+                                      className="absolute inset-0 opacity-0 cursor-pointer"
+                                      onChange={(e) => {
+                                        const file = e.target.files?.[0]
+                                        if (file) setQuestionState({ questionItems: questionState.questionItems.map(i => i.id === item.id ? { ...i, image: URL.createObjectURL(file) } : i) })
+                                      }}
+                                    />
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+
+                            <div className="flex flex-col gap-2 transition-opacity">
+                              <button
+                                onClick={() => {
+                                  setEditingQuestionId(item.id)
+                                  setNewQuestionText(item.text || "")
+                                  setNewQuestionImage(item.image || null)
+                                  setIsAddingQuestion(false)
+                                  window.scrollTo({ top: 0, behavior: 'smooth' })
+                                }}
+                                className="w-10 h-10 rounded-xl bg-primary/5 text-primary flex items-center justify-center border border-primary/10 hover:bg-primary hover:text-white transition-all shadow-sm"
+                                title="تعديل السؤال"
+                              >
+                                <Edit3 size={16} />
+                              </button>
+                              <button
+                                onClick={() => setQuestionState({ questionItems: questionState.questionItems.filter(i => i.id !== item.id) })}
+                                className="w-10 h-10 rounded-xl bg-red-50 text-red-500 flex items-center justify-center border border-red-100 hover:bg-red-500 hover:text-white transition-all shadow-sm"
+                                title="حذف السؤال"
+                              >
+                                <Trash2 size={16} />
+                              </button>
+                            </div>
+                          </motion.div>
+                        )
+                      })}
+                    </AnimatePresence>
                   </div>
                 </div>
               )}
@@ -301,7 +492,7 @@ export default function SetupView({
                           onClick={() => setQuestionState({ excludedQuestionItems: questionState.excludedQuestionItems.filter(x => x !== id) })}
                           className="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1 rounded-full text-xs flex items-center gap-1 transition-colors capitalize"
                         >
-                          {item.type === 'text' ? item.content.substring(0, 20) : "Image Question"} <Trash2 size={10} className="rotate-45" />
+                          {item.text ? item.text.substring(0, 20) : (item.image ? "صورة" : "سؤال")} <Trash2 size={10} className="rotate-45" />
                         </button>
                       )
                     })}
@@ -320,7 +511,7 @@ export default function SetupView({
               open={lightboxIndex >= 0}
               index={lightboxIndex}
               close={() => setLightboxIndex(-1)}
-              slides={questionState.questionItems.filter(i => i.type === 'image').map(i => ({ src: i.content }))}
+              slides={questionState.questionItems.filter(i => i.image).map(i => ({ src: i.image! }))}
             />
           </div>
         )}
