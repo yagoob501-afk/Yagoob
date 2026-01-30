@@ -142,7 +142,7 @@ export default function QuestionTool({ state, setState }: { state: QuestionToolS
                         </motion.button>
                       ))
                     ) : (
-                      (list as QuestionItem[]).reverse().map((item, i) => (
+                      (list as QuestionItem[]).reverse().map((item) => (
                         <motion.button
                           layout
                           initial={{ opacity: 0, scale: 0.98 }}
