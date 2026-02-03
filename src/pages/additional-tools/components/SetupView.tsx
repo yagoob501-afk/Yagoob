@@ -80,6 +80,16 @@ export default function SetupView({
     setTimerState({ minutes: m, seconds: s, timeLeft: tot, totalTime: tot, isRunning: false, isFinished: false })
   }
 
+  // Helper to convert file to base64
+  const fileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = () => resolve(reader.result as string)
+      reader.onerror = error => reject(error)
+    })
+  }
+
   return (
     <div className="w-full bg-white rounded-[2.5rem] shadow-xl border border-border overflow-hidden min-h-[600px] flex flex-col">
       <div className="flex border-b border-gray-100 bg-gray-50/50 p-2 gap-2 overflow-x-auto" data-tour="setup-tabs">
@@ -305,9 +315,16 @@ export default function SetupView({
                                   type="file"
                                   accept="image/*"
                                   className="absolute inset-0 opacity-0 cursor-pointer"
-                                  onChange={(e) => {
+                                  onChange={async (e) => {
                                     const file = e.target.files?.[0]
-                                    if (file) setNewQuestionImage(URL.createObjectURL(file))
+                                    if (file) {
+                                      try {
+                                        const base64 = await fileToBase64(file)
+                                        setNewQuestionImage(base64)
+                                      } catch (err) {
+                                        console.error("Error converting file to base64", err)
+                                      }
+                                    }
                                   }}
                                 />
                               </div>
@@ -419,9 +436,16 @@ export default function SetupView({
                                       type="file"
                                       accept="image/*"
                                       className="absolute inset-0 opacity-0 cursor-pointer"
-                                      onChange={(e) => {
+                                      onChange={async (e) => {
                                         const file = e.target.files?.[0]
-                                        if (file) setQuestionState({ questionItems: questionState.questionItems.map(i => i.id === item.id ? { ...i, image: URL.createObjectURL(file) } : i) })
+                                        if (file) {
+                                          try {
+                                            const base64 = await fileToBase64(file)
+                                            setQuestionState({ questionItems: questionState.questionItems.map(i => i.id === item.id ? { ...i, image: base64 } : i) })
+                                          } catch (err) {
+                                            console.error("Error converting file to base64", err)
+                                          }
+                                        }
                                       }}
                                     />
                                   </div>
@@ -565,15 +589,15 @@ export default function SetupView({
                     type="file"
                     id="background-sound"
                     accept="audio/*,video/*"
-                    onChange={(e) => {
+                    onChange={async (e) => {
                       const file = e.target.files?.[0]
                       if (file) {
-                        // Revoke old URL if it exists
-                        if (timerState.backgroundSoundUrl) {
-                          URL.revokeObjectURL(timerState.backgroundSoundUrl)
+                        try {
+                          const base64 = await fileToBase64(file)
+                          setTimerState({ backgroundSoundUrl: base64 })
+                        } catch (err) {
+                          console.error("Error converting file to base64", err)
                         }
-                        const url = URL.createObjectURL(file)
-                        setTimerState({ backgroundSoundUrl: url })
                       }
                     }}
                     className="w-full text-sm text-center bg-white file:mr-4 file:py-2.5 file:px-6 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer shadow-sm"
@@ -583,9 +607,6 @@ export default function SetupView({
                       <span className="text-xs font-semibold text-primary">تم اختيار الملف بنجاح</span>
                       <button
                         onClick={() => {
-                          if (timerState.backgroundSoundUrl) {
-                            URL.revokeObjectURL(timerState.backgroundSoundUrl)
-                          }
                           setTimerState({ backgroundSoundUrl: undefined })
                         }}
                         className="p-1.5 text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
