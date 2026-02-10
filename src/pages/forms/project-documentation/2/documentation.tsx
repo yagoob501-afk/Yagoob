@@ -7,6 +7,24 @@ import { Download, FileDown, Eye, Edit, Palette } from "lucide-react"
 import Lightbox from "yet-another-react-lightbox"
 import EducationMinistryLogo from "@/assets/شعار_وزارة_التعليم_العالي__الكويت_.png"
 
+const teacherGenders = {
+    male: "المعلم",
+    female: "المعلمة",
+    maleStudent: "الطالب",
+    femaleStudent: "الطالبة"
+} as Record<string, string>;
+
+const managerGenders = {
+    male: "مدير المدرسة",
+    female: "مديرة المدرسة"
+} as Record<string, string>;
+
+const departmentManagerGenders = {
+    male: "رئيس القسم",
+    female: "رئيسة القسم"
+} as Record<string, string>;
+
+
 export interface DocumentationData {
     title: string
     area: string
@@ -381,7 +399,9 @@ export default function ProjectDocumentationPreview({
                                 }}
                             >
                                 <InfoBox
-                                    label={data.teacherGender === "male" ? "المعلم" : "المعلمة"}
+                                    label={
+                                        (teacherGenders)[data.teacherGender] || "المعلم"
+                                    }
                                     value={data.teacherName || "يعقوب"}
                                     colors={colors}
                                 />
@@ -475,7 +495,7 @@ export default function ProjectDocumentationPreview({
 
                                             >
                                                 <span style={{ color: colors.departmentManagerGender }}>
-                                                    {data.departmentManagerGender === "male" ? "رئيس القسم" : "رئيسة القسم"}
+                                                    {(departmentManagerGenders)[data.departmentManagerGender || "male"]}
                                                 </span>
                                                 <span className="font-bold" style={{ color: colors.departmentManager }}>  {data.departmentManager}</span>
                                             </div>
@@ -487,7 +507,7 @@ export default function ProjectDocumentationPreview({
                                                 className="text-[40px] flex flex-col items-center w-fit"
                                             >
                                                 <span style={{ color: colors.managerGender }}>
-                                                    {data.managerGender === "male" ? "مدير المدرسة" : "مديرة المدرسة"}
+                                                    {(managerGenders)[data.managerGender || "male"]}
                                                 </span>
                                                 <span className="font-bold" style={{ color: colors.manager }}>{data.managerName}</span>
                                             </div>
