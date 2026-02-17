@@ -65,6 +65,26 @@ export interface DocumentationData {
     }
 }
 
+export const SAMPLE_DATA: DocumentationData = {
+    title: "عنوان التقرير",
+    area: "الجهراء",
+    school: "مدرسة الاصمعي",
+    teacherGender: "male",
+    teacherName: "اسم المعلم",
+    department: "القسم",
+    // departmentManager: "اسم المشرف",
+    // departmentManagerGender: "male",
+    place: "المكان",
+    date: new Date().toISOString(),
+    managerGender: "male",
+    managerName: "اسم المدير",
+    eventType: "نوع الفعالية",
+    targetGroup: "الفئة المستهدفة",
+    description: "هذا نص تجريبي لمعاينة شكل التقرير بالألوان المختارة... يمكن إضافة المزيد من التفاصيل هنا لرؤية كيف سيبدو التقرير النهائي.",
+    images: [],
+    logoPicture: null as any
+};
+
 const A4_WIDTH_PX = 1240
 
 export default function ProjectDocumentationPreview({
@@ -115,18 +135,6 @@ export default function ProjectDocumentationPreview({
         if (!data.logoPicture) return null
         return typeof data.logoPicture === "string" ? data.logoPicture : URL.createObjectURL(data.logoPicture)
     }, [data.logoPicture])
-
-    const formatDate = (dateStr: string) => {
-        if (!dateStr) return "............"
-        const d = new Date(dateStr)
-        const year = d.getFullYear()
-        const month = String(d.getMonth() + 1).padStart(2, "0")
-        const day = String(d.getDate()).padStart(2, "0")
-        return `${year}/${month}/${day}`
-    }
-
-    const hasDescription = data.description && data.description.trim()
-    const hasImages = imageUrls.length > 0;
 
     const generatePreview = async () => {
         if (!documentRef.current) return
@@ -318,210 +326,239 @@ export default function ProjectDocumentationPreview({
                             color: colors.containerText,
                         }}
                     >
-                        <div
-                            style={{
-                                width: "96%",
-                                height: "calc(1754px * 0.96)",
-                                border: `5px solid ${colors.containerBorder}`,
-                                borderRadius: "20px",
-                                padding: "40px",
-                                backgroundColor: colors.containerBg,
-                                display: "flex",
-                                flexDirection: "column",
-                                justifyContent: "center",
-                                gap: "25px",
-                                overflow: "hidden",
-                            }}
-                        >
-                            {/* Header */}
-                            <div
-                                style={{
-                                    border: `2px solid ${colors.headerBorder}`,
-                                    borderRadius: "15px",
-                                    padding: "30px 70px",
-                                    maxHeight: "278px",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "space-between",
-                                    backgroundColor: colors.headerBg,
-                                    marginTop: "20px",
-                                    color: colors.headerText,
-                                }}
-                            >
-                                <div className="flex flex-col items-center font-almaria">
-                                    <img src={EducationMinistryLogo || "/placeholder.svg"} className="max-w-40" />
-                                    <div style={{ textAlign: "center", fontSize: "25px", lineHeight: "1.8" }}>
-                                        <div style={{ fontWeight: "bold" }}>وزارة التربية</div>
-                                        <div>الإدارة العامة لمنطقة</div>
-                                        <div>{data.area || "الجهراء"} التعليمية</div>
-                                    </div>
-                                </div>
-
-                                <div
-                                    className="font-almaria text-center"
-                                    style={{
-                                        fontSize: "56px",
-                                        fontWeight: "bold",
-                                        color: colors.headerText,
-                                        flex: 1,
-                                        textAlign: "center",
-                                    }}
-                                >
-                                    {data.school || "مدرسة الاصمعي الثانوية"}
-                                </div>
-
-                                {logoUrl ? <img src={logoUrl || "/placeholder.svg"} className="max-w-60" /> : null}
-                            </div>
-
-                            {/* Title */}
-                            <div
-                                className="font-amiri"
-                                style={{
-                                    border: `2px solid ${colors.titleBorder}`,
-                                    borderRadius: "12px",
-                                    padding: "20px",
-                                    textAlign: "center",
-                                    fontSize: "44px",
-                                    fontWeight: "bold",
-                                    color: colors.titleText,
-                                    backgroundColor: colors.titleBg,
-                                }}
-                            >
-                                {data.title || "عنوان التوثيق"}
-                            </div>
-
-                            {/* Info Grid */}
-                            <div
-                                style={{
-                                    display: "grid",
-                                    gridTemplateColumns: "1fr 1fr",
-                                    gap: "20px",
-                                }}
-                            >
-                                <InfoBox
-                                    label={
-                                        (teacherGenders)[data.teacherGender] || "المعلم"
-                                    }
-                                    value={data.teacherName || "يعقوب"}
-                                    colors={colors}
-                                />
-                                <InfoBox label="القسم" value={data.department || "الإدارة"} colors={colors} />
-                                <InfoBox label="المكان" value={data.place || "شارع مدرسة الاصمعي"} colors={colors} />
-                                <InfoBox label="التاريخ" value={formatDate(data.date)} colors={colors} />
-                                <InfoBox label="نوع الفعالية" value={data.eventType || "احتفال"} colors={colors} />
-                                <InfoBox label="الفئة المستهدفة" value={data.targetGroup || "الصف الثالث"} colors={colors} />
-                            </div>
-
-                            {/* Description */}
-                            {hasDescription && (
-                                <div
-                                    style={{
-                                        maxWidth: `${A4_WIDTH_PX}px`,
-                                        border: `2px solid ${colors.inputBorder}`,
-                                        backgroundColor: colors.inputBg,
-                                        borderRadius: "12px",
-                                        padding: "20px 25px",
-                                        lineHeight: "1.8",
-                                        wordBreak: "break-word",
-                                    }}
-                                >
-                                    {/* <div style={{ fontWeight: "bold", marginBottom: "10px", color: colors.inputLabelText }} className="font-alhoda text-4xl" >
-                                        الشرح
-                                    </div> */}
-                                    <div style={{
-                                        color: colors.inputText
-                                    }}
-                                        className="font-cairo text-4xl line-clamp-2 overflow-visible">
-                                        {data.description}
-                                    </div>
-
-                                </div>
-                            )}
-
-                            {
-                                hasImages && (
-                                    <div
-                                        className="mt-auto mb-auto"
-                                        style={{
-                                            display: "grid",
-                                            gap: "15px",
-                                            gridTemplateColumns: "repeat(2, 1fr)",
-                                        }}
-                                    >
-                                        {imageUrls.map((img, index) => {
-                                            let style: React.CSSProperties = {}
-
-                                            switch (imageUrls.length) {
-                                                case 1:
-                                                    style = { gridColumn: "span 2", gridRow: "span 2" }
-                                                    break
-                                                case 2:
-                                                    style = { gridColumn: "span 1", gridRow: "span 2" }
-                                                    break
-                                                case 3:
-                                                    if (index < 2) {
-                                                        style = { gridColumn: "span 1", gridRow: "span 1" }
-                                                    } else {
-                                                        style = { gridColumn: "span 2", gridRow: "span 1" }
-                                                    }
-                                                    break
-                                                case 4:
-                                                    style = { gridColumn: "span 1", gridRow: "span 2" }
-                                                    break
-                                                default:
-                                                    style = { gridColumn: "span 1", gridRow: "span 1" }
-                                            }
-
-                                            return <img key={index} src={img} style={{ width: "100%", height: "100%", ...style, maxHeight: "250px" }} />
-                                        })}
-                                    </div>
-                                )
-                            }
-
-
-                            {
-                                ((!!data.managerGender && !!data.managerName) || (!!data.departmentManager && !!data.departmentManagerGender)) && (
-                                    <div
-                                        className="flex justify-between"
-                                        style={{
-                                            marginTop: hasImages ? "auto" : "",
-                                            marginBottom: hasImages ? "auto" : ""
-                                        }}
-                                    >
-                                        {/* ✅ مدير القسم */}
-                                        {!!data.departmentManager && !!data.departmentManagerGender ? (
-                                            <div
-                                                className="text-[40px] flex flex-col items-center w-fit"
-
-                                            >
-                                                <span style={{ color: colors.departmentManagerGender }}>
-                                                    {(departmentManagerGenders)[data.departmentManagerGender || "male"]}
-                                                </span>
-                                                <span className="font-bold" style={{ color: colors.departmentManager }}>  {data.departmentManager}</span>
-                                            </div>
-                                        ) : <div></div>}
-
-                                        {/* ✅ مدير المدرسة */}
-                                        {!!data.managerGender && !!data.managerName && (
-                                            <div
-                                                className="text-[40px] flex flex-col items-center w-fit"
-                                            >
-                                                <span style={{ color: colors.managerGender }}>
-                                                    {(managerGenders)[data.managerGender || "male"]}
-                                                </span>
-                                                <span className="font-bold" style={{ color: colors.manager }}>{data.managerName}</span>
-                                            </div>
-                                        )}
-                                    </div>
-                                )
-                            }
-
-                        </div>
+                        <DocumentationTemplateViewer data={data} colors={colors} imageUrls={imageUrls} logoUrl={logoUrl} />
                     </div>
                 </div>
             </div>
 
             <Lightbox open={isLightBoxOpen} close={() => setIsLightBoxOpen(false)} slides={[{ src: previewImage }]} />
+        </div>
+    )
+}
+
+export function DocumentationTemplateViewer({ data, colors, imageUrls, logoUrl }: {
+    data: DocumentationData;
+    colors: any;
+    imageUrls?: string[];
+    logoUrl?: string | null;
+}) {
+    // Re-calculate derived values if not passed (though we pass them for now to avoid breaking changes)
+    // For cleaner usage in form.tsx, we might want to handle generic data better.
+
+    // Internal helper for formatDate since it's used inside
+    const formatDate = (dateStr: string) => {
+        if (!dateStr) return "............"
+        const d = new Date(dateStr)
+        const year = d.getFullYear()
+        const month = String(d.getMonth() + 1).padStart(2, "0")
+        const day = String(d.getDate()).padStart(2, "0")
+        return `${year}/${month}/${day}`
+    }
+
+    const hasDescription = data.description && data.description.trim()
+    const validImageUrls = imageUrls || (data.images || []).map((value) => (typeof value === "string" ? value : URL.createObjectURL(value)));
+    const hasImages = validImageUrls.length > 0;
+    const finalLogoUrl = logoUrl !== undefined ? logoUrl : (data.logoPicture ? (typeof data.logoPicture === "string" ? data.logoPicture : URL.createObjectURL(data.logoPicture)) : null);
+
+    return (
+        <div
+            style={{
+                width: "96%",
+                height: "calc(1754px * 0.96)",
+                border: `5px solid ${colors.containerBorder}`,
+                borderRadius: "20px",
+                padding: "40px",
+                backgroundColor: colors.containerBg,
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                gap: "25px",
+                overflow: "hidden",
+            }}
+        >
+            {/* Header */}
+            <div
+                style={{
+                    border: `2px solid ${colors.headerBorder}`,
+                    borderRadius: "15px",
+                    padding: "30px 70px",
+                    maxHeight: "278px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    backgroundColor: colors.headerBg,
+                    marginTop: "20px",
+                    color: colors.headerText,
+                }}
+            >
+                <div className="flex flex-col items-center font-almaria">
+                    <img src={EducationMinistryLogo || "/placeholder.svg"} className="max-w-40" />
+                    <div style={{ textAlign: "center", fontSize: "25px", lineHeight: "1.8" }}>
+                        <div style={{ fontWeight: "bold" }}>وزارة التربية</div>
+                        <div>الإدارة العامة لمنطقة</div>
+                        <div>{data.area || SAMPLE_DATA.area} التعليمية</div>
+                    </div>
+                </div>
+
+                <div
+                    className="font-almaria text-center"
+                    style={{
+                        fontSize: "56px",
+                        fontWeight: "bold",
+                        color: colors.headerText,
+                        flex: 1,
+                        textAlign: "center",
+                    }}
+                >
+                    {data.school || SAMPLE_DATA.school}
+                </div>
+
+                {finalLogoUrl ? <img src={finalLogoUrl || "/placeholder.svg"} className="max-w-60" /> : null}
+            </div>
+
+            {/* Title */}
+            <div
+                className="font-amiri"
+                style={{
+                    border: `2px solid ${colors.titleBorder}`,
+                    borderRadius: "12px",
+                    padding: "20px",
+                    textAlign: "center",
+                    fontSize: "44px",
+                    fontWeight: "bold",
+                    color: colors.titleText,
+                    backgroundColor: colors.titleBg,
+                }}
+            >
+                {data.title || SAMPLE_DATA.title}
+            </div>
+
+            {/* Info Grid */}
+            <div
+                style={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr",
+                    gap: "20px",
+                }}
+            >
+                <InfoBox
+                    label={
+                        (teacherGenders)[data.teacherGender] || "المعلم"
+                    }
+                    value={data.teacherName || SAMPLE_DATA.teacherName}
+                    colors={colors}
+                />
+                <InfoBox label="القسم" value={data.department || SAMPLE_DATA.department} colors={colors} />
+                <InfoBox label="المكان" value={data.place || SAMPLE_DATA.place} colors={colors} />
+                <InfoBox label="التاريخ" value={formatDate(data.date)} colors={colors} />
+                <InfoBox label="نوع الفعالية" value={data.eventType || SAMPLE_DATA.eventType} colors={colors} />
+                <InfoBox label="الفئة المستهدفة" value={data.targetGroup || SAMPLE_DATA.targetGroup} colors={colors} />
+            </div>
+
+            {/* Description */}
+            {hasDescription && (
+                <div
+                    style={{
+                        maxWidth: `${A4_WIDTH_PX}px`,
+                        border: `2px solid ${colors.inputBorder}`,
+                        backgroundColor: colors.inputBg,
+                        borderRadius: "12px",
+                        padding: "20px 25px",
+                        lineHeight: "1.8",
+                        wordBreak: "break-word",
+                    }}
+                >
+                    {/* <div style={{ fontWeight: "bold", marginBottom: "10px", color: colors.inputLabelText }} className="font-alhoda text-4xl" >
+                        الشرح
+                    </div> */}
+                    <div style={{
+                        color: colors.inputText
+                    }}
+                        className="font-cairo text-4xl line-clamp-2 overflow-visible">
+                        {data.description}
+                    </div>
+
+                </div>
+            )}
+
+            {
+                hasImages && (
+                    <div
+                        className="mt-auto mb-auto"
+                        style={{
+                            display: "grid",
+                            gap: "15px",
+                            gridTemplateColumns: "repeat(2, 1fr)",
+                        }}
+                    >
+                        {validImageUrls.map((img, index) => {
+                            let style: React.CSSProperties = {}
+
+                            switch (validImageUrls.length) {
+                                case 1:
+                                    style = { gridColumn: "span 2", gridRow: "span 2" }
+                                    break
+                                case 2:
+                                    style = { gridColumn: "span 1", gridRow: "span 2" }
+                                    break
+                                case 3:
+                                    if (index < 2) {
+                                        style = { gridColumn: "span 1", gridRow: "span 1" }
+                                    } else {
+                                        style = { gridColumn: "span 2", gridRow: "span 1" }
+                                    }
+                                    break
+                                case 4:
+                                    style = { gridColumn: "span 1", gridRow: "span 2" }
+                                    break
+                                default:
+                                    style = { gridColumn: "span 1", gridRow: "span 1" }
+                            }
+
+                            return <img key={index} src={img} style={{ width: "100%", height: "100%", ...style, maxHeight: "250px" }} />
+                        })}
+                    </div>
+                )
+            }
+
+
+            {
+                ((!!data.managerGender && !!data.managerName) || (!!data.departmentManager && !!data.departmentManagerGender)) && (
+                    <div
+                        className="flex justify-between"
+                        style={{
+                            marginTop: hasImages ? "auto" : "",
+                            marginBottom: hasImages ? "auto" : ""
+                        }}
+                    >
+                        {/* ✅ مدير القسم */}
+                        {!!data.departmentManager && !!data.departmentManagerGender ? (
+                            <div
+                                className="text-[40px] flex flex-col items-center w-fit"
+
+                            >
+                                <span style={{ color: colors.departmentManagerGender }}>
+                                    {(departmentManagerGenders)[data.departmentManagerGender || "male"]}
+                                </span>
+                                <span className="font-bold" style={{ color: colors.departmentManager }}>  {data.departmentManager}</span>
+                            </div>
+                        ) : <div></div>}
+
+                        {/* ✅ مدير المدرسة */}
+                        {!!data.managerGender && !!data.managerName && (
+                            <div
+                                className="text-[40px] flex flex-col items-center w-fit"
+                            >
+                                <span style={{ color: colors.managerGender }}>
+                                    {(managerGenders)[data.managerGender || "male"]}
+                                </span>
+                                <span className="font-bold" style={{ color: colors.manager }}>{data.managerName}</span>
+                            </div>
+                        )}
+                    </div>
+                )
+            }
+
         </div>
     )
 }
