@@ -31,7 +31,7 @@ The JSON should be an array of objects. Each object represents a question:
   "timeLimit": 30
 }
 Please provide exactly 15 questions. 
-Respond ONLY with the raw JSON array.`
+`
   }
 
   const handleCopy = () => {
