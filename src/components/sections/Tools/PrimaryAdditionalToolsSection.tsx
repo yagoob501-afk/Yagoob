@@ -4,9 +4,11 @@ import { motion } from "framer-motion"
 import { useState, useEffect } from "react"
 import PrimaryToolCard from "@/components/cards/ToolCard/PrimaryToolCard"
 import PrimarySectionTitle from "@/components/ui/SectionTitle/PrimarySectionTitle"
+import { } from "lucide-react"
 import QrThumbnail from "@/assets/qrcode.png"
 import smartClassTools from "@/assets/smart_classroom_tools.png"
 import _3_Books from "@/assets/3_books.png"
+import xoGamePreview from "/images/xo_game_preview.png"
 
 function PrimaryAdditionalToolsSection() {
   const [scale, setScale] = useState(1)
@@ -108,6 +110,22 @@ function PrimaryAdditionalToolsSection() {
                 description="مجموعة أدوات تفاعلية (المؤقّت، العجلة، الاختيار العشوائي) لإدارة الحصة."
                 link="/additional-tools/classroom-tools"
                 img={smartClassTools}
+              />
+            </motion.div>
+
+            <motion.div
+              className="w-[370px] h-full"
+              variants={{
+                hidden: { opacity: 0, y: 30 },
+                show: { opacity: 1, y: 0 },
+              }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+            >
+              <PrimaryToolCard
+                title="لعبة XO التعليمية"
+                description="لعبة تنافسية تفاعلية للطلاب تعتمد على نظام المراجعة والأسئلة لتعزيز التعلم."
+                link="/additional-tools/xo-game"
+                img={xoGamePreview}
               />
             </motion.div>
 

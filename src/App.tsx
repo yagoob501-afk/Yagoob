@@ -22,6 +22,7 @@ import CertificatesFormsPage from './pages/forms/certificate-of-appreciation/pag
 import ToolsPage from './pages/tools/page';
 import AddToHomePrompt from './components/ui/AddToHomePrompt';
 import ClassroomToolsPage from './pages/additional-tools/ClassroomTools';
+import XOGamePage from './pages/additional-tools/XOGame';
 
 function App() {
   return (
@@ -58,6 +59,7 @@ function App() {
               {/* additional tools */}
               <Route path='/additional-tools/text-to-qrcode' element={<TextToQRcodePage />} />
               <Route path='/additional-tools/classroom-tools' element={<ClassroomToolsPage />} />
+              <Route path='/additional-tools/xo-game' element={<XOGamePage />} />
             </Routes>
           </BrowserRouter>
         </TourProvider>
