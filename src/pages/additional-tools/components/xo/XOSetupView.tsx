@@ -4,8 +4,6 @@ import * as React from "react"
 import {
   Plus,
   Trash2,
-  FileDown,
-  FileUp,
   Sparkles,
   Play,
   LayoutGrid,
@@ -21,9 +19,7 @@ import { Link } from "react-router-dom"
 interface XOSetupViewProps {
   questions: Question[]
   onUpdateQuestions: (questions: Question[]) => void
-  onStartGame: (timerSeconds: number) => void
-  onExportTOON: () => void
-  onImportTOON: () => void
+  onStartGame: (timerSeconds: number, greenName: string, blueName: string) => void
   onClearData: () => void
 }
 
@@ -31,16 +27,16 @@ export function XOSetupView({
   questions,
   onUpdateQuestions,
   onStartGame,
-  onExportTOON,
-  onImportTOON,
   onClearData
 }: XOSetupViewProps) {
   const [isAIModalOpen, setIsAIModalOpen] = React.useState(false)
-  const [timerMinutes, setTimerMinutes] = React.useState(5)
-  const [timerSeconds, setTimerSeconds] = React.useState(0) // Default 5:00 or 0 for muted
+  // maybe a dead code
+  // const [timerMinutes, setTimerMinutes] = React.useState(5)
+  // const [timerSeconds, setTimerSeconds] = React.useState(0) // Default 5:00 or 0 for muted
+  const [greenName, setGreenName] = React.useState("فريق الابطال")
+  const [blueName, setBlueName] = React.useState("فريق المميزين")
 
-  const totalTimerSeconds = (timerMinutes * 60) + timerSeconds
-
+  const totalTimerSeconds = 0 // (timerMinutes * 60) + timerSeconds
   const handleAddQuestion = () => {
     const newQuestion: Question = {
       id: Math.random().toString(36).substr(2, 9),
@@ -57,6 +53,28 @@ export function XOSetupView({
     )
   }
 
+  // maybe a dead code
+  /*
+  const handleExportTOON = () => {
+    const data = gameRef.current.toJSON()
+    try {
+      const toonString = TOON.encode(data)
+      const blob = new Blob([toonString], { type: 'application/octet-stream' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `xo_game_${new Date().toISOString().split('T')[0]}.toon`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+    } catch (err) {
+      console.error("Export failed", err)
+      alert("فشل تصدير الملف.")
+    }
+  }
+  */
+
   const handleRemoveQuestion = (id: string) => {
     onUpdateQuestions(questions.filter(q => q.id !== id))
   }
@@ -72,7 +90,6 @@ export function XOSetupView({
       alert("Format JSON غير صالح. يرجى التأكد من لصق الكود بشكل صحيح.")
     }
   }
-
   return (
     <div className="w-full max-w-5xl space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="flex items-center justify-between">
@@ -106,6 +123,7 @@ export function XOSetupView({
         </div>
 
         <div className="flex flex-wrap gap-3">
+          {/* maybe a dead code
           <button
             onClick={onExportTOON}
             className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-gray-50 text-gray-700 font-bold border-2 border-border hover:bg-white hover:border-primary/50 transition-all shadow-sm"
@@ -121,6 +139,7 @@ export function XOSetupView({
             <FileUp size={18} />
             استيراد ملف TOON
           </button>
+          */}
 
           <button
             onClick={() => setIsAIModalOpen(true)}
@@ -129,6 +148,28 @@ export function XOSetupView({
             <Sparkles size={18} />
             توليد AI
           </button>
+        </div>
+      </div>
+
+      {/* Team Names Configuration */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-8 rounded-4xl shadow-xl border border-border">
+        <div className="space-y-3">
+          <label className="text-sm font-bold text-emerald-600 px-2">اسم الفريق (X)</label>
+          <input
+            value={greenName}
+            onChange={(e) => setGreenName(e.target.value)}
+            className="w-full px-6 py-4 rounded-2xl bg-emerald-50 border-2 border-emerald-100 text-xl font-bold text-emerald-700 outline-none focus:border-emerald-300 transition-all"
+            placeholder="اسم فريق X..."
+          />
+        </div>
+        <div className="space-y-3">
+          <label className="text-sm font-bold text-sky-600 px-2">اسم الفريق (O)</label>
+          <input
+            value={blueName}
+            onChange={(e) => setBlueName(e.target.value)}
+            className="w-full px-6 py-4 rounded-2xl bg-sky-50 border-2 border-sky-100 text-xl font-bold text-sky-700 outline-none focus:border-sky-300 transition-all"
+            placeholder="اسم فريق O..."
+          />
         </div>
       </div>
 
@@ -141,6 +182,7 @@ export function XOSetupView({
               إعدادات الجولة
             </h3>
 
+            {/* maybe a dead code
             <div className="space-y-4">
               <label className="block text-sm font-bold text-gray-600">وقت الفريق (مم:ثث)</label>
               <div className="flex items-center gap-2 bg-gray-50 p-3 rounded-2xl border-2 border-gray-100">
@@ -166,6 +208,7 @@ export function XOSetupView({
                 * اتركه 0:0 لإلغاء عداد الفريق (وضع صامت).
               </p>
             </div>
+            */}
 
             <div className="space-y-3 pt-4 border-t border-gray-50">
               <div className="flex justify-between p-4 bg-gray-50 rounded-2xl border border-gray-100">
@@ -177,7 +220,7 @@ export function XOSetupView({
 
           <button
             disabled={questions.length < 9}
-            onClick={() => onStartGame(totalTimerSeconds)}
+            onClick={() => onStartGame(totalTimerSeconds, greenName, blueName)}
             className="w-full py-6 rounded-4xl bg-green-600 text-white font-bold text-xl shadow-xl shadow-green-200 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 disabled:grayscale flex items-center justify-center gap-3"
           >
             <Play size={24} />

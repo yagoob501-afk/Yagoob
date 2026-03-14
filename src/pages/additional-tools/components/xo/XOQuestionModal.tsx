@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Clock, HelpCircle, Check, X } from "lucide-react"
+import { Clock, HelpCircle, Check, X, AlarmClock } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import type { Question } from "@/lib/XOGameLogic"
 import { cn } from "@/lib/utils"
@@ -9,19 +9,42 @@ import { cn } from "@/lib/utils"
 interface XOQuestionModalProps {
   question: Question
   onAnswer: (isCorrect: boolean) => void
+  onTimeout?: () => void
   team: 'green' | 'blue'
-  result: 'correct' | 'wrong' | null
+  result: 'correct' | 'wrong' | 'timeout' | null
 }
 
-export function XOQuestionModal({ question, onAnswer, team, result }: XOQuestionModalProps) {
+export function XOQuestionModal({ question, onAnswer, onTimeout, team, result }: XOQuestionModalProps) {
   const [timeLeft, setTimeLeft] = React.useState(question.timeLimit || 0)
   const timerActive = (question.timeLimit || 0) > 0
 
+  // Keep references to non-stable callbacks to avoid effect loops or strict mode double-firing
+  const onAnswerRef = React.useRef(onAnswer)
+  const onTimeoutRef = React.useRef(onTimeout)
+
   React.useEffect(() => {
-    if (!timerActive || timeLeft <= 0) return
-    const timer = setInterval(() => setTimeLeft(prev => prev - 1), 1000)
+    onAnswerRef.current = onAnswer
+    onTimeoutRef.current = onTimeout
+  }, [onAnswer, onTimeout])
+
+  const timeoutHandledRef = React.useRef(false)
+
+  React.useEffect(() => {
+    if (!timerActive || result || timeoutHandledRef.current) return
+
+    if (timeLeft <= 0) {
+      timeoutHandledRef.current = true
+      // Trigger side effect outside of setState updater!
+      if (onTimeoutRef.current) onTimeoutRef.current()
+      else onAnswerRef.current(false)
+      return
+    }
+
+    const timer = setInterval(() => {
+      setTimeLeft(prev => (prev > 0 ? prev - 1 : 0))
+    }, 1000)
     return () => clearInterval(timer)
-  }, [timerActive, timeLeft])
+  }, [timerActive, timeLeft, result])
 
   return (
     <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-in fade-in duration-300">
@@ -40,6 +63,8 @@ export function XOQuestionModal({ question, onAnswer, team, result }: XOQuestion
               <div className="bg-white p-12 rounded-full shadow-2xl border-4 border-gray-100 flex items-center justify-center">
                 {result === 'correct' ? (
                   <Check size={120} className="text-green-500 stroke-[5px]" />
+                ) : result === 'timeout' ? (
+                  <AlarmClock size={120} className="text-amber-500 stroke-[5px]" />
                 ) : (
                   <X size={120} className="text-red-500 stroke-[5px]" />
                 )}
@@ -84,8 +109,8 @@ export function XOQuestionModal({ question, onAnswer, team, result }: XOQuestion
               className={cn(
                 "group relative p-6 text-xl font-bold rounded-4xl border-2 border-gray-100 bg-gray-50 transition-all text-right flex items-center justify-between",
                 !result && "hover:bg-white hover:border-primary hover:text-primary hover:shadow-xl",
-                result && idx === question.correctAnswerIndex && "bg-green-50 border-green-500 text-green-700",
-                result === 'wrong' && idx !== question.correctAnswerIndex && "opacity-50"
+                result === 'correct' && idx === question.correctAnswerIndex && "bg-green-50 border-green-500 text-green-700",
+                result && idx !== question.correctAnswerIndex && "opacity-50"
               )}
             >
               <span className="flex-1">{choice}</span>

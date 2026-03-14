@@ -4,11 +4,13 @@ import * as React from "react"
 import { XOGameLogic, type Question } from "@/lib/XOGameLogic"
 import { XOSetupView } from "./components/xo/XOSetupView"
 import { XORoundView } from "./components/xo/XORoundView"
-import * as TOON from "@toon-format/toon"
+// maybe a dead code
+// import * as TOON from "@toon-format/toon"
 
 export default function XOGamePage() {
   const [view, setView] = React.useState<'setup' | 'round'>('setup')
-  const fileInputRef = React.useRef<HTMLInputElement>(null)
+  // maybe a dead code
+  // const fileInputRef = React.useRef<HTMLInputElement>(null)
 
   // Game instance held in ref to persist across re-renders
   const gameRef = React.useRef(new XOGameLogic())
@@ -38,6 +40,8 @@ export default function XOGamePage() {
     setQuestions([...newQuestions]) // Trigger re-render
   }
 
+  // maybe a dead code
+  /*
   const handleExportTOON = () => {
     const data = gameRef.current.toJSON()
     try {
@@ -78,6 +82,7 @@ export default function XOGamePage() {
     // Clear input
     e.target.value = ''
   }
+  */
 
   return (
     <div className="min-h-screen bg-bg-layout rtl text-right py-12 px-4">
@@ -86,13 +91,13 @@ export default function XOGamePage() {
           <XOSetupView
             questions={questions}
             onUpdateQuestions={handleUpdateQuestions}
-            onStartGame={(timerSeconds) => {
-              gameRef.current.setTimers(timerSeconds, timerSeconds)
-              gameRef.current.startGame()
+            onStartGame={(_timerSeconds, greenName, blueName) => {
+              // maybe a dead code
+              // gameRef.current.setTimers(timerSeconds, timerSeconds)
+              gameRef.current.setTeamInfo(greenName, blueName, 'emerald', 'sky') // Default colors
+              gameRef.current.prepareGame()
               setView('round')
             }}
-            onExportTOON={handleExportTOON}
-            onImportTOON={() => fileInputRef.current?.click()}
             onClearData={() => {
               gameRef.current = new XOGameLogic()
               setQuestions([])
@@ -107,7 +112,7 @@ export default function XOGamePage() {
         )}
       </div>
 
-      {/* Hidden file input for TOON import */}
+      {/* maybe a dead code
       <input
         type="file"
         ref={fileInputRef}
@@ -115,6 +120,7 @@ export default function XOGamePage() {
         accept=".toon"
         className="hidden"
       />
+      */}
     </div>
   )
 }

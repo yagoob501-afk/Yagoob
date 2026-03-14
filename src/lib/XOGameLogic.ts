@@ -8,6 +8,8 @@ export type Team = 'green' | 'blue';
 export type Player = 'X' | 'O';
 export type CellValue = Player | null;
 
+export type TeamColor = 'red' | 'emerald' | 'sky' | 'purple' | 'yellow' | 'orange' | 'green' | 'blue';
+
 export interface Question {
   id: string;
   text: string;
@@ -26,7 +28,11 @@ export interface GameState {
   initialTimerValue: number; // For identifying if it's "muted"/unset
   answeredQuestionIds: Set<string>;
   winner: Player | 'Draw' | null;
-  status: 'setup' | 'playing' | 'finished';
+  status: 'setup' | 'ready' | 'playing' | 'finished';
+  greenTeamName: string;
+  blueTeamName: string;
+  greenTeamColor: TeamColor;
+  blueTeamColor: TeamColor;
 }
 
 export class XOGameLogic {
@@ -38,18 +44,24 @@ export class XOGameLogic {
   private blueTimer: number = 0;
   private initialTimerValue: number = 0;
   private winner: Player | 'Draw' | null = null;
-  private status: 'setup' | 'playing' | 'finished' = 'setup';
+  private status: 'setup' | 'ready' | 'playing' | 'finished' = 'setup';
+  private greenTeamName: string = "الفريق الأخضر";
+  private blueTeamName: string = "الفريق الأزرق";
+  private greenTeamColor: TeamColor = 'emerald';
+  private blueTeamColor: TeamColor = 'sky';
 
   // Callback for UI sound effects
   public onEffect?: (effect: GameEffect) => void;
 
-  constructor(questions?: Question[], timers?: { green: number; blue: number }) {
+  constructor(questions?: Question[] /*, timers?: { green: number; blue: number }*/) {
     if (questions) this.questions = questions;
+    /* maybe a dead code
     if (timers) {
       this.greenTimer = timers.green;
       this.blueTimer = timers.blue;
       this.initialTimerValue = Math.max(timers.green, timers.blue);
     }
+    */
   }
 
   // --- State Accessors ---
@@ -64,6 +76,10 @@ export class XOGameLogic {
       answeredQuestionIds: new Set(this.answeredQuestionIds),
       winner: this.winner,
       status: this.status,
+      greenTeamName: this.greenTeamName,
+      blueTeamName: this.blueTeamName,
+      greenTeamColor: this.greenTeamColor,
+      blueTeamColor: this.blueTeamColor,
     };
   }
 
@@ -77,10 +93,28 @@ export class XOGameLogic {
     this.questions = questions;
   }
 
+  // maybe a dead code
+  /*
   setTimers(green: number, blue: number) {
     this.greenTimer = green;
     this.blueTimer = blue;
     this.initialTimerValue = Math.max(green, blue);
+  }
+  */
+
+  setTeamInfo(greenName: string, blueName: string, greenColor: TeamColor, blueColor: TeamColor) {
+    this.greenTeamName = greenName;
+    this.blueTeamName = blueName;
+    this.greenTeamColor = greenColor;
+    this.blueTeamColor = blueColor;
+  }
+
+  prepareGame() {
+    this.status = 'ready';
+    this.board = Array(9).fill(null);
+    this.currentPlayer = 'X';
+    this.answeredQuestionIds.clear();
+    this.winner = null;
   }
 
   startGame() {
@@ -90,10 +124,12 @@ export class XOGameLogic {
     this.answeredQuestionIds.clear();
     this.winner = null;
     // Reset timers to their initial set values if they exist
+    /* maybe a dead code
     if (this.initialTimerValue > 0) {
       this.greenTimer = this.initialTimerValue;
       this.blueTimer = this.initialTimerValue;
     }
+    */
   }
 
   /**
@@ -151,6 +187,8 @@ export class XOGameLogic {
     }
   }
 
+  // maybe a dead code
+  /*
   updateTimer(team: Team, seconds: number) {
     if (this.initialTimerValue === 0 || this.status !== 'playing') return; // Muted mode or over
 
@@ -171,20 +209,33 @@ export class XOGameLogic {
     // Dispatch tick sound
     if (this.onEffect) this.onEffect('tick');
   }
+  */
 
   // --- Import/Export Helpers ---
 
   toJSON() {
     return {
       questions: this.questions,
-      timers: { green: this.greenTimer, blue: this.blueTimer, initial: this.initialTimerValue }
+      timers: { green: this.greenTimer, blue: this.blueTimer, initial: this.initialTimerValue },
+      names: { green: this.greenTeamName, blue: this.blueTeamName },
+      colors: { green: this.greenTeamColor, blue: this.blueTeamColor }
     };
   }
 
   static fromJSON(data: any): XOGameLogic {
-    const logic = new XOGameLogic(data.questions, data.timers);
+    const logic = new XOGameLogic(data.questions /*, data.timers*/);
+    /* maybe a dead code
     if (data.timers?.initial) {
       logic.setTimers(data.timers.initial, data.timers.initial);
+    }
+    */
+    if (data.names) {
+      logic.setTeamInfo(
+        data.names.green || "الفريق الأخضر",
+        data.names.blue || "الفريق الأزرق",
+        data.colors?.green || 'emerald',
+        data.colors?.blue || 'sky'
+      );
     }
     return logic;
   }
