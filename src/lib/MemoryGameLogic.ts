@@ -51,9 +51,9 @@ export class MemoryGameLogic {
   private scores = { Team1: 0, Team2: 0 };
   private status: 'setup' | 'ready' | 'playing' | 'finished' = 'setup';
   private questionTime: number = 15;
-  
-  private greenTeamName: string = "فريق الزمرد";
-  private blueTeamName: string = "فريق السماء";
+
+  private greenTeamName: string = "الفريق الأول";
+  private blueTeamName: string = "الفريق الثاني";
   private greenTeamColor: TeamColor = 'emerald';
   private blueTeamColor: TeamColor = 'sky';
 
@@ -117,10 +117,10 @@ export class MemoryGameLogic {
   private resetBoard() {
     const totalCells = this.matrix.rows * this.matrix.cols;
     const pairCount = Math.floor(totalCells / 2);
-    
+
     // Use only the required number of questions
     const selectedQuestions = this.questions.slice(0, pairCount);
-    
+
     let cards: MemoryCard[] = [];
     selectedQuestions.forEach((q) => {
       // Question Card (Pair A)
@@ -156,7 +156,7 @@ export class MemoryGameLogic {
    */
   flipCard(id: string) {
     if (this.status !== 'playing') return;
-    
+
     const flippedCount = this.board.filter(c => c.isFlipped && !c.isMatched).length;
     if (flippedCount >= 2) return;
 
@@ -164,7 +164,7 @@ export class MemoryGameLogic {
     if (!card || card.isFlipped || card.isMatched) return;
 
     card.isFlipped = true;
-    
+
     if (this.onEffect) this.onEffect('tick');
   }
 
@@ -191,7 +191,7 @@ export class MemoryGameLogic {
    */
   handleAnswer(isCorrect: boolean, pairId?: string) {
     const flipped = this.board.filter(c => c.isFlipped && !c.isMatched);
-    
+
     if (isCorrect && pairId) {
       flipped.forEach(c => {
         if (c.pairId === pairId) {
@@ -203,19 +203,19 @@ export class MemoryGameLogic {
       else this.scores.Team2++;
 
       if (this.onEffect) this.onEffect('match-success');
-      
+
       // Check if board finished
       if (this.board.every(c => c.isMatched)) {
         this.status = 'finished';
       }
-      
+
       // Match found: turn continues?
       // "Correct Answer -> Player gets the pair, points, and possibly another turn."
       // Let's allow another turn for now.
     } else {
       // Wrong answer or no match
       if (this.onEffect) this.onEffect('wrong-answer');
-      
+
       // Flip back and switch turns
       this.board.filter(c => c.isFlipped && !c.isMatched).forEach(c => c.isFlipped = false);
       this.currentPlayer = this.currentPlayer === 'Team1' ? 'Team2' : 'Team1';

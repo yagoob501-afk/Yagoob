@@ -47,8 +47,8 @@ export function MemorySetupView({
   onUpdateQuestionTime
 }: MemorySetupViewProps) {
   const [isAIModalOpen, setIsAIModalOpen] = React.useState(false)
-  const [greenName, setGreenName] = React.useState("فريق الزمرد")
-  const [blueName, setBlueName] = React.useState("فريق السماء")
+  const [greenName, setGreenName] = React.useState("الفريق الاول")
+  const [blueName, setBlueName] = React.useState("الفريق الثاني")
 
   const requiredQuestions = Math.floor((matrix.rows * matrix.cols) / 2)
   const isReady = questions.length >= requiredQuestions
@@ -260,22 +260,22 @@ export function MemorySetupView({
                   {/* Pair Configuration */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-surface-container-highest/20 rounded-2xl border border-outline-variant-prism/10">
                     <div className="space-y-2">
-                       <label className="text-[10px] font-black text-primary-prism uppercase px-2">نص البطاقة 1 (المطابقة)</label>
-                       <input
-                         value={q.pairA}
-                         onChange={(e) => handleUpdateQuestion(q.id, { pairA: e.target.value })}
-                         placeholder="مثال: H2O"
-                         className="w-full px-4 py-2 bg-surface-container-low rounded-xl border border-transparent focus:border-primary-prism/30 outline-none font-bold text-on-surface-prism shadow-inner"
-                       />
+                      <label className="text-[10px] font-black text-primary-prism uppercase px-2">نص البطاقة 1 (المطابقة)</label>
+                      <input
+                        value={q.pairA}
+                        onChange={(e) => handleUpdateQuestion(q.id, { pairA: e.target.value })}
+                        placeholder="مثال: H2O"
+                        className="w-full px-4 py-2 bg-surface-container-low rounded-xl border border-transparent focus:border-primary-prism/30 outline-none font-bold text-on-surface-prism shadow-inner"
+                      />
                     </div>
                     <div className="space-y-2">
-                       <label className="text-[10px] font-black text-secondary-prism uppercase px-2">نص البطاقة 2 (المطابقة)</label>
-                       <input
-                         value={q.pairB}
-                         onChange={(e) => handleUpdateQuestion(q.id, { pairB: e.target.value })}
-                         placeholder="مثال: أوكسجين"
-                         className="w-full px-4 py-2 bg-surface-container-low rounded-xl border border-transparent focus:border-secondary-prism/30 outline-none font-bold text-on-surface-prism shadow-inner"
-                       />
+                      <label className="text-[10px] font-black text-secondary-prism uppercase px-2">نص البطاقة 2 (المطابقة)</label>
+                      <input
+                        value={q.pairB}
+                        onChange={(e) => handleUpdateQuestion(q.id, { pairB: e.target.value })}
+                        placeholder="مثال: أوكسجين"
+                        className="w-full px-4 py-2 bg-surface-container-low rounded-xl border border-transparent focus:border-secondary-prism/30 outline-none font-bold text-on-surface-prism shadow-inner"
+                      />
                     </div>
                   </div>
 
@@ -290,7 +290,7 @@ export function MemorySetupView({
                         className="w-full text-lg font-bold bg-transparent border-b-2 border-outline-variant-prism/20 focus:border-primary-prism outline-none py-2 transition-all"
                       />
                     </div>
-  
+
                     <div className="grid grid-cols-2 gap-3">
                       {q.choices.map((choice, cIdx) => (
                         <div key={cIdx} className="flex items-center gap-2">
