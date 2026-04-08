@@ -245,8 +245,8 @@ export class MemoryGameLogic {
     const logic = new MemoryGameLogic(data.questions, data.matrix);
     if (data.names) {
       logic.setTeamInfo(
-        data.names.green || "فريق الزمرد",
-        data.names.blue || "فريق السماء",
+        data.names.green || "الفريق الأول",
+        data.names.blue || "الفريق الثاني",
         data.colors?.green || 'emerald',
         data.colors?.blue || 'sky'
       );
