@@ -169,14 +169,17 @@ export function MemoryRoundView({ gameLogic, onBack }: MemoryRoundViewProps) {
       </div>
 
       {!isReady && (
-        <div style={{ height: contentHeight ? `${contentHeight}px` : "auto" }} className="transition-[height] duration-300">
+        <div 
+          style={{ height: contentHeight ? `${contentHeight}px` : "auto" }} 
+          className="transition-[height] duration-300 w-full overflow-hidden flex justify-center"
+        >
           <div
             id="memory-game-content"
             style={{
               transform: `scale(${scale})`,
               transformOrigin: "top center",
               width: "1140px",
-              margin: "0 auto"
+              flexShrink: 0
             }}
           >
             {/* Team Scoreboard (The Cognitive Prism Style) */}

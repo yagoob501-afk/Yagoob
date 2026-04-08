@@ -41,7 +41,7 @@ export function MemoryAIModal({ isOpen, onClose, onImport, count }: MemoryAIModa
                   initial={{ scale: 0.95, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   exit={{ scale: 0.95, opacity: 0 }}
-                  className="w-full max-w-4xl glass-panel p-10 rounded-xl border border-outline-variant-prism/10 shadow-2xl relative"
+                  className="w-full max-w-4xl max-h-[95vh] overflow-y-auto glass-panel p-6 sm:p-10 rounded-xl border border-outline-variant-prism/10 shadow-2xl relative custom-scrollbar"
                >
                   <button
                      onClick={onClose}
@@ -89,7 +89,7 @@ export function MemoryAIModal({ isOpen, onClose, onImport, count }: MemoryAIModa
                         <div className="space-y-3">
                            <label className="text-sm font-black text-on-surface-prism px-2">أمر التوليد (Prompt)</label>
                            <div className="relative group">
-                              <pre className="p-4 rounded-xl bg-surface-container-lowest border border-outline-variant-prism/20 text-xs font-mono text-primary-fixed leading-relaxed overflow-x-auto whitespace-pre-wrap h-40">
+                              <pre className="p-4 rounded-xl bg-surface-container-lowest border border-outline-variant-prism/20 text-xs font-mono text-primary-fixed leading-relaxed overflow-x-auto whitespace-pre-wrap h-40 custom-scrollbar">
                                  {examplePrompt}
                               </pre>
                               <button
@@ -109,27 +109,27 @@ export function MemoryAIModal({ isOpen, onClose, onImport, count }: MemoryAIModa
                            value={jsonText}
                            onChange={(e) => setJsonText(e.target.value)}
                            placeholder='الصق كود JSON هنا (مثال: [{ "text": "...", ... }])'
-                           className="flex-1 w-full p-4 rounded-xl bg-surface-container-lowest border border-outline-variant-prism/20 font-mono text-xs text-on-surface-prism outline-none focus:border-primary-prism transition-all resize-none min-h-[400px]"
+                           className="flex-1 w-full p-4 rounded-xl bg-surface-container-lowest border border-outline-variant-prism/20 font-mono text-xs text-on-surface-prism outline-none focus:border-primary-prism transition-all resize-none min-h-[400px] custom-scrollbar"
                         />
                      </div>
                   </div>
 
-                  <div className="flex items-center justify-between mt-10 p-6 bg-surface-container-highest/20 rounded-xl border border-outline-variant-prism/10">
-                     <div className="flex items-center gap-2 text-sm text-on-surface-variant-prism">
+                  <div className="flex flex-col sm:flex-row items-center justify-between mt-10 p-6 bg-surface-container-highest/20 rounded-xl border border-outline-variant-prism/10 gap-6">
+                     <div className="flex items-center gap-2 text-sm text-on-surface-variant-prism justify-center sm:justify-start">
                         <CheckCircle2 size={16} className="text-primary-prism" />
                         <p>تأكد من أن البيانات بصيغة JSON صالحة.</p>
                      </div>
-                     <div className="flex gap-4">
+                     <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
                         <button
                            onClick={onClose}
-                           className="px-8 py-3 rounded-xl text-on-surface-variant-prism font-bold hover:bg-surface-bright transition-all"
+                           className="px-8 py-3 rounded-xl text-on-surface-variant-prism font-bold hover:bg-surface-bright transition-all w-full sm:w-auto order-2 sm:order-1"
                         >
                            إلغاء
                         </button>
                         <button
                            onClick={() => onImport(jsonText)}
                            disabled={!jsonText.trim()}
-                           className="px-10 py-3 rounded-full bg-linear-to-br from-primary-prism to-primary-container text-on-primary font-black shadow-lg shadow-primary-prism/20 hover:scale-105 active:scale-95 disabled:opacity-50 transition-all flex items-center gap-2"
+                           className="px-10 py-3 rounded-full bg-linear-to-br from-primary-prism to-primary-container text-on-primary font-black shadow-lg shadow-primary-prism/20 hover:scale-105 active:scale-95 disabled:opacity-50 transition-all flex items-center justify-center gap-2 w-full sm:w-auto order-1 sm:order-2"
                         >
                            بناء اللعبة <CheckCircle2 size={20} />
                         </button>

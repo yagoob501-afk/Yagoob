@@ -75,4 +75,25 @@
   .card-front {
     transform: rotateY(180deg);
   }
+
+  /* Custom Scrollbar - Cognitive Prism Style */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: var(--color-surface-container-low);
+    border-radius: 10px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--color-outline-variant-prism);
+    border-radius: 10px;
+    border: 2px solid var(--color-surface-container-low);
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: var(--color-primary-prism);
+  }
 }
