@@ -23,6 +23,7 @@ import ToolsPage from './pages/tools/page';
 import AddToHomePrompt from './components/ui/AddToHomePrompt';
 import ClassroomToolsPage from './pages/additional-tools/ClassroomTools';
 import XOGamePage from './pages/additional-tools/XOGame';
+import MemoryGamePage from './pages/additional-tools/MemoryGame';
 
 function App() {
   return (
@@ -60,6 +61,7 @@ function App() {
               <Route path='/additional-tools/text-to-qrcode' element={<TextToQRcodePage />} />
               <Route path='/additional-tools/classroom-tools' element={<ClassroomToolsPage />} />
               <Route path='/additional-tools/xo-game' element={<XOGamePage />} />
+              <Route path='/additional-tools/memory-strong' element={<MemoryGamePage />} />
             </Routes>
           </BrowserRouter>
         </TourProvider>
