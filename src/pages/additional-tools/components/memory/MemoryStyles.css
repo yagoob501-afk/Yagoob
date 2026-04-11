@@ -3,40 +3,40 @@
 /* Memory Strong - The Cognitive Prism Design System */
 
 @theme {
-  --color-surface-container-highest: #192540;
-  --color-primary-container: #3bb668;
-  --color-surface-container: #0f1930;
-  --color-on-secondary-fixed-variant: #00567c;
-  --color-primary-fixed: #86fea7;
-  --color-on-secondary-container: #f3f8ff;
-  --color-primary-dim: #78ef9a;
-  --color-surface-dim: #060e20;
-  --color-inverse-on-surface: #4d556b;
-  --color-surface-container-lowest: #000000;
-  --color-inverse-surface: #faf8ff;
-  --color-secondary-fixed-dim: #81ccff;
-  --color-secondary-container: #006591;
-  --color-surface-tint: #86fea7;
-  --color-secondary-fixed: #a4d8ff;
-  --color-surface-bright: #1f2b49;
-  --color-on-primary: #00612f;
-  --color-error-container: #9f0519;
-  --color-secondary-dim: #17a8ec;
-  --color-on-primary-container: #002910;
-  --color-surface-variant: #192540;
-  --color-primary-fixed-dim: #78ef9a;
-  --color-on-secondary-fixed: #003853;
-  --color-background-prism: #060e20;
-  --color-on-surface-prism: #dee5ff;
-  --color-on-secondary-prism: #003047;
-  --color-on-primary-fixed: #004c23;
-  --color-surface-container-high: #141f38;
-  --color-outline-variant-prism: #40485d;
-  --color-on-background-prism: #dee5ff;
-  --color-secondary-prism: #34b5fa;
-  --color-primary-prism: #86fea7;
-  --color-on-surface-variant-prism: #a3aac4;
-  --color-surface-container-low: #091328;
+  --color-surface-container-highest: var(--color-border-secondary);
+  --color-primary-container: var(--color-primary);
+  --color-surface-container: var(--color-bg-container);
+  --color-on-secondary-fixed-variant: var(--color-text-tertiary);
+  --color-primary-fixed: var(--color-primary);
+  --color-on-secondary-container: var(--color-text-base);
+  --color-primary-dim: var(--color-primary-hover);
+  --color-surface-dim: var(--color-bg-base);
+  --color-inverse-on-surface: var(--color-text-muted);
+  --color-surface-container-lowest: var(--color-bg-base);
+  --color-inverse-surface: var(--color-text-heading);
+  --color-secondary-fixed-dim: var(--color-text-tertiary);
+  --color-secondary-container: var(--color-bg-layout);
+  --color-surface-tint: var(--color-primary);
+  --color-secondary-fixed: var(--color-text-secondary);
+  --color-surface-bright: var(--color-bg-container);
+  --color-on-primary: var(--color-primary-foreground);
+  --color-error-container: var(--color-error);
+  --color-secondary-dim: var(--color-text-tertiary);
+  --color-on-primary-container: var(--color-text-heading);
+  --color-surface-variant: var(--color-bg-layout);
+  --color-primary-fixed-dim: var(--color-primary-hover);
+  --color-on-secondary-fixed: var(--color-text-heading);
+  --color-background-prism: var(--color-bg-base);
+  --color-on-surface-prism: var(--color-text-base);
+  --color-on-secondary-prism: var(--color-text-base);
+  --color-on-primary-fixed: var(--color-text-heading);
+  --color-surface-container-high: var(--color-bg-container);
+  --color-outline-variant-prism: var(--color-border);
+  --color-on-background-prism: var(--color-text-base);
+  --color-secondary-prism: var(--color-text-tertiary);
+  --color-primary-prism: var(--color-primary);
+  --color-on-surface-variant-prism: var(--color-text-secondary);
+  --color-surface-container-low: var(--color-bg-layout);
 
   --radius-prism-xl: 3rem;
   --radius-prism-lg: 2rem;
@@ -45,7 +45,7 @@
 
 @layer utilities {
   .glass-panel {
-    background: rgba(25, 37, 64, 0.6);
+    background: rgba(255, 255, 255, 0.4);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
   }

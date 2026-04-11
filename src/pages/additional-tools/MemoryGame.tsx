@@ -53,13 +53,8 @@ export default function MemoryGame() {
     setLogic(MemoryGameLogic.fromJSON(logic.toJSON()))
   }
 
-  const handleUpdateMatrix = (rows: number, cols: number) => {
-    logic.setMatrix(rows, cols)
-    setLogic(MemoryGameLogic.fromJSON(logic.toJSON()))
-  }
-
-  const handleUpdateQuestionTime = (time: number) => {
-    logic.setQuestionTime(time)
+  const handleUpdateMatrix = (count: number) => {
+    logic.setMatrixByCount(count)
     setLogic(MemoryGameLogic.fromJSON(logic.toJSON()))
   }
 
@@ -71,7 +66,7 @@ export default function MemoryGame() {
   }
 
   return (
-    <div className="min-h-screen bg-[#060e20] text-[#dee5ff] relative overflow-x-hidden selection:bg-primary-prism/30">
+    <div className="min-h-screen bg-bg-base text-text-base relative overflow-x-hidden selection:bg-primary/30">
       <LayoutGroup>
         <div className="container mx-auto px-4 py-8 md:py-12 flex flex-col items-center">
           {view === 'setup' ? (
@@ -80,8 +75,6 @@ export default function MemoryGame() {
               matrix={logic.getState().matrix}
               onUpdateQuestions={handleUpdateQuestions}
               onUpdateMatrix={handleUpdateMatrix}
-              onUpdateQuestionTime={handleUpdateQuestionTime}
-              questionTime={logic.getState().questionTime}
               onStartGame={handleStartGame}
               onClearData={handleClearData}
             />

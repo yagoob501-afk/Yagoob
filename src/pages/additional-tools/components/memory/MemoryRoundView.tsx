@@ -12,7 +12,6 @@ import {
 import { cn } from "@/lib/utils"
 import { MemoryGameLogic, type MemoryGameState } from "@/lib/MemoryGameLogic"
 import { MemoryCard } from "./MemoryCard"
-import { MemoryQuestionModal } from "./MemoryQuestionModal"
 import confetti from "canvas-confetti"
 import "./MemoryStyles.css"
 
@@ -23,7 +22,6 @@ interface MemoryRoundViewProps {
 
 export function MemoryRoundView({ gameLogic, onBack }: MemoryRoundViewProps) {
   const [state, setState] = React.useState<MemoryGameState>(gameLogic.getState())
-  const [activeQuestion, setActiveQuestion] = React.useState<{ question: any; pairId: string } | null>(null)
   const [showResultModal, setShowResultModal] = React.useState(false)
   const [isProcessing, setIsProcessing] = React.useState(false)
   const [scale, setScale] = React.useState(1)
@@ -32,19 +30,16 @@ export function MemoryRoundView({ gameLogic, onBack }: MemoryRoundViewProps) {
   // Audio refs
   const tickAudio = React.useRef<HTMLAudioElement | null>(null)
   const successAudio = React.useRef<HTMLAudioElement | null>(null)
-  const wrongAudio = React.useRef<HTMLAudioElement | null>(null)
 
   // Initialize audio on mount
   React.useEffect(() => {
     tickAudio.current = new Audio("/sounds/tick.mp3")
     successAudio.current = new Audio("/sounds/switch-alarm.mp3")
-    wrongAudio.current = new Audio("/sounds/wrong-answer.mp3")
 
     gameLogic.onEffect = (effect) => {
       let audio: HTMLAudioElement | null = null
       if (effect === 'tick') audio = tickAudio.current
       else if (effect === 'match-success') audio = successAudio.current
-      else if (effect === 'wrong-answer') audio = wrongAudio.current
 
       if (audio) {
         audio.currentTime = 0
@@ -85,7 +80,7 @@ export function MemoryRoundView({ gameLogic, onBack }: MemoryRoundViewProps) {
   }, [gameLogic])
 
   const handleCardClick = (id: string) => {
-    if (state.status !== 'playing' || activeQuestion || isProcessing) return
+    if (state.status !== 'playing' || isProcessing) return
 
     // Don't flip if already flipped
     const card = state.board.find(c => c.id === id)
@@ -97,8 +92,22 @@ export function MemoryRoundView({ gameLogic, onBack }: MemoryRoundViewProps) {
     // Check for match
     const match = gameLogic.checkMatch()
     if (match) {
+      setIsProcessing(true) // Lock the board briefly for animation
       setTimeout(() => {
-        setActiveQuestion(match)
+        gameLogic.handleAnswer(true, match.pairId)
+        setIsProcessing(false) // Unlock
+        forceUpdate()
+
+        const updatedState = gameLogic.getState()
+        if (updatedState.status === 'finished') {
+          setShowResultModal(true)
+          confetti({
+            particleCount: 150,
+            spread: 100,
+            origin: { y: 0.6 },
+            colors: ['#C19A6B', '#A67B5B', '#7BA05B']
+          })
+        }
       }, 600) // Wait for flip animation
     } else {
       // If two cards flipped but no match, reset them after delay
@@ -112,27 +121,6 @@ export function MemoryRoundView({ gameLogic, onBack }: MemoryRoundViewProps) {
           setIsProcessing(false) // Unlock
           forceUpdate()
         }, 1500)
-      }
-    }
-  }
-
-  const handleAnswer = (isCorrect: boolean) => {
-    if (!activeQuestion) return
-
-    gameLogic.handleAnswer(isCorrect, activeQuestion.pairId)
-    setActiveQuestion(null)
-    forceUpdate()
-
-    if (isCorrect) {
-      const updatedState = gameLogic.getState()
-      if (updatedState.status === 'finished') {
-        setShowResultModal(true)
-        confetti({
-          particleCount: 150,
-          spread: 100,
-          origin: { y: 0.6 },
-          colors: ['#86fea7', '#34b5fa']
-        })
       }
     }
   }
@@ -293,7 +281,7 @@ export function MemoryRoundView({ gameLogic, onBack }: MemoryRoundViewProps) {
                     index={idx}
                     card={card}
                     onClick={() => handleCardClick(card.id)}
-                    disabled={isFinished || !!activeQuestion}
+                    disabled={isFinished}
                   />
                 ))}
               </div>
@@ -362,16 +350,6 @@ export function MemoryRoundView({ gameLogic, onBack }: MemoryRoundViewProps) {
           </div>
         )}
       </AnimatePresence>
-
-      {/* Question Challenge Modal */}
-      {activeQuestion && (
-        <MemoryQuestionModal
-          question={activeQuestion.question}
-          team={state.currentPlayer === 'Team1' ? 'green' : 'blue'}
-          onAnswer={handleAnswer}
-          questionTime={state.questionTime}
-        />
-      )}
 
       {/* Background Decorations */}
       <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden">

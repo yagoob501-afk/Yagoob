@@ -15,15 +15,12 @@ export function MemoryAIModal({ isOpen, onClose, onImport, count }: MemoryAIModa
    const [topic, setTopic] = React.useState("")
    const [copied, setCopied] = React.useState(false)
 
-   const examplePrompt = `قم بتوليد ${count} أسئلة عن (${topic || "قم بسؤال المستخدم عن موضوع"}) بصيغة JSON كالتالي (تأكد من تنويع قيمة correctAnswerIndex لكل سؤال لتجنب الغش):
+   const examplePrompt = `قم بتوليد ${count} أسئلة عن (${topic || "قم بسؤال المستخدم عن موضوع"}) بصيغة JSON كالتالي:
 [
   {
     "id": "1",
     "pairA": "المفهوم (يظهر على البطاقة 1)",
-    "pairB": "التعريف (يظهر على البطاقة 2)",
-    "text": "سؤال التحدي للمودال؟",
-    "choices": ["خيار 1", "خيار 2", "خيار 3", "خيار 4"],
-    "correctAnswerIndex": 1
+    "pairB": "التعريف (يظهر على البطاقة 2)"
   }
 ]`;
 
@@ -108,7 +105,7 @@ export function MemoryAIModal({ isOpen, onClose, onImport, count }: MemoryAIModa
                         <textarea
                            value={jsonText}
                            onChange={(e) => setJsonText(e.target.value)}
-                           placeholder='الصق كود JSON هنا (مثال: [{ "text": "...", ... }])'
+                           placeholder='الصق كود JSON هنا (مثال: [{ "pairA": "...", "pairB": "..." }])'
                            className="flex-1 w-full p-4 rounded-xl bg-surface-container-lowest border border-outline-variant-prism/20 font-mono text-xs text-on-surface-prism outline-none focus:border-primary-prism transition-all resize-none min-h-[400px] custom-scrollbar"
                         />
                      </div>

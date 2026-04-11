@@ -48,7 +48,7 @@ export function MemoryCard({ card, onClick, disabled, index }: MemoryCardProps) 
         {/* Card Front (The Question or Answer) */}
         <div
           className={cn(
-            "card-face card-front rounded-xl flex items-center justify-center p-4 border-2 shadow-[0_0_30px_rgba(134,254,167,0.3)]",
+            "card-face card-front rounded-xl flex items-center justify-center p-4 border-2 shadow-primary/20",
             card.type === 'question' 
               ? "bg-surface-container-highest text-on-surface-prism border-primary-prism/30" 
               : "bg-primary-prism text-on-primary border-primary-prism"

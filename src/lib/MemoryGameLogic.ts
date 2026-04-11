@@ -12,9 +12,6 @@ export interface Question {
   id: string;
   pairA: string; // Text for Card 1
   pairB: string; // Text for Card 2
-  text: string;  // Modal Question Text
-  choices: string[];
-  correctAnswerIndex: number;
 }
 
 export interface MemoryCard {
@@ -26,7 +23,7 @@ export interface MemoryCard {
   isMatched: boolean;
 }
 
-export type GameEffect = 'tick' | 'switch-alarm' | 'wrong-answer' | 'match-success';
+export type GameEffect = 'switch-alarm' | 'wrong-answer' | 'match-success' | 'tick';
 
 export interface MemoryGameState {
   matrix: { rows: number; cols: number };
@@ -40,17 +37,15 @@ export interface MemoryGameState {
   blueTeamName: string;
   greenTeamColor: TeamColor;
   blueTeamColor: TeamColor;
-  questionTime: number;
 }
 
 export class MemoryGameLogic {
-  private matrix = { rows: 4, cols: 5 };
+  private matrix = { rows: 2, cols: 4 };
   private board: MemoryCard[] = [];
   private currentPlayer: Player = 'Team1';
   private questions: Question[] = [];
   private scores = { Team1: 0, Team2: 0 };
   private status: 'setup' | 'ready' | 'playing' | 'finished' = 'setup';
-  private questionTime: number = 15;
 
   private greenTeamName: string = "الفريق الأول";
   private blueTeamName: string = "الفريق الثاني";
@@ -79,20 +74,22 @@ export class MemoryGameLogic {
       blueTeamName: this.blueTeamName,
       greenTeamColor: this.greenTeamColor,
       blueTeamColor: this.blueTeamColor,
-      questionTime: this.questionTime,
     };
-  }
-
-  setQuestionTime(time: number) {
-    this.questionTime = time;
   }
 
   setQuestions(questions: Question[]) {
     this.questions = questions;
   }
 
-  setMatrix(rows: number, cols: number) {
-    this.matrix = { rows, cols };
+  setMatrixByCount(count: number) {
+    if (count === 4) this.matrix = { rows: 2, cols: 4 };
+    else if (count === 6) this.matrix = { rows: 4, cols: 3 };
+    else if (count === 8) this.matrix = { rows: 4, cols: 4 };
+    else if (count === 10) this.matrix = { rows: 4, cols: 5 };
+    else {
+      // Default fallback
+      this.matrix = { rows: 4, cols: Math.ceil(count / 2) };
+    }
   }
 
   setTeamInfo(greenName: string, blueName: string, greenColor: TeamColor, blueColor: TeamColor) {
@@ -121,33 +118,45 @@ export class MemoryGameLogic {
     // Use only the required number of questions
     const selectedQuestions = this.questions.slice(0, pairCount);
 
-    let cards: MemoryCard[] = [];
+    let questionsSet: MemoryCard[] = [];
+    let answersSet: MemoryCard[] = [];
+
     selectedQuestions.forEach((q) => {
       // Question Card (Pair A)
-      cards.push({
+      questionsSet.push({
         id: `q-${q.id}`,
         pairId: q.id,
-        content: q.pairA || q.text,
+        content: q.pairA,
         type: 'question',
         isFlipped: false,
         isMatched: false,
       });
       // Answer Card (Pair B)
-      cards.push({
+      answersSet.push({
         id: `a-${q.id}`,
         pairId: q.id,
-        content: q.pairB || q.choices[q.correctAnswerIndex],
+        content: q.pairB,
         type: 'answer',
         isFlipped: false,
         isMatched: false,
       });
     });
 
-    this.board = this.shuffle(cards);
+    // Partitioned Board: Questions at top, Answers at bottom
+    // We shuffle each set independently if possible, or just keep them as is and shuffle their positions.
+    // The user wants questions at top and answers at bottom.
+    // So we shuffle the questions set and put it in first half, and shuffle answers set and put it in second half.
+    
+    this.board = [...this.shuffle(questionsSet), ...this.shuffle(answersSet)];
   }
 
   private shuffle(array: any[]) {
-    return array.sort(() => Math.random() - 0.5);
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
   }
 
   /**
@@ -170,18 +179,15 @@ export class MemoryGameLogic {
 
   /**
    * Check if the two flipped cards match.
-   * Returns the question if it's a match and requires verification.
+   * Returns the question if it's a match.
    */
-  checkMatch(): { question: Question, pairId: string } | null {
+  checkMatch(): { pairId: string } | null {
     const flipped = this.board.filter(c => c.isFlipped && !c.isMatched);
     if (flipped.length !== 2) return null;
 
     if (flipped[0].pairId === flipped[1].pairId) {
       // It's a match!
-      const question = this.questions.find(q => q.id === flipped[0].pairId);
-      if (question) {
-        return { question, pairId: flipped[0].pairId };
-      }
+      return { pairId: flipped[0].pairId };
     }
     return null;
   }
@@ -196,6 +202,7 @@ export class MemoryGameLogic {
       flipped.forEach(c => {
         if (c.pairId === pairId) {
           c.isMatched = true;
+          c.isFlipped = true; // Ensure they stay flipped
         }
       });
       // Increment score for current player
@@ -208,10 +215,6 @@ export class MemoryGameLogic {
       if (this.board.every(c => c.isMatched)) {
         this.status = 'finished';
       }
-
-      // Match found: turn continues?
-      // "Correct Answer -> Player gets the pair, points, and possibly another turn."
-      // Let's allow another turn for now.
     } else {
       // Wrong answer or no match
       if (this.onEffect) this.onEffect('wrong-answer');
@@ -236,8 +239,7 @@ export class MemoryGameLogic {
       names: { green: this.greenTeamName, blue: this.blueTeamName },
       colors: { green: this.greenTeamColor, blue: this.blueTeamColor },
       scores: this.scores,
-      currentPlayer: this.currentPlayer,
-      questionTime: this.questionTime
+      currentPlayer: this.currentPlayer
     };
   }
 
@@ -253,7 +255,6 @@ export class MemoryGameLogic {
     }
     if (data.scores) logic.scores = data.scores;
     if (data.currentPlayer) logic.currentPlayer = data.currentPlayer;
-    if (data.questionTime) logic.questionTime = data.questionTime;
     return logic;
   }
 }

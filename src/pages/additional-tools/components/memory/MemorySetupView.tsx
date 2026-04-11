@@ -20,20 +20,16 @@ interface MemorySetupViewProps {
   questions: Question[]
   onUpdateQuestions: (questions: Question[]) => void
   matrix: { rows: number; cols: number }
-  onUpdateMatrix: (rows: number, cols: number) => void
+  onUpdateMatrix: (count: number) => void
   onStartGame: (greenName: string, blueName: string) => void
   onClearData: () => void
-  questionTime: number
-  onUpdateQuestionTime: (time: number) => void
 }
 
 const MATRIX_OPTIONS = [
-  { rows: 3, cols: 4, label: "3 × 4 (6 أسئلة)" },
-  { rows: 4, cols: 4, label: "4 × 4 (8 أسئلة)" },
-  { rows: 4, cols: 5, label: "4 × 5 (10 أسئلة)" },
-  { rows: 5, cols: 6, label: "5 × 6 (15 أسئلة)" },
-  { rows: 6, cols: 6, label: "6 × 6 (18 أسئلة)" },
-  { rows: 5, cols: 8, label: "5 × 8 (20 سؤالاً)" },
+  { count: 4, label: "4 أسئلة" },
+  { count: 6, label: "6 أسئلة" },
+  { count: 8, label: "8 أسئلة" },
+  { count: 10, label: "10 أسئلة" },
 ];
 
 export function MemorySetupView({
@@ -42,9 +38,7 @@ export function MemorySetupView({
   matrix,
   onUpdateMatrix,
   onStartGame,
-  onClearData,
-  questionTime,
-  onUpdateQuestionTime
+  onClearData
 }: MemorySetupViewProps) {
   const [isAIModalOpen, setIsAIModalOpen] = React.useState(false)
   const [greenName, setGreenName] = React.useState("الفريق الاول")
@@ -59,9 +53,6 @@ export function MemorySetupView({
       id: Math.random().toString(36).substr(2, 9),
       pairA: "",
       pairB: "",
-      text: "",
-      choices: ["", "", "", ""],
-      correctAnswerIndex: 0,
     }
     onUpdateQuestions([...questions, newQuestion])
   }
@@ -135,15 +126,15 @@ export function MemorySetupView({
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
         {/* Matrix Selection */}
         <div className="glass-panel p-8 rounded-xl shadow-xl border border-outline-variant-prism/10 space-y-4">
-          <h3 className="font-headline font-black text-xl text-primary-fixed">إعدادات اللوحة</h3>
+          <h3 className="font-headline font-black text-xl text-primary-fixed">عدد الأسئلة</h3>
           <div className="grid grid-cols-2 gap-3">
             {MATRIX_OPTIONS.map((opt) => (
               <button
                 key={opt.label}
-                onClick={() => onUpdateMatrix(opt.rows, opt.cols)}
+                onClick={() => onUpdateMatrix(opt.count)}
                 className={cn(
                   "px-4 py-3 rounded-xl border-2 transition-all font-bold",
-                  matrix.rows === opt.rows && matrix.cols === opt.cols
+                  (matrix.rows * matrix.cols) / 2 === opt.count
                     ? "bg-primary-prism/10 border-primary-prism text-primary-prism"
                     : "bg-surface-container-low border-outline-variant-prism/10 text-on-surface-variant-prism hover:border-primary-prism/30"
                 )}
@@ -162,41 +153,6 @@ export function MemorySetupView({
             </span>
           </div>
 
-          <div className="pt-4 space-y-4">
-            <div className="flex items-center justify-between">
-              <label className="text-lg font-headline font-black text-primary-fixed">وقت السؤال (ثانية)</label>
-              <div className="flex items-center gap-3">
-                <input
-                  type="number"
-                  min="5"
-                  max="60"
-                  value={questionTime}
-                  onChange={(e) => onUpdateQuestionTime(Number(e.target.value))}
-                  className="w-20 text-center text-2xl font-black text-primary-prism bg-surface-container-high border-2 border-outline-variant-prism/10 rounded-xl py-1 focus:border-primary-prism outline-none transition-all"
-                />
-                <span className="text-xs font-bold text-on-surface-variant-prism opacity-60">ثانية</span>
-              </div>
-            </div>
-            <input
-              type="range"
-              min="5"
-              max="60"
-              step="1"
-              value={questionTime}
-              onChange={(e) => onUpdateQuestionTime(Number(e.target.value))}
-              className="w-full h-2 bg-surface-container-high rounded-lg appearance-none cursor-pointer accent-primary-prism"
-            />
-            <div className="relative h-4 mt-2">
-              <span className="absolute right-0 text-[10px] font-black text-on-surface-variant-prism/40">5 ثوانٍ</span>
-              <span
-                className="absolute text-[10px] font-black text-on-surface-variant-prism/60 translate-x-1/2"
-                style={{ right: `${((30 - 5) / (60 - 5)) * 100}%` }}
-              >
-                30 ثانية
-              </span>
-              <span className="absolute left-0 text-[10px] font-black text-on-surface-variant-prism/40">60 ثانية</span>
-            </div>
-          </div>
         </div>
 
         {/* Team Config */}
@@ -257,7 +213,7 @@ export function MemorySetupView({
                 </div>
 
                 <div className="flex-1 space-y-6">
-                  {/* Pair Configuration */}
+                  {/* Pair Configuration only */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-surface-container-highest/20 rounded-2xl border border-outline-variant-prism/10">
                     <div className="space-y-2">
                       <label className="text-[10px] font-black text-primary-prism uppercase px-2">نص البطاقة 1 (المطابقة)</label>
@@ -276,45 +232,6 @@ export function MemorySetupView({
                         placeholder="مثال: أوكسجين"
                         className="w-full px-4 py-2 bg-surface-container-low rounded-xl border border-transparent focus:border-secondary-prism/30 outline-none font-bold text-on-surface-prism shadow-inner"
                       />
-                    </div>
-                  </div>
-
-                  {/* Modal Question Configuration */}
-                  <div className="space-y-4 pt-2">
-                    <div className="space-y-1">
-                      <label className="text-xs font-black text-on-surface-variant-prism/60 px-2 italic">سؤال التحقق (المودال)</label>
-                      <input
-                        value={q.text}
-                        onChange={(e) => handleUpdateQuestion(q.id, { text: e.target.value })}
-                        placeholder="اكتب سؤال التحدي هنا للمودال..."
-                        className="w-full text-lg font-bold bg-transparent border-b-2 border-outline-variant-prism/20 focus:border-primary-prism outline-none py-2 transition-all"
-                      />
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-3">
-                      {q.choices.map((choice, cIdx) => (
-                        <div key={cIdx} className="flex items-center gap-2">
-                          <button
-                            onClick={() => handleUpdateQuestion(q.id, { correctAnswerIndex: cIdx })}
-                            className={cn(
-                              "w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all shrink-0",
-                              q.correctAnswerIndex === cIdx ? "bg-primary-prism border-primary-prism text-on-primary" : "border-outline-variant-prism/30"
-                            )}
-                          >
-                            {q.correctAnswerIndex === cIdx && <div className="w-2 h-2 rounded-full bg-white" />}
-                          </button>
-                          <input
-                            value={choice}
-                            onChange={(e) => {
-                              const newChoices = [...q.choices]
-                              newChoices[cIdx] = e.target.value
-                              handleUpdateQuestion(q.id, { choices: newChoices })
-                            }}
-                            placeholder={`خيار ${cIdx + 1}`}
-                            className="flex-1 bg-surface-container-low px-3 py-1.5 rounded-lg text-sm border border-transparent focus:border-primary-prism/30 outline-none font-medium"
-                          />
-                        </div>
-                      ))}
                     </div>
                   </div>
                 </div>
