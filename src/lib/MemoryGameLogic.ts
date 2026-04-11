@@ -221,6 +221,10 @@ export class MemoryGameLogic {
 
       // Flip back and switch turns
       this.board.filter(c => c.isFlipped && !c.isMatched).forEach(c => c.isFlipped = false);
+    }
+
+    // Switch turns regardless of result
+    if (this.status !== 'finished') {
       this.currentPlayer = this.currentPlayer === 'Team1' ? 'Team2' : 'Team1';
     }
   }

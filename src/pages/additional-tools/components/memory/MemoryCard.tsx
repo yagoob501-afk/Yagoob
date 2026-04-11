@@ -36,12 +36,18 @@ export function MemoryCard({ card, onClick, disabled, index }: MemoryCardProps) 
         {/* Card Back (Visible initially) */}
         <div 
           className={cn(
-            "card-face glass-panel rounded-xl flex flex-col items-center justify-center border border-outline-variant-prism/10 transition-all duration-300",
+            "card-face glass-panel rounded-xl flex flex-col items-center justify-center border border-outline-variant-prism/10 transition-all duration-300 gap-2",
             !card.isFlipped && !card.isMatched && "group-hover:scale-105 group-hover:bg-surface-bright"
           )}
         >
           <span className="text-4xl font-headline font-black text-primary-prism/60">
             {index + 1}
+          </span>
+          <span className={cn(
+             "text-sm font-black px-4 py-1 rounded-full uppercase tracking-tight border-2 shadow-sm",
+             card.type === 'question' ? "bg-surface-bright text-primary-prism border-primary-prism/20" : "bg-surface-bright text-secondary-prism border-secondary-prism/20"
+          )}>
+            {card.type === 'question' ? 'سؤال' : 'إجابة'}
           </span>
         </div>
 
@@ -54,6 +60,12 @@ export function MemoryCard({ card, onClick, disabled, index }: MemoryCardProps) 
               : "bg-primary-prism text-on-primary border-primary-prism"
           )}
         >
+          <span className={cn(
+             "absolute top-3 right-3 text-[10px] font-black px-3 py-1 rounded-full uppercase shadow-sm border",
+             card.type === 'question' ? "bg-primary-prism/10 text-primary-prism border-primary-prism/20" : "bg-white/20 text-white border-white/30"
+          )}>
+            {card.type === 'question' ? 'سؤال' : 'إجابة'}
+          </span>
           <p className={cn(
             "text-center font-bold leading-relaxed",
             card.content.length > 50 ? "text-sm" : card.content.length > 20 ? "text-base" : "text-xl",
