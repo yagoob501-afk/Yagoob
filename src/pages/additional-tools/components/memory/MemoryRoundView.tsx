@@ -12,6 +12,7 @@ import {
 import { cn } from "@/lib/utils"
 import { MemoryGameLogic, type MemoryGameState } from "@/lib/MemoryGameLogic"
 import { MemoryCard } from "./MemoryCard"
+import { ScaleToFit } from "@/components/ui/ScaleToFit"
 import confetti from "canvas-confetti"
 import "./MemoryStyles.css"
 
@@ -24,8 +25,6 @@ export function MemoryRoundView({ gameLogic, onBack }: MemoryRoundViewProps) {
   const [state, setState] = React.useState<MemoryGameState>(gameLogic.getState())
   const [showResultModal, setShowResultModal] = React.useState(false)
   const [isProcessing, setIsProcessing] = React.useState(false)
-  const [scale, setScale] = React.useState(1)
-  const [contentHeight, setContentHeight] = React.useState<number | null>(null)
 
   // Audio refs
   const tickAudio = React.useRef<HTMLAudioElement | null>(null)
@@ -47,33 +46,6 @@ export function MemoryRoundView({ gameLogic, onBack }: MemoryRoundViewProps) {
       }
     }
   }, [gameLogic])
-
-  // Scaling Logic (Mobile Scale Technique)
-  React.useEffect(() => {
-    const calculateScale = () => {
-      const screenWidth = window.innerWidth
-      const baseWidth = 1140
-      const padding = 32
-      const availableWidth = screenWidth - padding
-      setScale(Math.min(availableWidth / baseWidth, 1))
-    }
-    calculateScale()
-    window.addEventListener('resize', calculateScale)
-    return () => window.removeEventListener('resize', calculateScale)
-  }, [])
-
-  // Sync content height for scaling transitions
-  React.useEffect(() => {
-    const updateHeight = () => {
-      const gridElement = document.getElementById("memory-game-content")
-      if (gridElement) {
-        const actualHeight = gridElement.scrollHeight * scale
-        setContentHeight(actualHeight)
-      }
-    }
-    const timer = setTimeout(updateHeight, 100)
-    return () => clearTimeout(timer)
-  }, [scale, state])
 
   const forceUpdate = React.useCallback(() => {
     setState(gameLogic.getState())
@@ -157,21 +129,10 @@ export function MemoryRoundView({ gameLogic, onBack }: MemoryRoundViewProps) {
       </div>
 
       {!isReady && (
-        <div 
-          style={{ height: contentHeight ? `${contentHeight}px` : "auto" }} 
-          className="transition-[height] duration-300 w-full overflow-hidden flex justify-center"
-        >
-          <div
-            id="memory-game-content"
-            style={{
-              transform: `scale(${scale})`,
-              transformOrigin: "top center",
-              width: "1140px",
-              flexShrink: 0
-            }}
-          >
-            {/* Team Scoreboard (The Cognitive Prism Style) */}
-            <section className="w-full flex flex-col md:flex-row justify-between items-center gap-8 relative mb-16">
+        <ScaleToFit padding={32} watch={state}>
+          {/* Team Scoreboard (The Cognitive Prism Style) */}
+          <section className="w-full flex flex-col md:flex-row justify-between items-center gap-8 relative mb-16 px-4">
+            {/* Team Emerald */}
               {/* Team Emerald */}
               <div className="relative flex-1 w-full">
                 <div className={cn(
@@ -285,9 +246,8 @@ export function MemoryRoundView({ gameLogic, onBack }: MemoryRoundViewProps) {
                   />
                 ))}
               </div>
-            </main>
-          </div>
-        </div>
+          </main>
+        </ScaleToFit>
       )}
 
       {/* Finished State / Winner Display Modal */}

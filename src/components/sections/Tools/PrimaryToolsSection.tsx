@@ -8,52 +8,10 @@ import Template8background from "@/assets/cards_thumbnails/certificate-8.jpeg";
 import Template9background from "@/assets/cards_thumbnails/certificate-9.jpeg";
 import MultiCertificate from "@/assets/cards_thumbnails/multi-cetrificate.png";
 import PrimarySectionTitle from "@/components/ui/SectionTitle/PrimarySectionTitle";
+import { ScaleToFit } from "@/components/ui/ScaleToFit";
 import { Layers } from "lucide-react";
 
 function PrimaryToolsSection({ hideNewestItems }: { hideNewestItems?: boolean }) {
-    const [scale, setScale] = useState(1);
-    const [contentHeight, setContentHeight] = useState<number | null>(null);
-
-    useEffect(() => {
-        const calculateScale = () => {
-            const screenWidth = window.innerWidth;
-            const baseWidth = 1140;
-            const padding = 24; // 3 * 2 (px-3 on both sides)
-            const availableWidth = screenWidth - padding;
-
-            // حساب scale بناءً على العرض المتاح
-            const newScale = Math.min(availableWidth / baseWidth, 1);
-            setScale(newScale);
-        };
-
-        calculateScale();
-
-        window.addEventListener('focus', calculateScale);
-        return () => window.removeEventListener('focus', calculateScale);
-
-        // window.addEventListener('resize', calculateScale);
-        // return () => window.removeEventListener('resize', calculateScale);
-    }, []);
-
-    // حساب الارتفاع الفعلي بعد التصغير
-    useEffect(() => {
-        const updateHeight = () => {
-            const gridElement = document.getElementById('scaled-grid');
-            if (gridElement) {
-                const actualHeight = gridElement.scrollHeight * scale;
-                setContentHeight(actualHeight);
-            }
-        };
-
-        // انتظار تحميل الصور قبل حساب الارتفاع
-        const timer = setTimeout(updateHeight, 100);
-        // window.addEventListener('resize', updateHeight);
-
-        return () => {
-            clearTimeout(timer);
-            // window.removeEventListener('resize', updateHeight);
-        };
-    }, [scale]);
 
     return (
         <>
@@ -62,7 +20,7 @@ function PrimaryToolsSection({ hideNewestItems }: { hideNewestItems?: boolean })
                 id="tools"
             >
                 <div className="flex flex-col gap-7 w-full items-center">
-                    <h3 className="font-semibold mb-7 text-center text-xl">
+                    <div className="font-semibold mb-7 text-center">
                         <h3 className="font-semibold mb-7 text-center text-lg xl:text-2xl whitespace-nowrap">
                             منصة أدوات تعليمية تهدف إلى تسهيل عمل المعلم
                             <br />
@@ -72,20 +30,13 @@ function PrimaryToolsSection({ hideNewestItems }: { hideNewestItems?: boolean })
                             <br />
                             دون الحاجة لجهاز كمبيوتر
                         </h3>
-                    </h3>
+                    </div>
                     <PrimarySectionTitle
                         title="نماذج جاهزة للطباعة"
                         h4Props={{ className: "text-center text-3xl" }}
                     />
 
-                    <div
-                        style={{
-                            transform: `scale(${scale})`,
-                            transformOrigin: 'top center',
-                            transition: 'transform 0.3s ease',
-                            height: contentHeight ? `${contentHeight}px` : 'auto'
-                        }}
-                    >
+                    <ScaleToFit padding={24}>
                         <motion.div
                             id="scaled-grid"
                             className="grid grid-cols-3 w-[1140px] gap-2 h-full"
@@ -133,14 +84,14 @@ function PrimaryToolsSection({ hideNewestItems }: { hideNewestItems?: boolean })
                             </motion.div>
 
                         </motion.div>
-                    </div>
+                    </ScaleToFit>
                 </div>
             </motion.section>
 
             {!hideNewestItems && (
                 <motion.section
                     className="bg-cta-bg text-cta-foreground py-16 px-6 rounded-2xl shadow-lg container mx-auto text-center flex flex-col gap-14"
-                    id="tools"
+                    id="tools-newest"
                 >
                     <div className="text-center mb-10">
                         <h2 className="text-4xl font-bold mb-4">أحدث العناصر</h2>

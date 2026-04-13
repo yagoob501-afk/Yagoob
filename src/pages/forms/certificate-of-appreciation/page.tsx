@@ -1,11 +1,11 @@
 'use client'
 
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
 import PrimaryToolCard from "@/components/cards/ToolCard/PrimaryToolCard";
 import PrimaryFooter from "@/components/sections/Footer/PrimaryFooter";
 import PrimaryHeader from "@/components/sections/Header/PrimaryHeader";
 import PrimarySectionTitle from "@/components/ui/SectionTitle/PrimarySectionTitle";
+import { ScaleToFit } from "@/components/ui/ScaleToFit";
 
 // استيراد صور الشهادات
 import Template1background from "@/assets/cards_thumbnails/certificate-1.png";
@@ -17,46 +17,6 @@ import Template8background from "@/assets/cards_thumbnails/certificate-8.jpeg";
 import Template9background from "@/assets/cards_thumbnails/certificate-9.jpeg";
 
 export default function CertificatesFormsPage() {
-    const [scale, setScale] = useState(1);
-    const [contentHeight, setContentHeight] = useState<number | null>(null);
-
-    // حساب مقياس التحجيم بناءً على العرض المتاح
-    useEffect(() => {
-        const calculateScale = () => {
-            const screenWidth = window.innerWidth;
-            const baseWidth = 1140;
-            const padding = 24; // 3 * 2 (px-3 على الجانبين)
-            const availableWidth = screenWidth - padding;
-
-            const newScale = Math.min(availableWidth / baseWidth, 1);
-            setScale(newScale);
-        };
-
-        calculateScale();
-
-        // window.addEventListener("resize", calculateScale);
-        // return () => window.removeEventListener("resize", calculateScale);
-    }, []);
-
-    // تحديث الارتفاع بعد تطبيق التحجيم
-    useEffect(() => {
-        const updateHeight = () => {
-            const gridElement = document.getElementById("scaled-grid");
-            if (gridElement) {
-                const actualHeight = gridElement.scrollHeight * scale;
-                setContentHeight(actualHeight);
-            }
-        };
-
-        const timer = setTimeout(updateHeight, 100);
-        // window.addEventListener("resize", updateHeight);
-
-        return () => {
-            clearTimeout(timer);
-            // window.removeEventListener("resize", updateHeight);
-        };
-    }, [scale]);
-
     return (
         <div className="grow flex flex-col justify-between gap-14">
             <PrimaryHeader />
@@ -69,14 +29,7 @@ export default function CertificatesFormsPage() {
                         h4Props={{ className: "text-center text-3xl" }}
                     />
 
-                    <div
-                        style={{
-                            transform: `scale(${scale})`,
-                            transformOrigin: "top center",
-                            transition: "transform 0.3s ease",
-                            height: contentHeight ? `${contentHeight}px` : "auto",
-                        }}
-                    >
+                    <ScaleToFit padding={24}>
                         <motion.div
                             id="scaled-grid"
                             className="grid grid-cols-3 w-[1140px] gap-2"
@@ -142,7 +95,7 @@ export default function CertificatesFormsPage() {
                                 )
                             )}
                         </motion.div>
-                    </div>
+                    </ScaleToFit>
                 </div>
             </motion.section>
 
