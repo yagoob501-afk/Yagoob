@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
 import PrimaryToolCard from "@/components/cards/ToolCard/PrimaryToolCard";
 // import DocForm1 from "@/assets/cards_thumbnails/doc_form_1.jpeg";
 import DocForm2 from "@/assets/cards_thumbnails/doc_form_2.jpeg";

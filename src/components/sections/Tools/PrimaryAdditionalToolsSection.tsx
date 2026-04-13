@@ -1,7 +1,6 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { useState, useEffect } from "react"
 import PrimaryToolCard from "@/components/cards/ToolCard/PrimaryToolCard"
 import PrimarySectionTitle from "@/components/ui/SectionTitle/PrimarySectionTitle"
 import { ScaleToFit } from "@/components/ui/ScaleToFit"
