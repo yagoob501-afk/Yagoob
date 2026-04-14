@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils"
 import { exportAllToPdf } from "@/lib/attendance/exportAllToPdf"
 import { extractAttendanceFromPdf, type ImportResult } from "@/lib/attendance/importPdf"
 import { AttendanceImportModal } from "./AttendanceImportModal"
-import { Calendar, UserCheck, Users, HelpCircle, BookOpen, FileDown, Loader2, FileUp, Plus, UserPlus, Trash2 } from "lucide-react"
+import { Calendar, UserCheck, Users, HelpCircle, BookOpen, FileDown, Loader2, FileUp, Plus, UserPlus, Trash2, Star } from "lucide-react"
 import { AddLessonModal } from "./AddLessonModal"
 import { ManageStudentsModal } from "./ManageStudentsModal"
 
@@ -294,7 +294,14 @@ export function SelectionMobile({ onSelectLesson, onBack: _ }: SelectionMobilePr
           </div>
         </div>
         <div className="bg-bg-container border border-border rounded-[2.5rem] p-6 shadow-lg flex flex-col gap-4">
-          <HelpCircle className="w-6 h-6 text-error opacity-60" />
+          <Star className="w-6 h-6 text-amber-500 opacity-60" />
+          <div>
+            <p className="text-text-muted text-[10px] font-black uppercase tracking-widest leading-none mb-1">إجمالي المشاركة</p>
+            <h4 className="text-2xl font-black text-text-heading font-mono">{stats.totalParticipating}</h4>
+          </div>
+        </div>
+        <div className="col-span-2 bg-bg-container border border-border rounded-[2.5rem] p-6 shadow-lg flex flex-row items-center gap-4">
+          <HelpCircle className="w-8 h-8 text-error opacity-60" />
           <div>
             <p className="text-text-muted text-[10px] font-black uppercase tracking-widest leading-none mb-1">غيابات اليوم</p>
             <h4 className="text-2xl font-black text-text-heading font-mono">{stats.totalAbsent}</h4>

@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Check, X, Minus, Save, ArrowRight, UserCheck, Users, UserMinus, Timer, LayoutDashboard, Image as ImageIcon, Loader2 } from "lucide-react"
+import { Check, X, Save, ArrowRight, UserCheck, Users, UserMinus, Timer, LayoutDashboard, Image as ImageIcon, Loader2, Star } from "lucide-react"
 import { useLessonController, useAttendanceController, type AttendanceStatus } from "@/lib/attendance"
 import { cn } from "@/lib/utils"
 import { createAttendanceImage } from "@/lib/attendance/createAttendanceImage"
@@ -15,7 +15,7 @@ interface MarkingMobileProps {
 
 export function MarkingMobile({ lessonId, onSave, onBack }: MarkingMobileProps) {
   const { getLessonById, setLessonStatus } = useLessonController()
-  const { markStudent, getLessonAttendance } = useAttendanceController()
+  const { markStudent, toggleParticipation, getLessonAttendance, getStatusInfo } = useAttendanceController()
 
   const lesson = getLessonById(lessonId)
   const students = lesson?.students || []
@@ -27,11 +27,11 @@ export function MarkingMobile({ lessonId, onSave, onBack }: MarkingMobileProps) 
     const vals = Object.values(attendance)
     return {
       total: students.length,
-      present: vals.filter(v => v === 'present').length,
-      absent: vals.filter(v => v === 'absent').length,
-      ignored: vals.filter(v => v === 'ignore').length
+      present: vals.filter(v => getStatusInfo(v).isPresent).length,
+      absent: vals.filter(v => getStatusInfo(v).isAbsent).length,
+      participating: vals.filter(v => getStatusInfo(v).isParticipating).length
     }
-  }, [attendance, students])
+  }, [attendance, students, getStatusInfo])
 
   const handleMark = (studentId: string, status: AttendanceStatus) => {
     markStudent(lessonId, studentId, status)
@@ -73,15 +73,15 @@ export function MarkingMobile({ lessonId, onSave, onBack }: MarkingMobileProps) 
   return (
     <div className="w-full flex flex-col gap-8 rtl px-4 pb-36" dir="rtl">
 
-      {/* 2x2 Bento Grid Header */}
+      {/* Bento Grid Header */}
       <header className="grid grid-cols-2 gap-4 mt-4">
         {/* Card 1: Course Info */}
-        <div className="col-span-1 bg-bg-container p-5 rounded-4xl border border-border shadow-lg flex flex-col justify-between">
+        <div className="col-span-2 bg-bg-container p-5 rounded-4xl border border-border shadow-lg flex justify-between items-center">
           <div className="flex flex-col gap-1">
             <span className="text-[9px] font-black text-primary uppercase tracking-[0.2em]">الدرس الحالي</span>
             <h1 className="text-lg font-black text-text-heading font-cairo leading-tight">{lesson.subject}</h1>
           </div>
-          <div className="mt-3 flex items-center gap-2 text-text-muted text-[10px] font-bold opacity-60">
+          <div className="flex items-center gap-2 text-text-muted text-[10px] font-bold opacity-60">
             <Timer className="w-3.5 h-3.5" />
             <span>حصة {lesson.lessonNumber}</span>
           </div>
@@ -96,7 +96,16 @@ export function MarkingMobile({ lessonId, onSave, onBack }: MarkingMobileProps) 
           subtext="إجمالي المسجلين"
         />
 
-        {/* Card 3: Present */}
+        {/* Card 3: Participating */}
+        <MobileStat
+          label="مشاركة"
+          value={stats.participating}
+          color="warning"
+          icon={<Star className="w-4 h-4" />}
+          subtext="متفاعلين"
+        />
+
+        {/* Card 4: Present */}
         <MobileStat
           label="حضور"
           value={stats.present}
@@ -105,7 +114,7 @@ export function MarkingMobile({ lessonId, onSave, onBack }: MarkingMobileProps) 
           subtext="تم رصدهم"
         />
 
-        {/* Card 4: Absent */}
+        {/* Card 5: Absent */}
         <MobileStat
           label="غياب"
           value={stats.absent}
@@ -133,49 +142,53 @@ export function MarkingMobile({ lessonId, onSave, onBack }: MarkingMobileProps) 
         </div>
 
         <div className="flex flex-col gap-4">
-          {students.map((student, idx) => (
-            <motion.div
-              key={student.id}
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: idx * 0.03 }}
-              className="p-6 bg-bg-container rounded-4xl border border-border shadow-xl flex flex-col gap-6 relative"
-            >
-              <div className="flex items-start justify-between">
-                <div className="flex flex-col">
-                  <span className="text-xl font-black text-text-heading">{student.name}</span>
+          {students.map((student, idx) => {
+            const info = getStatusInfo(attendance[student.id])
+            return (
+              <motion.div
+                key={student.id}
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: idx * 0.03 }}
+                className="p-6 bg-bg-container rounded-4xl border border-border shadow-xl flex flex-col gap-6 relative"
+              >
+                <div className="flex items-start justify-between">
+                  <div className="flex flex-col">
+                    <span className="text-xl font-black text-text-heading">{student.name}</span>
+                  </div>
+                  <div className="w-8 h-8 rounded-lg bg-bg-layout flex items-center justify-center text-[10px] font-black text-text-muted opacity-30 border border-border/50">
+                    {idx + 1}
+                  </div>
                 </div>
-                <div className="w-8 h-8 rounded-lg bg-bg-layout flex items-center justify-center text-[10px] font-black text-text-muted opacity-30 border border-border/50">
-                  {idx + 1}
-                </div>
-              </div>
 
-              {/* Toggle Switch */}
-              <div className="grid grid-cols-3 gap-2 bg-bg-layout p-1.5 rounded-2xl border border-border">
-                <StatusTab
-                  active={attendance[student.id] === 'present'}
-                  label="حاضر"
-                  color="success"
-                  onClick={() => handleMark(student.id, 'present')}
-                  icon={<Check className="w-4 h-4" />}
-                />
-                <StatusTab
-                  active={attendance[student.id] === 'absent'}
-                  label="غائب"
-                  color="error"
-                  onClick={() => handleMark(student.id, 'absent')}
-                  icon={<X className="w-4 h-4" />}
-                />
-                <StatusTab
-                  active={attendance[student.id] === 'ignore'}
-                  label="تجاوز"
-                  color="neutral"
-                  onClick={() => handleMark(student.id, 'ignore')}
-                  icon={<Minus className="w-4 h-4" />}
-                />
-              </div>
-            </motion.div>
-          ))}
+                {/* Toggle Switch */}
+                <div className="grid grid-cols-3 gap-2 bg-bg-layout p-1.5 rounded-2xl border border-border">
+                  <StatusTab
+                    active={info.isPresent}
+                    label="حاضر"
+                    color="success"
+                    onClick={() => handleMark(student.id, 'present')}
+                    icon={<Check className="w-4 h-4" />}
+                  />
+                  <StatusTab
+                    active={info.isAbsent}
+                    label="غائب"
+                    color="error"
+                    onClick={() => handleMark(student.id, 'absent')}
+                    icon={<X className="w-4 h-4" />}
+                  />
+                  <StatusTab
+                    active={info.isParticipating}
+                    label="مشاركة"
+                    color="warning"
+                    disabled={!info.isPresent}
+                    onClick={() => toggleParticipation(lessonId, student.id)}
+                    icon={<Star className={cn("w-4 h-4", info.isParticipating && "fill-current")} />}
+                  />
+                </div>
+              </motion.div>
+            )
+          })}
         </div>
       </div>
 
@@ -216,11 +229,12 @@ export function MarkingMobile({ lessonId, onSave, onBack }: MarkingMobileProps) 
   )
 }
 
-function MobileStat({ label, value, color, icon, subtext }: { label: string, value: number, color: 'success' | 'error' | 'neutral', icon: React.ReactNode, subtext?: string }) {
+function MobileStat({ label, value, color, icon, subtext }: { label: string, value: number, color: 'success' | 'error' | 'neutral' | 'warning', icon: React.ReactNode, subtext?: string }) {
   const themes = {
     success: "text-success bg-success/5 border-success/20",
     error: "text-error bg-error/5 border-error/20",
-    neutral: "text-text-heading bg-bg-container border-border/50"
+    neutral: "text-text-heading bg-bg-container border-border/50",
+    warning: "text-[#B8860B] bg-yellow-50 border-yellow-200"
   }
   return (
     <div className={cn("flex flex-col items-center justify-center p-5 rounded-4xl border shadow-lg gap-1 text-center", themes[color])}>
@@ -236,18 +250,21 @@ function MobileStat({ label, value, color, icon, subtext }: { label: string, val
   )
 }
 
-function StatusTab({ active, label, color, onClick, icon }: { active: boolean, label: string, color: 'success' | 'error' | 'neutral', onClick: () => void, icon: React.ReactNode }) {
+function StatusTab({ active, label, color, onClick, icon, disabled }: { active: boolean, label: string, color: 'success' | 'error' | 'neutral' | 'warning', onClick: () => void, icon: React.ReactNode, disabled?: boolean }) {
   const activeStyles = {
     success: "bg-success text-text-light-solid shadow-lg shadow-success/20",
     error: "bg-error text-text-light-solid shadow-lg shadow-error/20",
-    neutral: "bg-text-heading text-text-light-solid shadow-lg"
+    neutral: "bg-text-heading text-text-light-solid shadow-lg",
+    warning: "bg-[#FFD700] text-slate-900 shadow-lg shadow-yellow-200/50"
   }
   return (
     <button
       onClick={onClick}
+      disabled={disabled}
       className={cn(
         "py-3.5 rounded-xl font-black transition-all flex items-center justify-center gap-2 outline-none",
-        active ? activeStyles[color] : "text-text-muted opacity-40 text-sm"
+        active ? activeStyles[color] : "text-text-muted opacity-40 text-xs",
+        disabled && "opacity-10 grayscale pointer-events-none"
       )}
     >
       <AnimatePresence mode="wait">

@@ -35,7 +35,6 @@ export function XOSetupView({
   const [greenName, setGreenName] = React.useState("فريق الابطال")
   const [blueName, setBlueName] = React.useState("فريق المميزين")
 
-  const totalTimerSeconds = 0 // (timerMinutes * 60) + timerSeconds
   const handleAddQuestion = () => {
     const newQuestion: Question = {
       id: Math.random().toString(36).substr(2, 9),

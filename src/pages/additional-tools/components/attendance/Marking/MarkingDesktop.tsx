@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Check, X, Minus, Save, ArrowRight, UserCheck, Users, Clock, LayoutDashboard, Search, Image as ImageIcon, Loader2 } from "lucide-react"
+import { Check, X, Save, ArrowRight, UserCheck, Users, Clock, LayoutDashboard, Search, Image as ImageIcon, Loader2, Star } from "lucide-react"
 import { useLessonController, useAttendanceController, type AttendanceStatus, type Lesson } from "@/lib/attendance"
 import { cn } from "@/lib/utils"
 import { createAttendanceImage } from "@/lib/attendance/createAttendanceImage"
@@ -15,7 +15,7 @@ interface MarkingDesktopProps {
 
 export function MarkingDesktop({ lessonId, onSave, onBack }: MarkingDesktopProps) {
   const { getLessonById, setLessonStatus } = useLessonController()
-  const { markStudent, getLessonAttendance } = useAttendanceController()
+  const { markStudent, toggleParticipation, getLessonAttendance, getStatusInfo } = useAttendanceController()
 
   const [searchQuery, setSearchQuery] = useState("")
   const [isExporting, setIsExporting] = useState(false)
@@ -45,11 +45,11 @@ export function MarkingDesktop({ lessonId, onSave, onBack }: MarkingDesktopProps
     const vals = Object.values(attendance)
     return {
       total: students.length,
-      present: vals.filter(v => v === 'present').length,
-      absent: vals.filter(v => v === 'absent').length,
-      ignored: vals.filter(v => v === 'ignore').length
+      present: vals.filter(v => getStatusInfo(v).isPresent).length,
+      absent: vals.filter(v => getStatusInfo(v).isAbsent).length,
+      participating: vals.filter(v => getStatusInfo(v).isParticipating).length
     }
-  }, [attendance, students])
+  }, [attendance, students, getStatusInfo])
 
   const handleExportImage = async () => {
     setIsExporting(true)
@@ -101,6 +101,7 @@ export function MarkingDesktop({ lessonId, onSave, onBack }: MarkingDesktopProps
           <DesktopHeaderStat label="إجمالي الطلاب" value={stats.total} color="neutral" />
           <DesktopHeaderStat label="حضور" value={stats.present} color="success" />
           <DesktopHeaderStat label="غياب" value={stats.absent} color="error" />
+          <DesktopHeaderStat label="مشاركة" value={stats.participating} color="warning" />
         </div>
       </header>
 
@@ -140,13 +141,15 @@ export function MarkingDesktop({ lessonId, onSave, onBack }: MarkingDesktopProps
                   {filteredStudents.map((student,) => {
                     // Find actual index in original list for the number column
                     const originalIdx = students.findIndex(s => s.id === student.id)
+                    const info = getStatusInfo(attendance[student.id])
+
                     return (
                       <tr
                         key={student.id}
                         className={cn(
                           "group transition-all hover:bg-bg-layout/30",
-                          attendance[student.id] === 'present' ? "bg-success/5" :
-                            attendance[student.id] === 'absent' ? "bg-error/5" : ""
+                          info.isPresent ? "bg-success/5" :
+                            info.isAbsent ? "bg-error/5" : ""
                         )}
                       >
                         <td className="px-8 py-6 text-center">
@@ -158,25 +161,26 @@ export function MarkingDesktop({ lessonId, onSave, onBack }: MarkingDesktopProps
                         <td className="px-8 py-6">
                           <div className="flex items-center gap-2 justify-center">
                             <MarkingButton
-                              active={attendance[student.id] === 'present'}
+                              active={info.isPresent}
                               onClick={() => handleMark(student.id, 'present')}
                               color="success"
                               label="حاضر"
                               icon={<Check className="w-4 h-4" />}
                             />
                             <MarkingButton
-                              active={attendance[student.id] === 'absent'}
+                              active={info.isAbsent}
                               onClick={() => handleMark(student.id, 'absent')}
                               color="error"
                               label="غائب"
                               icon={<X className="w-4 h-4" />}
                             />
                             <MarkingButton
-                              active={attendance[student.id] === 'ignore'}
-                              onClick={() => handleMark(student.id, 'ignore')}
-                              color="neutral"
-                              label="تجاوز"
-                              icon={<Minus className="w-4 h-4" />}
+                              active={info.isParticipating}
+                              disabled={!info.isPresent}
+                              onClick={() => toggleParticipation(lessonId, student.id)}
+                              color="warning"
+                              label="المشاركة"
+                              icon={<Star className={cn("w-4 h-4", info.isParticipating && "fill-current")} />}
                             />
                           </div>
                         </td>
@@ -259,10 +263,10 @@ export function MarkingDesktop({ lessonId, onSave, onBack }: MarkingDesktopProps
 
             <div className="p-6 bg-primary/5 rounded-3xl border border-primary/10 flex items-start gap-3">
               <div className="p-2 bg-primary rounded-xl text-text-light-solid">
-                <Minus className="w-4 h-4" />
+                <Star className="w-4 h-4 fill-current" />
               </div>
               <p className="text-[10px] font-bold text-primary leading-relaxed uppercase">
-                ملاحظة: خيار "تجاوز" يستخدم للطلاب الذين لا يشاركون في هذه الحصة لظروف استثنائية دون احتسابهم كغياب.
+                ملاحظة: خيار "المشاركة" يستخدم للطلاب المتفاعلين والذين أجابوا على الأسئلة خلال الحصة.
               </p>
             </div>
           </div>
@@ -273,11 +277,12 @@ export function MarkingDesktop({ lessonId, onSave, onBack }: MarkingDesktopProps
   )
 }
 
-function DesktopHeaderStat({ label, value, color }: { label: string, value: number, color: 'success' | 'error' | 'neutral' }) {
+function DesktopHeaderStat({ label, value, color }: { label: string, value: number, color: 'success' | 'error' | 'neutral' | 'warning' }) {
   const colors = {
     success: "text-success border-success/30 bg-success/5",
     error: "text-error border-error/30 bg-error/5",
-    neutral: "text-text-muted border-border bg-bg-layout"
+    neutral: "text-text-muted border-border bg-bg-layout",
+    warning: "text-[#B8860B] border-yellow-200 bg-yellow-50"
   }
   return (
     <div className={cn("px-8 py-5 rounded-3xl border min-w-[160px] flex flex-col items-center gap-1 shadow-sm", colors[color])}>
@@ -287,18 +292,20 @@ function DesktopHeaderStat({ label, value, color }: { label: string, value: numb
   )
 }
 
-function MarkingButton({ active, onClick, color, label, icon }: { active: boolean, onClick: () => void, color: 'success' | 'error' | 'neutral', label: string, icon: React.ReactNode }) {
+function MarkingButton({ active, onClick, color, label, icon, disabled }: { active: boolean, onClick: () => void, color: 'success' | 'error' | 'neutral' | 'warning', label: string, icon: React.ReactNode, disabled?: boolean }) {
   const themes = {
     success: active ? "bg-success text-text-light-solid shadow-lg shadow-success/20" : "text-success bg-success/5 hover:bg-success/10 border-success/20",
     error: active ? "bg-error text-text-light-solid shadow-lg shadow-error/20" : "text-error bg-error/5 hover:bg-error/10 border-error/20",
-    neutral: active ? "bg-text-heading text-text-light-solid shadow-lg" : "text-text-muted bg-bg-layout hover:bg-bg-layout-strong border-border/50"
+    neutral: active ? "bg-text-heading text-text-light-solid shadow-lg" : "text-text-muted bg-bg-layout hover:bg-bg-layout-strong border-border/50",
+    warning: active ? "bg-[#FFD700] text-slate-900 shadow-lg shadow-yellow-200/50" : "text-[#B8860B] bg-yellow-50 hover:bg-yellow-100 border-yellow-200/50"
   }
 
   return (
     <button
       onClick={onClick}
+      disabled={disabled}
       className={cn(
-        "flex-1 py-3 px-4 rounded-xl font-black text-[10px] transition-all flex items-center justify-center gap-2 border active:scale-95",
+        "flex-1 py-3 px-4 rounded-xl font-black text-[10px] transition-all flex items-center justify-center gap-2 border active:scale-95 disabled:opacity-20 disabled:grayscale disabled:cursor-not-allowed",
         themes[color],
         !active && "border-transparent"
       )}

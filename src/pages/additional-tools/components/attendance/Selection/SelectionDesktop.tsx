@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils"
 import { exportAllToPdf } from "@/lib/attendance/exportAllToPdf"
 import { extractAttendanceFromPdf, type ImportResult } from "@/lib/attendance/importPdf"
 import { AttendanceImportModal } from "./AttendanceImportModal"
-import { Calendar, Table2, TrendingUp, AlertTriangle, Eye, Users, FileDown, Loader2, FileUp, Plus, UserPlus, Trash2 } from "lucide-react"
+import { Calendar, Table2, TrendingUp, AlertTriangle, Eye, Users, FileDown, Loader2, FileUp, Plus, UserPlus, Trash2, Star } from "lucide-react"
 import { AddLessonModal } from "./AddLessonModal"
 import { ManageStudentsModal } from "./ManageStudentsModal"
 
@@ -314,13 +314,20 @@ export function SelectionDesktop({ onSelectLesson, onBack: _ }: SelectionDesktop
       </motion.section>
 
       {/* Bottom Informational Bento Cards */}
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         <SelectionInfoCard
           icon={<TrendingUp className="w-6 h-6" />}
           label="معدل الحضور العام"
           value={stats.rate + "%"}
           trend="مباشر"
           color="primary"
+        />
+        <SelectionInfoCard
+          icon={<Star className="w-6 h-6" />}
+          label="إجمالي المشاركين"
+          value={stats.totalParticipating.toString()}
+          trend="تفاعل"
+          color="warning"
         />
         <SelectionInfoCard
           icon={<Users className="w-6 h-6" />}
@@ -368,11 +375,12 @@ export function SelectionDesktop({ onSelectLesson, onBack: _ }: SelectionDesktop
   )
 }
 
-function SelectionInfoCard({ icon, label, value, trend, color }: { icon: React.ReactNode, label: string, value: string, trend: string, color: 'primary' | 'success' | 'error' }) {
+function SelectionInfoCard({ icon, label, value, trend, color }: { icon: React.ReactNode, label: string, value: string, trend: string, color: 'primary' | 'success' | 'error' | 'warning' }) {
   const colorClasses = {
     primary: "bg-primary/5 text-primary border-primary/20",
     success: "bg-success/5 text-success border-success/20",
-    error: "bg-error/5 text-error border-error/20"
+    error: "bg-error/5 text-error border-error/20",
+    warning: "bg-yellow-50 text-amber-600 border-yellow-200"
   }[color]
 
   return (

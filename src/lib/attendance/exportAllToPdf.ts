@@ -1,6 +1,7 @@
 import { createAttendanceImage } from "./createAttendanceImage";
 import type { Lesson, AttendanceMap } from "./types";
 import { serializeLessonData, encodeData } from "./jsonExport";
+import { getStatusInfo } from "./controllers/useAttendanceController";
 
 interface ExportOptions {
   lessons: Lesson[];
@@ -34,8 +35,9 @@ export async function exportAllToPdf({ lessons, attendance, onProgress }: Export
     const vals = Object.values(lessonAttendance);
     const stats = {
       total: lesson.students.length,
-      present: vals.filter(v => v === 'present').length,
-      absent: vals.filter(v => v === 'absent').length
+      present: vals.filter(v => getStatusInfo(v).isPresent).length,
+      absent: vals.filter(v => getStatusInfo(v).isAbsent).length,
+      participating: vals.filter(v => getStatusInfo(v).isParticipating).length
     };
 
     // Serialize data for embedding

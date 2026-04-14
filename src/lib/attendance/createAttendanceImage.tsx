@@ -10,6 +10,7 @@ interface ExportProps {
     total: number
     present: number
     absent: number
+    participating: number
   }
 }
 

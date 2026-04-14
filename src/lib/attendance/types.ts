@@ -3,7 +3,7 @@
  * Core data definitions for the Attendance Tool.
  */
 
-export type AttendanceStatus = 'present' | 'absent' | 'ignore';
+export type AttendanceStatus = 'present' | 'absent' | 'ignore' | 'present_participating';
 
 export interface Student {
   id: string;
@@ -33,5 +33,6 @@ export interface AttendanceStats {
   totalStudents: number;
   totalPresent: number;
   totalAbsent: number;
+  totalParticipating: number;
   rate: string; // Formatted percentage
 }
