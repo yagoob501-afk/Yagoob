@@ -1,4 +1,3 @@
-import * as React from "react"
 import { motion } from "framer-motion"
 import { cn } from "@/lib/utils"
 import type { MemoryCard as CardType } from "@/lib/MemoryGameLogic"
@@ -12,12 +11,6 @@ interface MemoryCardProps {
 }
 
 export function MemoryCard({ card, onClick, disabled, index }: MemoryCardProps) {
-  // Intentional Asymmetry: slight rotation for that "editorial" look
-  const rotation = React.useMemo(() => {
-    const rotations = [0, 1, -1, 2, -2];
-    return rotations[index % rotations.length];
-  }, [index]);
-
   return (
     <div
       onClick={!disabled ? onClick : undefined}
@@ -25,7 +18,6 @@ export function MemoryCard({ card, onClick, disabled, index }: MemoryCardProps) 
         "aspect-4/5 relative memory-grid-container group",
         !card.isMatched && !disabled ? "cursor-pointer" : "cursor-default"
       )}
-      style={{ transform: `rotate(${rotation}deg)` }}
     >
       <div
         className={cn(
@@ -34,7 +26,7 @@ export function MemoryCard({ card, onClick, disabled, index }: MemoryCardProps) 
         )}
       >
         {/* Card Back (Visible initially) */}
-        <div 
+        <div
           className={cn(
             "card-face glass-panel rounded-xl flex flex-col items-center justify-center border border-outline-variant-prism/10 transition-all duration-300 gap-2",
             !card.isFlipped && !card.isMatched && "group-hover:scale-105 group-hover:bg-surface-bright"
@@ -44,8 +36,8 @@ export function MemoryCard({ card, onClick, disabled, index }: MemoryCardProps) 
             {index + 1}
           </span>
           <span className={cn(
-             "text-sm font-black px-4 py-1 rounded-full uppercase tracking-tight border-2 shadow-sm",
-             card.type === 'question' ? "bg-surface-bright text-primary-prism border-primary-prism/20" : "bg-surface-bright text-secondary-prism border-secondary-prism/20"
+            "text-sm font-black px-4 py-1 rounded-full uppercase tracking-tight border-2 shadow-sm",
+            card.type === 'question' ? "bg-surface-bright text-primary-prism border-primary-prism/20" : "bg-surface-bright text-secondary-prism border-secondary-prism/20"
           )}>
             {card.type === 'question' ? 'سؤال' : 'إجابة'}
           </span>
@@ -55,14 +47,14 @@ export function MemoryCard({ card, onClick, disabled, index }: MemoryCardProps) 
         <div
           className={cn(
             "card-face card-front rounded-xl flex items-center justify-center p-4 border-2 shadow-primary/20",
-            card.type === 'question' 
-              ? "bg-surface-container-highest text-on-surface-prism border-primary-prism/30" 
+            card.type === 'question'
+              ? "bg-surface-container-highest text-on-surface-prism border-primary-prism/30"
               : "bg-primary-prism text-on-primary border-primary-prism"
           )}
         >
           <span className={cn(
-             "absolute top-3 right-3 text-[10px] font-black px-3 py-1 rounded-full uppercase shadow-sm border",
-             card.type === 'question' ? "bg-primary-prism/10 text-primary-prism border-primary-prism/20" : "bg-white/20 text-white border-white/30"
+            "absolute top-3 right-3 text-[10px] font-black px-3 py-1 rounded-full uppercase shadow-sm border",
+            card.type === 'question' ? "bg-primary-prism/10 text-primary-prism border-primary-prism/20" : "bg-white/20 text-white border-white/30"
           )}>
             {card.type === 'question' ? 'سؤال' : 'إجابة'}
           </span>
@@ -84,7 +76,7 @@ export function MemoryCard({ card, onClick, disabled, index }: MemoryCardProps) 
           className="absolute inset-0 bg-primary-prism/10 rounded-xl pointer-events-none flex items-center justify-center"
         >
           <div className="w-12 h-12 rounded-full bg-primary-prism text-on-primary flex items-center justify-center shadow-lg">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
           </div>
         </motion.div>
       )}
