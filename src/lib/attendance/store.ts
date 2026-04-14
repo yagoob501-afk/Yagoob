@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
-import { Lesson, AttendanceMap } from './types'
+import type { Lesson, AttendanceMap } from './types'
 
 interface AttendanceStoreState {
   lessons: Lesson[]

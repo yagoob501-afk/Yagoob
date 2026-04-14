@@ -1,5 +1,5 @@
+import type { Lesson, Student } from '../types'
 import { useAttendanceStore } from '../store'
-import { Lesson, Student } from '../types'
 
 export function useLessonController() {
   const { lessons, setLessons, attendance, setAttendance } = useAttendanceStore()
