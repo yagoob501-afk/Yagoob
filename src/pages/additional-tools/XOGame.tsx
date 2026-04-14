@@ -91,9 +91,8 @@ export default function XOGamePage() {
           <XOSetupView
             questions={questions}
             onUpdateQuestions={handleUpdateQuestions}
-            onStartGame={(_timerSeconds, greenName, blueName) => {
-              // maybe a dead code
-              // gameRef.current.setTimers(timerSeconds, timerSeconds)
+            onStartGame={(timerSeconds, greenName, blueName) => {
+              gameRef.current.setPerQuestionTimer(timerSeconds)
               gameRef.current.setTeamInfo(greenName, blueName, 'emerald', 'sky') // Default colors
               gameRef.current.prepareGame()
               setView('round')

@@ -165,12 +165,11 @@ export function XORoundView({ gameLogic, onBack }: XORoundViewProps) {
 
     const question = gameLogic.selectBox(index)
     if (question) {
-      // maybe a dead code
       /*
       const teamTime = state.currentPlayer === 'X' ? state.greenTimer : state.blueTimer
       const cappedLimit = state.initialTimerValue > 0 ? Math.min(30, teamTime) : 30
       */
-      const cappedLimit = 30;
+      const cappedLimit = state.perQuestionTimer;
       setActiveQuestion({
         question: { ...question, timeLimit: cappedLimit },
         index

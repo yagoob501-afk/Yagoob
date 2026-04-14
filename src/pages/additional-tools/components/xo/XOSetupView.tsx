@@ -8,7 +8,8 @@ import {
   Play,
   LayoutGrid,
   AlertCircle,
-  Home
+  Home,
+  Timer
 } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { cn } from "@/lib/utils"
@@ -30,9 +31,7 @@ export function XOSetupView({
   onClearData
 }: XOSetupViewProps) {
   const [isAIModalOpen, setIsAIModalOpen] = React.useState(false)
-  // maybe a dead code
-  // const [timerMinutes, setTimerMinutes] = React.useState(5)
-  // const [timerSeconds, setTimerSeconds] = React.useState(0) // Default 5:00 or 0 for muted
+  const [questionTimer, setQuestionTimer] = React.useState(60)
   const [greenName, setGreenName] = React.useState("فريق الابطال")
   const [blueName, setBlueName] = React.useState("فريق المميزين")
 
@@ -182,33 +181,23 @@ export function XOSetupView({
               إعدادات الجولة
             </h3>
 
-            {/* maybe a dead code
             <div className="space-y-4">
-              <label className="block text-sm font-bold text-gray-600">وقت الفريق (مم:ثث)</label>
-              <div className="flex items-center gap-2 bg-gray-50 p-3 rounded-2xl border-2 border-gray-100">
+              <label className="block text-sm font-bold text-gray-600">وقت السؤال (بالثواني)</label>
+              <div className="flex items-center gap-3 bg-gray-50 p-4 rounded-2xl border-2 border-gray-100 focus-within:border-primary/30 transition-all">
+                <Timer className="w-5 h-5 text-primary" />
                 <input
                   type="number"
-                  min="0"
-                  max="59"
-                  value={timerMinutes}
-                  onChange={(e) => setTimerMinutes(parseInt(e.target.value) || 0)}
-                  className="w-full bg-transparent text-center font-bold text-xl outline-none"
-                />
-                <span className="font-bold text-gray-400">:</span>
-                <input
-                  type="number"
-                  min="0"
-                  max="59"
-                  value={timerSeconds}
-                  onChange={(e) => setTimerSeconds(parseInt(e.target.value) || 0)}
-                  className="w-full bg-transparent text-center font-bold text-xl outline-none"
+                  min="5"
+                  max="300"
+                  value={questionTimer}
+                  onChange={(e) => setQuestionTimer(parseInt(e.target.value) || 0)}
+                  className="w-full bg-transparent font-bold text-xl outline-none"
                 />
               </div>
               <p className="text-[10px] text-muted-foreground leading-tight">
-                * اتركه 0:0 لإلغاء عداد الفريق (وضع صامت).
+                * وقت التفكير المتاح لكل جولة بعد اختيار المربع.
               </p>
             </div>
-            */}
 
             <div className="space-y-3 pt-4 border-t border-gray-50">
               <div className="flex justify-between p-4 bg-gray-50 rounded-2xl border border-gray-100">
@@ -220,7 +209,7 @@ export function XOSetupView({
 
           <button
             disabled={questions.length < 9}
-            onClick={() => onStartGame(totalTimerSeconds, greenName, blueName)}
+            onClick={() => onStartGame(questionTimer, greenName, blueName)}
             className="w-full py-6 rounded-4xl bg-green-600 text-white font-bold text-xl shadow-xl shadow-green-200 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 disabled:grayscale flex items-center justify-center gap-3"
           >
             <Play size={24} />

@@ -33,7 +33,7 @@ export function useAttendanceController() {
     })
 
     const totalMarked = totalPresent + totalAbsent
-    const rateVal = totalMarked > 0 ? (totalPresent / totalMarked) * 100 : 100
+    const rateVal = totalMarked > 0 ? (totalPresent / totalMarked) * 100 : 0
     const rate = rateVal % 1 === 0 ? rateVal.toFixed(0) : rateVal.toFixed(1)
 
     return {

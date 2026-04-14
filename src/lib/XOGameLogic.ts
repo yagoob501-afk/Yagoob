@@ -33,6 +33,7 @@ export interface GameState {
   blueTeamName: string;
   greenTeamColor: TeamColor;
   blueTeamColor: TeamColor;
+  perQuestionTimer: number;
 }
 
 export class XOGameLogic {
@@ -49,6 +50,7 @@ export class XOGameLogic {
   private blueTeamName: string = "الفريق الأزرق";
   private greenTeamColor: TeamColor = 'emerald';
   private blueTeamColor: TeamColor = 'sky';
+  private perQuestionTimer: number = 60;
 
   // Callback for UI sound effects
   public onEffect?: (effect: GameEffect) => void;
@@ -80,6 +82,7 @@ export class XOGameLogic {
       blueTeamName: this.blueTeamName,
       greenTeamColor: this.greenTeamColor,
       blueTeamColor: this.blueTeamColor,
+      perQuestionTimer: this.perQuestionTimer,
     };
   }
 
@@ -107,6 +110,10 @@ export class XOGameLogic {
     this.blueTeamName = blueName;
     this.greenTeamColor = greenColor;
     this.blueTeamColor = blueColor;
+  }
+
+  setPerQuestionTimer(seconds: number) {
+    this.perQuestionTimer = seconds;
   }
 
   prepareGame() {
@@ -218,7 +225,8 @@ export class XOGameLogic {
       questions: this.questions,
       timers: { green: this.greenTimer, blue: this.blueTimer, initial: this.initialTimerValue },
       names: { green: this.greenTeamName, blue: this.blueTeamName },
-      colors: { green: this.greenTeamColor, blue: this.blueTeamColor }
+      colors: { green: this.greenTeamColor, blue: this.blueTeamColor },
+      perQuestionTimer: this.perQuestionTimer
     };
   }
 
@@ -236,6 +244,9 @@ export class XOGameLogic {
         data.colors?.green || 'emerald',
         data.colors?.blue || 'sky'
       );
+    }
+    if (data.perQuestionTimer) {
+      logic.setPerQuestionTimer(data.perQuestionTimer);
     }
     return logic;
   }

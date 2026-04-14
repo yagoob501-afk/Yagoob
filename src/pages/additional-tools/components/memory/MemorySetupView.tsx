@@ -7,7 +7,9 @@ import {
   Grid, // Replacement for LayoutGrid
   AlertCircle,
   Home,
-  CheckCircle2
+  CheckCircle2,
+  FileDown,
+  FileUp
 } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { cn } from "@/lib/utils"
@@ -43,6 +45,43 @@ export function MemorySetupView({
   const [isAIModalOpen, setIsAIModalOpen] = React.useState(false)
   const [greenName, setGreenName] = React.useState("الفريق الاول")
   const [blueName, setBlueName] = React.useState("الفريق الثاني")
+  const fileInputRef = React.useRef<HTMLInputElement>(null)
+
+  const handleExport = () => {
+    const data = JSON.stringify(questions, null, 2)
+    const blob = new Blob([data], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `memory_questions_${new Date().toISOString().split('T')[0]}.json`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  }
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    const reader = new FileReader()
+    reader.onload = (event) => {
+      try {
+        const content = event.target?.result as string
+        const parsed = JSON.parse(content)
+        if (Array.isArray(parsed)) {
+          onUpdateQuestions(parsed)
+          alert("تم استيراد الأسئلة بنجاح!")
+        } else {
+          alert("تنسيق الملف غير صالح.")
+        }
+      } catch (err) {
+        alert("فشل استيراد الملف.")
+      }
+    }
+    reader.readAsText(file)
+    e.target.value = ''
+  }
 
   const requiredQuestions = Math.floor((matrix.rows * matrix.cols) / 2)
   const isReady = questions.length >= requiredQuestions
@@ -113,13 +152,34 @@ export function MemorySetupView({
           </div>
         </div>
 
-        <button
-          onClick={() => setIsAIModalOpen(true)}
-          className="flex items-center gap-2 px-8 py-3 rounded-full bg-linear-to-br from-primary-prism to-primary-container text-on-primary font-black shadow-lg shadow-primary-prism/20 hover:scale-105 active:scale-95 transition-all"
-        >
-          <Sparkles size={18} />
-          توليد الأسئلة بـ AI
-        </button>
+        <div className="flex flex-wrap gap-3">
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            accept=".json"
+            className="hidden"
+          />
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-surface-container-high text-on-surface-prism font-bold border border-outline-variant-prism/10 hover:bg-surface-bright transition-all shadow-sm"
+          >
+            <FileUp size={18} /> استيراد
+          </button>
+          <button
+            onClick={handleExport}
+            className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-surface-container-high text-on-surface-prism font-bold border border-outline-variant-prism/10 hover:bg-surface-bright transition-all shadow-sm"
+          >
+            <FileDown size={18} /> تصدير
+          </button>
+          <button
+            onClick={() => setIsAIModalOpen(true)}
+            className="flex items-center gap-2 px-8 py-3 rounded-full bg-linear-to-br from-primary-prism to-primary-container text-on-primary font-black shadow-lg shadow-primary-prism/20 hover:scale-105 active:scale-95 transition-all"
+          >
+            <Sparkles size={18} />
+            توليد الأسئلة بـ AI
+          </button>
+        </div>
       </div>
 
       {/* Grid Settings & Teams */}
