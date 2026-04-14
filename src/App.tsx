@@ -24,6 +24,7 @@ import AddToHomePrompt from './components/ui/AddToHomePrompt';
 import ClassroomToolsPage from './pages/additional-tools/ClassroomTools';
 import XOGamePage from './pages/additional-tools/XOGame';
 import MemoryGamePage from './pages/additional-tools/MemoryGame';
+import AttendanceToolPage from './pages/additional-tools/AttendanceTool';
 
 function App() {
   return (
@@ -62,6 +63,7 @@ function App() {
               <Route path='/additional-tools/classroom-tools' element={<ClassroomToolsPage />} />
               <Route path='/additional-tools/xo-game' element={<XOGamePage />} />
               <Route path='/additional-tools/memory-strong' element={<MemoryGamePage />} />
+              <Route path='/additional-tools/attendance-management' element={<AttendanceToolPage />} />
             </Routes>
           </BrowserRouter>
         </TourProvider>

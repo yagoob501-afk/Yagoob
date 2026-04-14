@@ -10,6 +10,7 @@ import smartClassTools from "@/assets/smart_classroom_tools.png"
 import _3_Books from "@/assets/3_books.png"
 import xoGamePreview from "/images/xo_game_preview.png"
 import memoryGamePreview from "/images/memory_game_preview.png"
+import attendancePreview from "/images/attendance_tool_preview.png"
 
 function PrimaryAdditionalToolsSection() {
 
@@ -113,6 +114,22 @@ function PrimaryAdditionalToolsSection() {
                 link="https://elibrary.moe.edu.kw/StudentsLibrary"
                 blank
                 img={_3_Books}
+              />
+            </motion.div>
+
+            <motion.div
+              className="w-[370px] h-full"
+              variants={{
+                hidden: { opacity: 0, y: 30 },
+                show: { opacity: 1, y: 0 },
+              }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+            >
+              <PrimaryToolCard
+                title="إدارة الحضور والغياب"
+                description="أداة متكاملة لرصد وتنظيم حضور وغياب الطلاب بشكل يومي ومنظّم."
+                link="/additional-tools/attendance-management"
+                img={attendancePreview}
               />
             </motion.div>
           </motion.div>
