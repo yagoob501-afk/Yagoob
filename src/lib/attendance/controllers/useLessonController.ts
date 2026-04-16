@@ -4,13 +4,14 @@ import { useAttendanceStore } from '../store'
 export function useLessonController() {
   const { lessons, setLessons, attendance, setAttendance } = useAttendanceStore()
 
-  const addLesson = (lessonNumber: string, subject: string, teacher: string, date: string) => {
+  const addLesson = (lessonNumber: string, subject: string, teacher: string, date: string, semester?: string) => {
     const id = crypto.randomUUID()
     const newLesson: Lesson = {
       id,
       lessonNumber,
       subject,
       teacher,
+      semester,
       date,
       status: 'pending',
       students: []
@@ -47,6 +48,12 @@ export function useLessonController() {
     ))
   }
 
+  const updateLesson = (id: string, updates: Partial<Omit<Lesson, 'id' | 'students'>>) => {
+    setLessons(lessons.map(l => 
+      l.id === id ? { ...l, ...updates } : l
+    ))
+  }
+
   const getLessonById = (id: string) => {
     return lessons.find(l => l.id === id)
   }
@@ -57,6 +64,7 @@ export function useLessonController() {
     removeLesson,
     setLessonStudents,
     setLessonStatus,
+    updateLesson,
     getLessonById
   }
 }

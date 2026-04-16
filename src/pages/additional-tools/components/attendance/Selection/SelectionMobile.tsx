@@ -1,13 +1,13 @@
 "use client"
 
-import { useMemo, useRef, useState } from "react"
+import { useMemo, useRef, useState, type ChangeEvent } from "react"
 import { motion } from "framer-motion"
 import { useLessonController, useAttendanceController, useAttendanceStore } from "@/lib/attendance"
 import { cn } from "@/lib/utils"
 import { exportAllToPdf } from "@/lib/attendance/exportAllToPdf"
 import { extractAttendanceFromPdf, type ImportResult } from "@/lib/attendance/importPdf"
 import { AttendanceImportModal } from "./AttendanceImportModal"
-import { Calendar, UserCheck, Users, HelpCircle, BookOpen, FileDown, Loader2, FileUp, Plus, UserPlus, Trash2, Star } from "lucide-react"
+import { Calendar, BookOpen, FileDown, Loader2, FileUp, Plus, Edit, UserCheck, UserPlus, Trash2, Star, HelpCircle, Users } from "lucide-react"
 import { AddLessonModal } from "./AddLessonModal"
 import { ManageStudentsModal } from "./ManageStudentsModal"
 
@@ -17,13 +17,14 @@ interface SelectionMobileProps {
 }
 
 export function SelectionMobile({ onSelectLesson, onBack: _ }: SelectionMobileProps) {
-  const { lessons, addLesson, removeLesson, setLessonStudents } = useLessonController()
+  const { lessons, addLesson, removeLesson, setLessonStudents, updateLesson } = useLessonController()
   const { getGlobalStats } = useAttendanceController()
   const { setLessons, setAttendance } = useAttendanceStore()
   const { attendance } = useAttendanceStore()
 
   // Lesson Management State
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
+  const [editingLessonId, setEditingLessonId] = useState<string | null>(null)
   const [editingStudentsLessonId, setEditingStudentsLessonId] = useState<string | null>(null)
 
   const [isExporting, setIsExporting] = useState(false)
@@ -55,7 +56,7 @@ export function SelectionMobile({ onSelectLesson, onBack: _ }: SelectionMobilePr
     }
   }
 
-  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
 
@@ -86,8 +87,13 @@ export function SelectionMobile({ onSelectLesson, onBack: _ }: SelectionMobilePr
     alert("تم استيراد البيانات بنجاح!")
   }
 
-  const handleAddLesson = (lessonNumber: string, subject: string, teacher: string) => {
-    addLesson(lessonNumber, subject, teacher, "");
+  const handleAddLesson = (lessonNumber: string, subject: string, teacher: string, semester?: string) => {
+    if (editingLessonId) {
+      updateLesson(editingLessonId, { lessonNumber, subject, teacher, semester });
+      setEditingLessonId(null);
+    } else {
+      addLesson(lessonNumber, subject, teacher, "", semester);
+    }
   }
 
   const handleSaveStudents = (lessonId: string, studentNames: string) => {
@@ -197,9 +203,10 @@ export function SelectionMobile({ onSelectLesson, onBack: _ }: SelectionMobilePr
                 )}>
                   <BookOpen className="w-6 h-6" />
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-col text-right">
                   <span className="text-[10px] font-black uppercase tracking-widest text-text-muted opacity-40">
                     الحصة {lesson.lessonNumber} • {lesson.teacher}
+                    {lesson.semester && ` • ${lesson.semester}`}
                   </span>
                   <h3 className="text-xl font-black text-text-heading font-cairo leading-tight">{lesson.subject}</h3>
                 </div>
@@ -224,11 +231,18 @@ export function SelectionMobile({ onSelectLesson, onBack: _ }: SelectionMobilePr
 
                 <div className="flex gap-2">
                   <button
+                    onClick={(e) => { e.stopPropagation(); setEditingLessonId(lesson.id); setIsAddModalOpen(true); }}
+                    className="flex-1 py-3 bg-bg-container border border-border rounded-xl text-text-muted font-bold text-xs flex items-center justify-center gap-2 hover:text-primary transition-colors"
+                  >
+                    <Edit className="w-4 h-4" />
+                    تعديل
+                  </button>
+                  <button
                     onClick={(e) => { e.stopPropagation(); setEditingStudentsLessonId(lesson.id); }}
-                    className="flex-1 py-3 bg-bg-container border border-border rounded-xl text-text-muted font-bold text-xs flex items-center justify-center gap-2"
+                    className="flex-1 py-3 bg-bg-container border border-border rounded-xl text-text-muted font-bold text-xs flex items-center justify-center gap-2 hover:text-success transition-colors"
                   >
                     <UserPlus className="w-4 h-4" />
-                    إدارة الطلاب
+                    الطلاب
                   </button>
                   <button
                     onClick={(e) => { e.stopPropagation(); if (confirm('حذف هذه الحصة؟')) { removeLesson(lesson.id); } }}
@@ -325,8 +339,9 @@ export function SelectionMobile({ onSelectLesson, onBack: _ }: SelectionMobilePr
 
       <AddLessonModal
         isOpen={isAddModalOpen}
-        onClose={() => setIsAddModalOpen(false)}
+        onClose={() => { setIsAddModalOpen(false); setEditingLessonId(null); }}
         onAdd={handleAddLesson}
+        initialData={editingLessonId ? lessons.find(l => l.id === editingLessonId) : null}
       />
 
       <ManageStudentsModal

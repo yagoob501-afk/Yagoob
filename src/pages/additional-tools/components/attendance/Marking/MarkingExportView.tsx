@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react"
-import { Check, X, LayoutDashboard, Clock, Users, Star } from "lucide-react"
+import { Check, X, Clock, Users, Star, GraduationCap, BookOpen } from "lucide-react"
 import { cn } from "@/lib/utils"
 import type { Lesson, Student, AttendanceStatus } from "@/lib/attendance/types"
 import { getStatusInfo } from "@/lib/attendance/controllers/useAttendanceController"
@@ -77,14 +77,35 @@ export function MarkingExportView({ lesson, students, attendance, stats, onImage
       {/* Header */}
       <header className="flex justify-between items-end gap-10 border-b-2 border-slate-200 pb-12 mb-12">
         <div className="flex items-center gap-8">
-          <div className="w-24 h-24 bg-blue-50 rounded-3xl flex items-center justify-center text-blue-600 border border-blue-100">
-            <LayoutDashboard className="w-10 h-10" />
-          </div>
-          <div className="flex flex-col gap-2 text-right">
-            <h1 className="text-5xl font-bold text-slate-900">{lesson.subject}</h1>
-            <div className="flex items-center gap-6 text-slate-500 font-bold text-lg">
-              <span className="flex items-center gap-2"><Clock className="w-5 h-5" /> الحصة رقم {lesson.lessonNumber}</span>
-              <span className="flex items-center gap-2 border-r border-slate-200 pr-6"><Users className="w-5 h-5" /> {lesson.teacher}</span>
+          <div className="flex flex-col gap-8 flex-1 min-w-0 text-right">
+            {/* Title Row with Subject & Lesson Number Icons */}
+            <div className="flex items-center gap-8">
+              <div className="flex items-center gap-6 min-w-0">
+                <div className="w-16 h-16 rounded-3xl bg-blue-50 flex items-center justify-center text-blue-600 border border-blue-100 shrink-0">
+                  <BookOpen className="w-8 h-8" />
+                </div>
+                <h1 className="text-5xl font-bold text-slate-900 leading-tight truncate">
+                  {lesson.subject}
+                </h1>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center gap-4 text-slate-600 font-bold text-2xl">
+                <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600 border border-blue-100">
+                  <Users className="w-6 h-6" />
+                </div>
+                <span>{lesson.teacher}</span>
+              </div>
+
+              {lesson.semester && (
+                <div className="flex items-center gap-4 text-slate-600 font-bold text-2xl">
+                  <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600 border border-blue-100">
+                    <GraduationCap className="w-6 h-6" />
+                  </div>
+                  <span>{lesson.semester}</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -162,6 +183,10 @@ export function MarkingExportView({ lesson, students, attendance, stats, onImage
       <div className="mt-12 pt-8 border-t border-slate-100 flex justify-between items-center text-slate-400 font-bold">
         <div className="flex gap-8 text-sm">
           <span>التاريخ: {new Date().toLocaleDateString('ar-EG')}</span>
+          <span className="flex items-center gap-2">
+            <Clock className="w-4 h-4" />
+            الحصة: {lesson.lessonNumber}
+          </span>
           <span>وقت التصدير: {new Date().toLocaleTimeString('ar-EG')}</span>
         </div>
         <span className="text-xs font-bold uppercase">نظام رصد الحضور الذكي</span>

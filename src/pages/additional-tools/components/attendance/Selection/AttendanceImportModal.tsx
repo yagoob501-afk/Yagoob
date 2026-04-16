@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AlertTriangle, Download, X, AlertOctagon } from 'lucide-react';
 
@@ -9,7 +9,7 @@ interface AttendanceImportModalProps {
   fileName?: string;
 }
 
-export const AttendanceImportModal: React.FC<AttendanceImportModalProps> = ({
+export const AttendanceImportModal: FC<AttendanceImportModalProps> = ({
   isOpen,
   onClose,
   onConfirm,

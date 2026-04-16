@@ -15,6 +15,7 @@ export interface Lesson {
   lessonNumber: string;
   subject: string;
   teacher: string;
+  semester?: string;
   date: string;
   status: 'pending' | 'completed';
   students: Student[];

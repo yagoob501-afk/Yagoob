@@ -9,7 +9,9 @@ import {
   LayoutGrid,
   AlertCircle,
   Home,
-  Timer
+  Timer,
+  FileDown,
+  FileUp
 } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { cn } from "@/lib/utils"
@@ -34,6 +36,43 @@ export function XOSetupView({
   const [questionTimer, setQuestionTimer] = React.useState(60)
   const [greenName, setGreenName] = React.useState("فريق الابطال")
   const [blueName, setBlueName] = React.useState("فريق المميزين")
+  const fileInputRef = React.useRef<HTMLInputElement>(null)
+
+  const handleExport = () => {
+    const data = JSON.stringify(questions, null, 2)
+    const blob = new Blob([data], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `xo_questions_${new Date().toISOString().split('T')[0]}.json`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  }
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    const reader = new FileReader()
+    reader.onload = (event) => {
+      try {
+        const content = event.target?.result as string
+        const parsed = JSON.parse(content)
+        if (Array.isArray(parsed)) {
+          onUpdateQuestions(parsed)
+          alert("تم استيراد الأسئلة بنجاح!")
+        } else {
+          alert("تنسيق الملف غير صالح.")
+        }
+      } catch (err) {
+        alert("فشل استيراد الملف.")
+      }
+    }
+    reader.readAsText(file)
+    e.target.value = ''
+  }
 
   const handleAddQuestion = () => {
     const newQuestion: Question = {
@@ -138,6 +177,26 @@ export function XOSetupView({
             استيراد ملف TOON
           </button>
           */}
+
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            accept=".json"
+            className="hidden"
+          />
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-gray-50 text-gray-700 font-bold border-2 border-border hover:bg-white hover:border-primary/50 transition-all shadow-sm"
+          >
+            <FileUp size={18} /> استيراد
+          </button>
+          <button
+            onClick={handleExport}
+            className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-gray-50 text-gray-700 font-bold border-2 border-border hover:bg-white hover:border-primary/50 transition-all shadow-sm"
+          >
+            <FileDown size={18} /> تصدير
+          </button>
 
           <button
             onClick={() => setIsAIModalOpen(true)}

@@ -1,13 +1,13 @@
 "use client"
 
-import { useMemo, useRef, useState } from "react"
+import { useMemo, useRef, useState, type ChangeEvent } from "react"
 import { motion } from "framer-motion"
 import { useLessonController, useAttendanceController, useAttendanceStore } from "@/lib/attendance"
 import { cn } from "@/lib/utils"
 import { exportAllToPdf } from "@/lib/attendance/exportAllToPdf"
 import { extractAttendanceFromPdf, type ImportResult } from "@/lib/attendance/importPdf"
 import { AttendanceImportModal } from "./AttendanceImportModal"
-import { Calendar, Table2, TrendingUp, AlertTriangle, Eye, Users, FileDown, Loader2, FileUp, Plus, UserPlus, Trash2, Star } from "lucide-react"
+import { Calendar, Table2, TrendingUp, AlertTriangle, Eye, Users, FileDown, Loader2, FileUp, Plus, UserPlus, Trash2, Star, Edit } from "lucide-react"
 import { AddLessonModal } from "./AddLessonModal"
 import { ManageStudentsModal } from "./ManageStudentsModal"
 
@@ -17,7 +17,7 @@ interface SelectionDesktopProps {
 }
 
 export function SelectionDesktop({ onSelectLesson, onBack: _ }: SelectionDesktopProps) {
-  const { lessons, addLesson, removeLesson, setLessonStudents } = useLessonController()
+  const { lessons, addLesson, removeLesson, setLessonStudents, updateLesson } = useLessonController()
   const { getGlobalStats } = useAttendanceController()
   const { setLessons, setAttendance } = useAttendanceStore()
   const { attendance } = useAttendanceStore()
@@ -34,6 +34,7 @@ export function SelectionDesktop({ onSelectLesson, onBack: _ }: SelectionDesktop
 
   // Lesson Management State
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
+  const [editingLessonId, setEditingLessonId] = useState<string | null>(null)
   const [editingStudentsLessonId, setEditingStudentsLessonId] = useState<string | null>(null)
 
   const stats = useMemo(() => getGlobalStats(), [lessons, getGlobalStats])
@@ -55,7 +56,7 @@ export function SelectionDesktop({ onSelectLesson, onBack: _ }: SelectionDesktop
     }
   }
 
-  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
 
@@ -88,8 +89,13 @@ export function SelectionDesktop({ onSelectLesson, onBack: _ }: SelectionDesktop
     alert("تم استيراد البيانات بنجاح!")
   }
 
-  const handleAddLesson = (lessonNumber: string, subject: string, teacher: string) => {
-    addLesson(lessonNumber, subject, teacher, "");
+  const handleAddLesson = (lessonNumber: string, subject: string, teacher: string, semester?: string) => {
+    if (editingLessonId) {
+      updateLesson(editingLessonId, { lessonNumber, subject, teacher, semester });
+      setEditingLessonId(null);
+    } else {
+      addLesson(lessonNumber, subject, teacher, "", semester);
+    }
   }
 
   const handleSaveStudents = (lessonId: string, studentNames: string) => {
@@ -199,9 +205,9 @@ export function SelectionDesktop({ onSelectLesson, onBack: _ }: SelectionDesktop
               <tr className="bg-bg-layout/40 text-text-muted">
                 <th className="px-10 py-6 text-xs font-black uppercase tracking-widest">رقم الحصة</th>
                 <th className="px-10 py-6 text-xs font-black uppercase tracking-widest">الدرس / الموضوع</th>
-                <th className="px-10 py-6 text-xs font-black uppercase tracking-widest">اسم المعلم</th>
+                <th className="px-10 py-6 text-xs font-black uppercase tracking-widest">المعلم</th>
                 <th className="px-10 py-6 text-xs font-black uppercase tracking-widest">الحالة</th>
-                <th className="px-10 py-6 text-xs font-black uppercase tracking-widest text-center">الإجراء</th>
+                <th className="px-10 py-6 text-xs font-black uppercase tracking-widest text-center">الإجراءات</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border/10">
@@ -252,7 +258,12 @@ export function SelectionDesktop({ onSelectLesson, onBack: _ }: SelectionDesktop
                     </div>
                   </td>
                   <td className="px-10 py-8 text-on-surface-variant font-bold">
-                    {lesson.teacher}
+                    <div className="flex flex-col">
+                      <span>{lesson.teacher}</span>
+                      {lesson.semester && (
+                        <span className="text-[10px] opacity-40 underline-offset-4 decoration-border/50">الفصل الدراسي: {lesson.semester}</span>
+                      )}
+                    </div>
                   </td>
                   <td className="px-10 py-8">
                     <div className={cn(
@@ -266,6 +277,14 @@ export function SelectionDesktop({ onSelectLesson, onBack: _ }: SelectionDesktop
                   </td>
                   <td className="px-10 py-8">
                     <div className="flex items-center justify-center gap-2">
+                      <button
+                        onClick={(e) => { e.stopPropagation(); setEditingLessonId(lesson.id); setIsAddModalOpen(true); }}
+                        className="p-3 bg-bg-container border border-border rounded-xl text-text-muted hover:text-primary hover:border-primary/50 transition-all shadow-sm"
+                        title="تعديل الحصة"
+                      >
+                        <Edit className="w-5 h-5" />
+                      </button>
+
                       {/* Add/Edit Students Button */}
                       <button
                         onClick={(e) => { e.stopPropagation(); setEditingStudentsLessonId(lesson.id); }}
@@ -361,8 +380,9 @@ export function SelectionDesktop({ onSelectLesson, onBack: _ }: SelectionDesktop
 
       <AddLessonModal
         isOpen={isAddModalOpen}
-        onClose={() => setIsAddModalOpen(false)}
+        onClose={() => { setIsAddModalOpen(false); setEditingLessonId(null); }}
         onAdd={handleAddLesson}
+        initialData={editingLessonId ? lessons.find(l => l.id === editingLessonId) : null}
       />
 
       <ManageStudentsModal

@@ -14,6 +14,10 @@ export const lessonSchema = z.object({
     .max(100, "اسم المعلم طويل جداً")
     .optional()
     .or(z.literal("")),
+  semester: z.string()
+    .max(50, "اسم الفصل الدراسي طويل جداً")
+    .optional()
+    .or(z.literal("")),
 });
 
 /**

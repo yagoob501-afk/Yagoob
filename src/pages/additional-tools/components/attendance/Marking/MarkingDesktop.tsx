@@ -1,11 +1,13 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useMemo, useState, type ReactNode } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Check, X, Save, ArrowRight, UserCheck, Users, Clock, LayoutDashboard, Search, Image as ImageIcon, Loader2, Star } from "lucide-react"
+import { Check, X, Save, ArrowRight, UserCheck, Users, Search, Image as ImageIcon, Loader2, Star, Edit, UserPlus, GraduationCap, BookOpen, Clock } from "lucide-react"
 import { useLessonController, useAttendanceController, type AttendanceStatus, type Lesson } from "@/lib/attendance"
 import { cn } from "@/lib/utils"
 import { createAttendanceImage } from "@/lib/attendance/createAttendanceImage"
+import { AddLessonModal } from "../Selection/AddLessonModal"
+import { ManageStudentsModal } from "../Selection/ManageStudentsModal"
 
 interface MarkingDesktopProps {
   lessonId: string
@@ -14,15 +16,33 @@ interface MarkingDesktopProps {
 }
 
 export function MarkingDesktop({ lessonId, onSave, onBack }: MarkingDesktopProps) {
-  const { getLessonById, setLessonStatus } = useLessonController()
+  const { getLessonById, setLessonStatus, updateLesson, setLessonStudents } = useLessonController()
   const { markStudent, toggleParticipation, getLessonAttendance, getStatusInfo } = useAttendanceController()
 
   const [searchQuery, setSearchQuery] = useState("")
   const [isExporting, setIsExporting] = useState(false)
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [isManageStudentsOpen, setIsManageStudentsOpen] = useState(false)
 
   const lesson = getLessonById(lessonId)
   const students = lesson?.students || []
   const attendance = getLessonAttendance(lessonId)
+
+  const handleUpdateLesson = (lessonNumber: string, subject: string, teacher: string, semester?: string) => {
+    updateLesson(lessonId, { lessonNumber, subject, teacher, semester });
+    setIsEditModalOpen(false);
+  }
+
+  const handleSaveStudents = (_id: string, namesStr: string) => {
+    const names = namesStr.split('\n').filter(n => n.trim() !== '')
+    const currentStudents = lesson?.students || []
+    const updatedStudents = names.map(name => {
+      const existing = currentStudents.find(s => s.name === name)
+      return { id: existing?.id || crypto.randomUUID(), name }
+    })
+    setLessonStudents(lessonId, updatedStudents)
+    setIsManageStudentsOpen(false)
+  }
 
   const filteredStudents = useMemo(() => {
     if (!searchQuery.trim()) return students
@@ -85,23 +105,67 @@ export function MarkingDesktop({ lessonId, onSave, onBack }: MarkingDesktopProps
       {/* Hero Header Section */}
       <header className="flex justify-between items-end gap-10 border-b-2 border-border/50 pb-10">
         <div className="flex items-center gap-8">
-          <div className="w-24 h-24 bg-primary/10 rounded-[2.5rem] flex items-center justify-center text-primary shadow-inner border border-primary/20">
-            <LayoutDashboard className="w-10 h-10" />
-          </div>
-          <div className="flex flex-col gap-2">
-            <h1 className="text-5xl font-black text-text-heading font-cairo tracking-tight">{lesson.subject}</h1>
-            <div className="flex items-center gap-6 text-text-muted font-bold text-lg opacity-60">
-              <span className="flex items-center gap-2"><Clock className="w-5 h-5" /> الحصة رقم {lesson.lessonNumber}</span>
-              <span className="flex items-center gap-2 border-r border-border pr-6"><Users className="w-5 h-5" /> {lesson.teacher}</span>
+
+          <div className="flex flex-col gap-5">
+            <div className="flex items-center gap-6">
+              <div className="flex items-center gap-4 min-w-0">
+                <div className="w-16 h-16 rounded-3xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20 shrink-0">
+                  <BookOpen className="w-8 h-8" />
+                </div>
+                <h1 className="text-5xl font-black text-text-heading font-cairo tracking-tight leading-[1.1] truncate">
+                  {lesson.subject}
+                </h1>
+              </div>
+
+              <div className="flex items-center gap-3 bg-bg-layout px-5 py-3 rounded-2xl border border-border shrink-0 shadow-sm">
+                <Clock className="w-6 h-6 text-primary opacity-60" />
+                <span className="text-3xl font-black text-text-muted font-cairo leading-none">{lesson.lessonNumber}</span>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center gap-3 text-text-muted font-bold text-xl opacity-80">
+                <div className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
+                  <Users className="w-5 h-5" />
+                </div>
+                <span>{lesson.teacher}</span>
+              </div>
+
+              {lesson.semester && (
+                <div className="flex items-center gap-3 text-text-muted font-bold text-xl opacity-80">
+                  <div className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
+                    <GraduationCap className="w-5 h-5" />
+                  </div>
+                  <span>{lesson.semester}</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
 
-        <div className="flex gap-4">
-          <DesktopHeaderStat label="إجمالي الطلاب" value={stats.total} color="neutral" />
-          <DesktopHeaderStat label="حضور" value={stats.present} color="success" />
-          <DesktopHeaderStat label="غياب" value={stats.absent} color="error" />
-          <DesktopHeaderStat label="مشاركة" value={stats.participating} color="warning" />
+        <div className="flex items-center gap-4">
+          <div className="flex gap-2 ml-6">
+            <button
+              onClick={() => setIsEditModalOpen(true)}
+              className="p-4 bg-bg-container border border-border rounded-2xl text-text-muted hover:text-primary hover:border-primary/50 transition-all shadow-sm group"
+              title="تعديل بيانات الحصة"
+            >
+              <Edit className="w-6 h-6 group-hover:scale-110 transition-transform" />
+            </button>
+            <button
+              onClick={() => setIsManageStudentsOpen(true)}
+              className="p-4 bg-bg-container border border-border rounded-2xl text-text-muted hover:text-success hover:border-success/50 transition-all shadow-sm group"
+              title="إدارة قائمة الطلاب"
+            >
+              <UserPlus className="w-6 h-6 group-hover:scale-110 transition-transform" />
+            </button>
+          </div>
+          <div className="flex gap-4">
+            <DesktopHeaderStat label="إجمالي الطلاب" value={stats.total} color="neutral" />
+            <DesktopHeaderStat label="حضور" value={stats.present} color="success" />
+            <DesktopHeaderStat label="غياب" value={stats.absent} color="error" />
+            <DesktopHeaderStat label="مشاركة" value={stats.participating} color="warning" />
+          </div>
         </div>
       </header>
 
@@ -207,9 +271,17 @@ export function MarkingDesktop({ lessonId, onSave, onBack }: MarkingDesktopProps
         <aside className="col-span-12 lg:col-span-3">
           <div className="sticky top-12 flex flex-col gap-6">
             <div className="bg-bg-container p-8 rounded-[2.5rem] border border-border shadow-2xl flex flex-col gap-8">
-              <div className="flex flex-col gap-2">
-                <h3 className="text-xl font-black text-text-heading">ملخص الحفظ</h3>
-                <p className="text-sm font-bold text-text-muted opacity-60">تأكد من مراجعة القائمة قبل الحفظ النهائي.</p>
+              <div className="flex flex-col gap-1.5 mt-2">
+                <div className="flex items-center gap-2">
+                  <Users className="w-3.5 h-3.5 text-text-muted opacity-60" />
+                  <span className="text-[10px] font-bold text-text-muted opacity-80">{lesson.teacher}</span>
+                </div>
+                {lesson.semester && (
+                  <div className="flex items-center gap-2">
+                    <GraduationCap className="w-3.5 h-3.5 text-text-muted opacity-60" />
+                    <span className="text-[10px] font-bold text-text-muted opacity-80">{lesson.semester}</span>
+                  </div>
+                )}
               </div>
 
               <div className="flex flex-col gap-4">
@@ -273,6 +345,19 @@ export function MarkingDesktop({ lessonId, onSave, onBack }: MarkingDesktopProps
         </aside>
       </div>
 
+      <AddLessonModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        onAdd={handleUpdateLesson}
+        initialData={lesson}
+      />
+
+      <ManageStudentsModal
+        isOpen={isManageStudentsOpen}
+        onClose={() => setIsManageStudentsOpen(false)}
+        lesson={lesson}
+        onSave={handleSaveStudents}
+      />
     </div>
   )
 }
@@ -292,7 +377,7 @@ function DesktopHeaderStat({ label, value, color }: { label: string, value: numb
   )
 }
 
-function MarkingButton({ active, onClick, color, label, icon, disabled }: { active: boolean, onClick: () => void, color: 'success' | 'error' | 'neutral' | 'warning', label: string, icon: React.ReactNode, disabled?: boolean }) {
+function MarkingButton({ active, onClick, color, label, icon, disabled }: { active: boolean, onClick: () => void, color: 'success' | 'error' | 'neutral' | 'warning', label: string, icon: ReactNode, disabled?: boolean }) {
   const themes = {
     success: active ? "bg-success text-text-light-solid shadow-lg shadow-success/20" : "text-success bg-success/5 hover:bg-success/10 border-success/20",
     error: active ? "bg-error text-text-light-solid shadow-lg shadow-error/20" : "text-error bg-error/5 hover:bg-error/10 border-error/20",

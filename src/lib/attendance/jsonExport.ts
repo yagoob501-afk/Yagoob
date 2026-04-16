@@ -10,6 +10,7 @@ export interface AttendanceExportData {
     subject: string;
     teacher: string;
     date: string;
+    semester?: string;
   };
   attendance: Record<string, AttendanceStatus>;
   students: { id: string; name: string }[];
@@ -32,6 +33,7 @@ export function serializeLessonData(
       subject: lesson.subject,
       teacher: lesson.teacher,
       date: lesson.date,
+      semester: lesson.semester,
     },
     attendance: attendanceMap,
     students: lesson.students.map(s => ({ id: s.id, name: s.name })),

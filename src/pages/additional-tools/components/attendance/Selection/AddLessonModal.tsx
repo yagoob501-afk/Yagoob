@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { type FC, useState, useEffect, type FormEvent } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, FolderPlus, AlertCircle } from 'lucide-react';
 import { lessonSchema, type LessonFormData } from '@/lib/attendance/validation';
@@ -7,26 +7,47 @@ import { cn } from '@/lib/utils';
 interface AddLessonModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onAdd: (lessonNumber: string, subject: string, teacher: string) => void;
+  onAdd: (lessonNumber: string, subject: string, teacher: string, semester?: string) => void;
+  initialData?: {
+    lessonNumber: string;
+    subject: string;
+    teacher: string;
+    semester?: string;
+  } | null;
 }
 
-export const AddLessonModal: React.FC<AddLessonModalProps> = ({
+export const AddLessonModal: FC<AddLessonModalProps> = ({
   isOpen,
   onClose,
-  onAdd
+  onAdd,
+  initialData
 }) => {
-  const [newLesson, setNewLesson] = useState<LessonFormData>({ lessonNumber: "", subject: "", teacher: "" });
+  const [newLesson, setNewLesson] = useState<LessonFormData>({ lessonNumber: "", subject: "", teacher: "", semester: "" });
   const [errors, setErrors] = useState<Partial<Record<keyof LessonFormData, string>>>({});
   const [shake, setShake] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    if (initialData) {
+      setNewLesson({
+        lessonNumber: initialData.lessonNumber,
+        subject: initialData.subject,
+        teacher: initialData.teacher,
+        semester: initialData.semester || ""
+      });
+    } else {
+      setNewLesson({ lessonNumber: "", subject: "", teacher: "", semester: "" });
+    }
+    setErrors({});
+  }, [initialData, isOpen]);
+
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
     const result = lessonSchema.safeParse(newLesson);
 
     if (result.success) {
-      onAdd(result.data.lessonNumber, result.data.subject, result.data.teacher || "");
-      setNewLesson({ lessonNumber: "", subject: "", teacher: "" });
+      onAdd(result.data.lessonNumber, result.data.subject, result.data.teacher || "", result.data.semester);
+      setNewLesson({ lessonNumber: "", subject: "", teacher: "", semester: "" });
       setErrors({});
       onClose();
     } else {
@@ -72,7 +93,9 @@ export const AddLessonModal: React.FC<AddLessonModalProps> = ({
 
             <div className="p-8">
               <div className="flex justify-between items-center mb-8">
-                <h3 className="text-2xl font-black text-text-heading font-cairo">إضافة حصة جديدة</h3>
+                <h3 className="text-2xl font-black text-text-heading font-cairo">
+                  {initialData ? "تعديل بيانات الحصة" : "إضافة حصة جديدة"}
+                </h3>
                 <button
                   onClick={onClose}
                   className="p-2 hover:bg-bg-layout rounded-xl transition-colors text-text-muted"
@@ -144,12 +167,23 @@ export const AddLessonModal: React.FC<AddLessonModalProps> = ({
                   />
                 </div>
 
+                <div className="space-y-2">
+                  <label className="text-xs font-black text-text-muted px-2">الفصل الدراسي (اختياري)</label>
+                  <input
+                    type="text"
+                    placeholder="مثال: الفصل الأول، الفصل الثاني..."
+                    value={newLesson.semester}
+                    onChange={(e) => setNewLesson({ ...newLesson, semester: e.target.value })}
+                    className="w-full bg-bg-layout border border-border/50 rounded-2xl px-6 py-4 font-bold text-xl focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all outline-none text-text-heading"
+                  />
+                </div>
+
                 <button
                   type="submit"
                   className="w-full py-6 bg-primary text-text-light-solid font-black text-2xl rounded-3xl shadow-2xl shadow-primary/20 hover:shadow-primary/40 active:scale-95 transition-all flex items-center justify-center gap-3 mt-4"
                 >
                   <FolderPlus className="w-8 h-8" />
-                  <span>إدراج الحصة في الجدول</span>
+                  <span>{initialData ? "تحديث بيانات الحصة" : "إدراج الحصة في الجدول"}</span>
                 </button>
               </form>
             </div>

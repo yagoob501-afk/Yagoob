@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { type FC, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Save, Users, UserCheck, AlertCircle } from 'lucide-react';
 import type { Lesson } from '@/lib/attendance';
@@ -12,7 +12,7 @@ interface ManageStudentsModalProps {
   onSave: (lessonId: string, studentNames: string) => void;
 }
 
-export const ManageStudentsModal: React.FC<ManageStudentsModalProps> = ({
+export const ManageStudentsModal: FC<ManageStudentsModalProps> = ({
   isOpen,
   onClose,
   lesson,
@@ -32,7 +32,7 @@ export const ManageStudentsModal: React.FC<ManageStudentsModalProps> = ({
 
   const handleSave = () => {
     if (!lesson) return;
-    
+
     const result = studentsSchema.safeParse(bulkStudents);
     if (!result.success) {
       setError(result.error.issues[0].message);
@@ -105,7 +105,7 @@ export const ManageStudentsModal: React.FC<ManageStudentsModalProps> = ({
                     )}
                     dir="rtl"
                   />
-                  
+
                   <AnimatePresence>
                     {error && (
                       <motion.div

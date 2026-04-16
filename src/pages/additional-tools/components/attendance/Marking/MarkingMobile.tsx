@@ -1,11 +1,13 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useMemo, useState, type ReactNode } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Check, X, Save, ArrowRight, UserCheck, Users, UserMinus, Timer, LayoutDashboard, Image as ImageIcon, Loader2, Star } from "lucide-react"
+import { Check, X, Save, ArrowRight, UserCheck, Users, UserMinus, LayoutDashboard, Image as ImageIcon, Loader2, Star, Edit, UserPlus, GraduationCap, BookOpen, Clock } from "lucide-react"
 import { useLessonController, useAttendanceController, type AttendanceStatus } from "@/lib/attendance"
 import { cn } from "@/lib/utils"
 import { createAttendanceImage } from "@/lib/attendance/createAttendanceImage"
+import { AddLessonModal } from "../Selection/AddLessonModal"
+import { ManageStudentsModal } from "../Selection/ManageStudentsModal"
 
 interface MarkingMobileProps {
   lessonId: string
@@ -14,14 +16,32 @@ interface MarkingMobileProps {
 }
 
 export function MarkingMobile({ lessonId, onSave, onBack }: MarkingMobileProps) {
-  const { getLessonById, setLessonStatus } = useLessonController()
+  const { getLessonById, setLessonStatus, updateLesson, setLessonStudents } = useLessonController()
   const { markStudent, toggleParticipation, getLessonAttendance, getStatusInfo } = useAttendanceController()
+
+  const [isExporting, setIsExporting] = useState(false)
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [isManageStudentsOpen, setIsManageStudentsOpen] = useState(false)
 
   const lesson = getLessonById(lessonId)
   const students = lesson?.students || []
   const attendance = getLessonAttendance(lessonId)
 
-  const [isExporting, setIsExporting] = useState(false)
+  const handleUpdateLesson = (lessonNumber: string, subject: string, teacher: string, semester?: string) => {
+    updateLesson(lessonId, { lessonNumber, subject, teacher, semester });
+    setIsEditModalOpen(false);
+  }
+
+  const handleSaveStudents = (_id: string, namesStr: string) => {
+    const names = namesStr.split('\n').filter(n => n.trim() !== '')
+    const currentStudents = lesson?.students || []
+    const updatedStudents = names.map(name => {
+      const existing = currentStudents.find(s => s.name === name)
+      return { id: existing?.id || crypto.randomUUID(), name }
+    })
+    setLessonStudents(lessonId, updatedStudents)
+    setIsManageStudentsOpen(false)
+  }
 
   const stats = useMemo(() => {
     const vals = Object.values(attendance)
@@ -76,14 +96,50 @@ export function MarkingMobile({ lessonId, onSave, onBack }: MarkingMobileProps) 
       {/* Bento Grid Header */}
       <header className="grid grid-cols-2 gap-4 mt-4">
         {/* Card 1: Course Info */}
-        <div className="col-span-2 bg-bg-container p-5 rounded-4xl border border-border shadow-lg flex justify-between items-center">
-          <div className="flex flex-col gap-1">
-            <span className="text-[9px] font-black text-primary uppercase tracking-[0.2em]">الدرس الحالي</span>
-            <h1 className="text-lg font-black text-text-heading font-cairo leading-tight">{lesson.subject}</h1>
+        <div className="col-span-2 bg-bg-container p-6 rounded-4xl border border-border shadow-lg space-y-4">
+          <div className="flex justify-between items-center">
+            <div className="flex flex-col gap-1">
+              <span className="text-[9px] font-black text-primary uppercase tracking-[0.2em] mb-1">الدرس الحالي</span>
+              <div className="flex items-center gap-3">
+                <BookOpen className="w-5 h-5 text-primary opacity-40" />
+                <h1 className="text-xl font-black text-text-heading font-cairo leading-tight">{lesson.subject}</h1>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 bg-bg-layout px-3 py-1.5 rounded-xl border border-border shrink-0">
+              <Clock className="w-4 h-4 text-primary opacity-40" />
+              <span className="text-base font-black text-text-muted font-cairo leading-none">{lesson.lessonNumber}</span>
+            </div>
           </div>
-          <div className="flex items-center gap-2 text-text-muted text-[10px] font-bold opacity-60">
-            <Timer className="w-3.5 h-3.5" />
-            <span>حصة {lesson.lessonNumber}</span>
+
+          <div className="flex flex-col gap-2 mt-4 px-1">
+            <div className="flex items-center gap-3 text-text-muted opacity-80">
+              <Users className="w-4 h-4" />
+              <span className="text-[11px] font-bold">{lesson.teacher}</span>
+            </div>
+            {lesson.semester && (
+              <div className="flex items-center gap-3 text-text-muted opacity-80">
+                <GraduationCap className="w-4 h-4" />
+                <span className="text-[11px] font-bold">{lesson.semester}</span>
+              </div>
+            )}
+          </div>
+
+          <div className="flex items-center justify-end pt-4 border-t border-border/50">
+            <div className="flex gap-2">
+              <button
+                onClick={() => setIsEditModalOpen(true)}
+                className="p-3 bg-bg-layout border border-border rounded-xl text-text-muted active:text-primary active:border-primary/50 transition-all"
+              >
+                <Edit className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => setIsManageStudentsOpen(true)}
+                className="p-3 bg-bg-layout border border-border rounded-xl text-text-muted active:text-success active:border-success/50 transition-all"
+              >
+                <UserPlus className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </div>
 
@@ -225,11 +281,25 @@ export function MarkingMobile({ lessonId, onSave, onBack }: MarkingMobileProps) 
           </motion.button>
         </motion.div>
       </div>
+
+      <AddLessonModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        onAdd={handleUpdateLesson}
+        initialData={lesson}
+      />
+
+      <ManageStudentsModal
+        isOpen={isManageStudentsOpen}
+        onClose={() => setIsManageStudentsOpen(false)}
+        lesson={lesson}
+        onSave={handleSaveStudents}
+      />
     </div>
   )
 }
 
-function MobileStat({ label, value, color, icon, subtext }: { label: string, value: number, color: 'success' | 'error' | 'neutral' | 'warning', icon: React.ReactNode, subtext?: string }) {
+function MobileStat({ label, value, color, icon, subtext }: { label: string, value: number, color: 'success' | 'error' | 'neutral' | 'warning', icon: ReactNode, subtext?: string }) {
   const themes = {
     success: "text-success bg-success/5 border-success/20",
     error: "text-error bg-error/5 border-error/20",
@@ -250,7 +320,7 @@ function MobileStat({ label, value, color, icon, subtext }: { label: string, val
   )
 }
 
-function StatusTab({ active, label, color, onClick, icon, disabled }: { active: boolean, label: string, color: 'success' | 'error' | 'neutral' | 'warning', onClick: () => void, icon: React.ReactNode, disabled?: boolean }) {
+function StatusTab({ active, label, color, onClick, icon, disabled }: { active: boolean, label: string, color: 'success' | 'error' | 'neutral' | 'warning', onClick: () => void, icon: ReactNode, disabled?: boolean }) {
   const activeStyles = {
     success: "bg-success text-text-light-solid shadow-lg shadow-success/20",
     error: "bg-error text-text-light-solid shadow-lg shadow-error/20",

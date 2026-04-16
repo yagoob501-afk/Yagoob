@@ -29,12 +29,7 @@ export default function MemoryGame() {
 
   // Persistence
   React.useEffect(() => {
-    const currentState = logic.getState()
-    if (currentState.status !== 'setup') {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(logic.toJSON()))
-    } else {
-        localStorage.removeItem(STORAGE_KEY)
-    }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(logic.toJSON()))
   }, [logic])
 
   const handleStartGame = (greenName: string, blueName: string) => {
